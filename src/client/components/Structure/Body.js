@@ -21,6 +21,13 @@ export default function Body(props){
                             <Col sm/>
                         </Row>
                     </div>
+                    <div class="footerBar">
+                        <p>
+                            Developed by Phil Scott
+                            <br/>
+                            This is a WIP game.
+                        </p>
+                    </div>
                 </div>
             </body>
         </>
