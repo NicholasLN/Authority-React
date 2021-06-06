@@ -1,7 +1,7 @@
 {
-  "name": "simple-react-full-stack",
+  "name": "authority-react",
   "version": "1.0.0",
-  "description": "Boilerplate to build a full stack web application using React, Node.js, Express and Webpack.",
+  "description": "AUTHORITY port to React/Express",
   "main": "src/server/index.js",
   "scripts": {
     "build": "webpack --mode production",
@@ -10,15 +10,13 @@
     "server": "nodemon src/server/index.js",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "author": "Sandeep Raveesh",
+  "author": "Phil Scott",
   "license": "ISC",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.6.0",
     "cookie-parser": "^1.4.5",
     "express": "^4.16.3",
-    "mongodb": "^3.6.9",
-    "mongoose": "^5.12.13",
     "mysql": "^2.18.1",
     "node-color-log": "^5.3.0",
     "npm-check-updates": "^11.6.0",
