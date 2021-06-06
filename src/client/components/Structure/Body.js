@@ -4,24 +4,29 @@
 
 import React from 'react';
 import { Row, Col } from 'react-bootstrap'
+import NavBar from './NavBar.js'
 import '../../css/main.css';
 
 export default function Body(props){
+    let middleColWidth = 8;
+    if(props.middleColWidth){
+        middleColWidth = props.middleColWidth;
+    }
     return(
         <>
             {/* Insert NavBar component here (when done) */}
-            <body>
+                <NavBar/>
                 <div className="main">
                     <div className="gameContainer">
                         <Row>  
                             <Col sm/>
-                            <Col sm='8'>
+                            <Col sm={middleColWidth}>
                                 {props.children}
                             </Col>
                             <Col sm/>
                         </Row>
                     </div>
-                    <div class="footerBar">
+                    <div className="footerBar">
                         <p>
                             Developed by Phil Scott
                             <br/>
@@ -29,7 +34,6 @@ export default function Body(props){
                         </p>
                     </div>
                 </div>
-            </body>
         </>
     )
 }

@@ -4,8 +4,8 @@ import { Route } from 'react-router-dom';
 /** 
  * Import all page components here.
  */
-
-import Index from './components/Index/Index';
+import Index from '../Index/Index';
+import Register from '../Pages/Register';
 
 class Routes extends Component{
     render(){
@@ -13,6 +13,9 @@ class Routes extends Component{
             <>
                 <Route exact path="/">
                     <Index/>
+                </Route>
+                <Route exact path="/register">
+                    <Register/>
                 </Route>
             </>
         );

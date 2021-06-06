@@ -7,6 +7,9 @@ import GameLogo from '../../css/images/AuthorityLogoV3.png';
 
 export default class Index extends Component{
 
+    componentDidMount(){
+        document.title = "AUTHORITY | Index"
+    }
     render(){
         return(
             <Body>
@@ -23,7 +26,7 @@ export default class Index extends Component{
                 <hr/>
 
                 <LinkContainer to='/register'>
-                    <Button >Register Now!</Button>
+                    <Button size="lg" active>Register Now!</Button>
                 </LinkContainer>
 
                 <br/>

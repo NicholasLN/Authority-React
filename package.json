@@ -15,7 +15,11 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.6.0",
+    "cookie-parser": "^1.4.5",
     "express": "^4.16.3",
+    "mongodb": "^3.6.9",
+    "mongoose": "^5.12.13",
+    "mysql": "^2.18.1",
     "npm-check-updates": "^11.6.0",
     "react": "^16.5.2",
     "react-bootstrap": "^1.6.1",
