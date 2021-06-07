@@ -1,0 +1,4 @@
+{
+    "cookieSecret":"Enter secret cookie key here (IMPORTANT!)",
+    "isSecure":"Enter true/false depending on if your production env. is HTTP/HTTPS. Vehemently recommended to set to true if you are running on an HTTPS server."
+}

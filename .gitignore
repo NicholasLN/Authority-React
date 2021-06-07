@@ -11,7 +11,8 @@
 /build
 
 # confidential data!
-src/server/databaseConfig.json
+src/server/configFiles/serverConfig.json
+src/server/configFiles/databaseConfig.json
 
 
 # misc

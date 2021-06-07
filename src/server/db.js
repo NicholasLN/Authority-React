@@ -1,7 +1,7 @@
 var mysql = require('mysql');
 const logger = require('node-color-log');
 try{
-    var server_configuration = require('./databaseConfig.json');
+    var server_configuration = require('.configFiles/databaseConfig.json');
 }
 catch(e){
     logger.color('red').bold().log("[mySQL] databaseConfig.json does not exist! Use databaseConfigExample.js as a template!");
