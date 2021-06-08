@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import { Button, h1 } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 import Body from '../Structure/Body';
 
 import GameLogo from '../../css/images/AuthorityLogoV3.png'; 
@@ -32,7 +33,7 @@ export default class Index extends Component{
                 <br/>
 
                 <br/>
-                <p>Already have an account? <a href="login">Login Here</a></p>
+                <p>Already have an account? <Link to='/login'>Login Here</Link></p>
                 <hr/>
             </Body>
         )

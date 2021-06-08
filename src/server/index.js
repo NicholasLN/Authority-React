@@ -1,8 +1,9 @@
 const express = require('express');
-const session = require('express-session');
 const logger = require('node-color-log');
+const cookieSession = require('cookie-session');
 
 const app = express();
+
 
 
 /*  Initialize session which will be used for storing user data and the like. */
@@ -16,11 +17,15 @@ catch(exception){
 
 
 app.get("/api/init",(req,res)=>{
-    if(!req.session.loggedIn){
+    // Initialize session data
+    if(req.session.playerData == null){
+        req.session.playerData = {};
         req.session.loggedIn = false;
     }
-    res.send(req.session);
+    //
+    console.log(req.session.playerData);
 })
+
 
 
 app.use(express.static('dist'));

@@ -1,17 +1,14 @@
-const session = require('express-session');
+const cookieSession = require('cookie-session');
 const logger = require("node-color-log");
 
 
 try{
     const serverConfig = require('./configFiles/serverConfig.json');
     var configDetails = {
-        name:'AUTHSESSION',
-        secret:serverConfig.cookieSecret,
-        cookie:{
-            secure:serverConfig.isSecure
-        },
-        resave:false,
-        saveUninitialized:false
+        name:'authSession',
+        keys:[serverConfig.cookieSecret],
+        secure:serverConfig.isSecure,
+        maxAge: 24 * 60 * 60 * 1000,
     }
 }
 catch(e){
@@ -19,7 +16,7 @@ catch(e){
     return;
 }
 
-var sessionInit = session(configDetails);
+var sessionInit = cookieSession(configDetails);
 
 module.exports = sessionInit;
 
