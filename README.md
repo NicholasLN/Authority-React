@@ -1,4 +1,3 @@
-# Authority React Project
 <h1>Authority: React</h1>
 <p>This is a personal project of mine dedicated towards porting my PHP game Authority over towards React.</p>
 
