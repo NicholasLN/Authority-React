@@ -15,10 +15,11 @@ catch(exception){
 }
 
 
-app.get("/",(req,res)=>{
-    req.session.cum = "cum";
-    console.log(req.session);
-    res.send("Hello!");
+app.get("/api/init",(req,res)=>{
+    if(!req.session.loggedIn){
+        req.session.loggedIn = false;
+    }
+    res.send(req.session);
 })
 
 
