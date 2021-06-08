@@ -1,10 +1,7 @@
 const express = require('express');
 const logger = require('node-color-log');
 const cookieSession = require('cookie-session');
-
 const app = express();
-
-
 
 /*  Initialize session which will be used for storing user data and the like. */
 try{
@@ -15,15 +12,31 @@ catch(exception){
     return;
 }
 
+// Default session variables.
+const setSessionDefaults = function(req){
+    req.session.playerData = {};
+    req.session.playerData.loggedIn = false;
+    req.session.playerData.loggedInId = 0;
+}
 
 app.get("/api/init",(req,res)=>{
     // Initialize session data
     if(req.session.playerData == null){
-        req.session.playerData = {};
-        req.session.loggedIn = false;
+        setSessionDefaults(req);
     }
     //
-    console.log(req.session.playerData);
+    res.send("OK");
+})
+
+app.get("/api/returnSessionData",(req,res)=>{
+    if(req.session.playerData != null){
+        res.send(req.session.playerData);
+    }
+    else{
+        // If they somehow still don't have it...then set it. 
+        setSessionDefaults(req);
+        res.send(req.session.playerData);
+    }
 })
 
 

@@ -6,9 +6,7 @@ import Routes from './components/routes/routes.js';
 
 export default class App extends Component {
   componentDidMount(){
-    axios.get("/api/init").then(function(response){
-      console.log(response);
-    });
+    axios.get("/api/init");
   }
 
   render() {
