@@ -30,10 +30,8 @@ export default class Body extends React.Component {
     }
 
     render() {
-        const { loggedIn } = this.state; 
+        const playerData = this.state.playerData; 
         let middleColWidth = 8;
-
-        console.log(this.props);
 
         if (this.props.middleColWidth) {
             middleColWidth = this.props.middleColWidth;
@@ -42,7 +40,7 @@ export default class Body extends React.Component {
         return(
             <>
                 {/* Insert NavBar component here (when done) */}
-                    <NavBar {...loggedIn} />
+                    <NavBar playerData={playerData} />
                     <div className="main">
                         <div className="gameContainer">
                             <Row>  

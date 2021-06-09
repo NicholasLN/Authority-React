@@ -1,13 +1,12 @@
 const cookieSession = require('cookie-session');
 const logger = require("node-color-log");
-
+const dotenv = require('dotenv').config();
 
 try{
-    const serverConfig = require('./configFiles/serverConfig.json');
     var configDetails = {
         name:'authSession',
-        keys:[serverConfig.cookieSecret],
-        secure:serverConfig.isSecure,
+        keys:[process.env.COOKIE_SECRET],
+        secure:process.env.SESSION_SECURE,
         maxAge: 24 * 60 * 60 * 1000,
     }
 }

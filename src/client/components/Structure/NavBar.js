@@ -18,7 +18,7 @@ class NavBar extends Component {
                         <div className="collapse navbar-collapse" id="myNavbar">
                             <ul className="nav navbar-nav navbar-right">
                                 <li className="nav-item active">
-                                    {(this.props.loggedIn) ? ( 
+                                    {(this.props.playerData.loggedIn) ? ( 
                                         <>
                                         </>
                                     ) : (

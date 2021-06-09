@@ -3,6 +3,7 @@ const logger = require('node-color-log');
 const cookieSession = require('cookie-session');
 const app = express();
 
+
 /*  Initialize session which will be used for storing user data and the like. */
 try{
     app.use(require('./sessionInit'));
@@ -39,7 +40,8 @@ app.get("/api/returnSessionData",(req,res)=>{
     }
 })
 
-
+// GET USER INFO
+app.use('/api/userinfo',require('./api/users/userInfo').router)
 
 app.use(express.static('dist'));
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
