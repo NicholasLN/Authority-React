@@ -45,8 +45,6 @@ router.get('/fetchUserById/:userId', async function (req, res) {
                 req.session.playerData == null
                 ||
                 req.session.playerData.loggedInId != userInfo.id
-                &&
-                req.session.playerData.isAdmin == 0
             ) {
                 userInfo = public_information(userInfo);
             }
