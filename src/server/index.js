@@ -48,6 +48,11 @@ app.use('/api/partyinfo',require('./api/parties/partyinfo').router);
 app.use('/api/misc/development',require('./api/misc/development').router);
 
 app.use(express.static('dist'));
+
+app.use(function(req, res, next){
+    res.sendStatus(404);
+});
+
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
 
