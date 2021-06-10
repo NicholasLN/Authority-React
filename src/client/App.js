@@ -7,7 +7,7 @@ import Routes from './components/routes/routes.js';
 export default class App extends Component {
   componentDidMount(){
     axios.get("/api/init").then(function(response){
-      if(response.status != 400){
+      if(response.status != 200){
         console.log("Error intializing session vars.")
       }
     });
