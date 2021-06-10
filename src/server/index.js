@@ -26,7 +26,7 @@ app.get("/api/init",(req,res)=>{
         setSessionDefaults(req);
     }
     //
-    res.send("OK");
+    res.sendStatus(200);
 })
 
 app.get("/api/returnSessionData",(req,res)=>{
@@ -42,6 +42,11 @@ app.get("/api/returnSessionData",(req,res)=>{
 
 // GET USER INFO
 app.use('/api/userinfo',require('./api/users/userInfo').router)
+// GET PARTY INFO
+app.use('/api/partyinfo',require('./api/parties/partyinfo').router);
+// DEVELOPMENT ROUTES
+app.use('/api/misc/development',require('./api/misc/development').router);
+
 
 app.use(express.static('dist'));
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
