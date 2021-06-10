@@ -2,64 +2,53 @@
  * Component used for creating main, transferrable outline for game.
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import NavBar from './NavBar.js'
 import '../../css/main.css';
 import axios from 'axios';
-
-export default class Body extends React.Component {
-    constructor(props) {
-        super(props);
-        this.props = props;
+export default function Body(props){
+    let middleColWidth = 8;
+    if (props.middleColWidth) {
+        middleColWidth = props.middleColWidth;
     }
 
-    state = {
-        playerData: {}
-    }
-
-    componentDidMount() {
-        const self = this;
-
-        axios.get('/api/returnSessionData')
-        .then((res) => {
-            const playerData = res.data;
-
-            self.setState({ playerData });
-        });
-    }
-
-    render() {
-        const playerData = this.state.playerData; 
-        let middleColWidth = 8;
-
-        if (this.props.middleColWidth) {
-            middleColWidth = this.props.middleColWidth;
+    const [sessionData, setSessionData] = useState([]);
+    
+    useEffect(() => {
+        async function fetchData(){
+            const result = await axios.get(
+            '/api/returnSessionData',
+            );
+            setSessionData(result.data);
         }
+        fetchData()
+    },[]);
 
-        return(
-            <>
-                {/* Insert NavBar component here (when done) */}
-                    <NavBar playerData={playerData} />
-                    <div className="main">
-                        <div className="gameContainer">
-                            <Row>  
-                                <Col sm/>
-                                <Col sm={middleColWidth}>
-                                    {this.props.children}
-                                </Col>
-                                <Col sm/>
-                            </Row>
-                        </div>
-                        <div className="footerBar">
-                            <p>
-                                Developed by Phil Scott
-                                <br/>
-                                This is a WIP game.
-                            </p>
-                        </div>
+    console.log(sessionData);
+
+    return(
+        <>
+            {/* Insert NavBar component here (when done) */}
+                <NavBar sessionData={sessionData} />
+                <div className="main">
+                    <div className="gameContainer">
+                        <Row>  
+                            <Col sm/>
+                            <Col sm={middleColWidth}>
+                                {props.children}
+                            </Col>
+                            <Col sm/>
+                        </Row>
                     </div>
-            </>
-        )
-    }
+                    <div className="footerBar">
+                        <p>
+                            Developed by Phil Scott
+                            <br/>
+                            This is a WIP game.
+                        </p>
+                    </div>
+                </div>
+        </>
+    )
 }
