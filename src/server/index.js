@@ -50,7 +50,7 @@ app.use('/api/misc/development',require('./api/misc/development').router);
 app.use(express.static('dist'));
 
 app.use(function(req, res, next){
-    res.sendFile(path.join(__dirname, '../../public','404.html'));
+    res.sendFile(path.join(__dirname, '../../public','index.html'));
 });
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
