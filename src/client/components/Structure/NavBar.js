@@ -5,6 +5,7 @@ import {
     Nav
 } from 'react-bootstrap'
 import { Link, NavLink } from 'react-router-dom';
+import LoggedInNavBar from './NavBar/loggedInNavBar';
 
 class NavBar extends Component {
     render() {
@@ -17,16 +18,13 @@ class NavBar extends Component {
                     <div className="container-fluid">
                         <div className="collapse navbar-collapse" id="myNavbar">
                             <ul className="nav navbar-nav navbar-right">
-                                <li className="nav-item active">
-                                    {(this.props.playerData.loggedIn) ? ( 
-                                        <>
-                                        </>
-                                    ) : (
-                                    <Link to='/login' className="nav-link">
-                                        LOGIN
-                                    </Link>
-                                    )}
-                                </li>
+                                {(this.props.sessionData.loggedIn) ? ( 
+                                    <LoggedInNavBar sessionData={this.props.sessionData}/>
+                                ) : (
+                                <Link to='/login' className="nav-link">
+                                    LOGIN
+                                </Link>
+                                )}
                             </ul>
                         </div>
                     </div>
