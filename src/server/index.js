@@ -47,16 +47,6 @@ app.use('/api/partyinfo',require('./api/parties/partyinfo').router);
 // DEVELOPMENT ROUTES
 app.use('/api/misc/development',require('./api/misc/development').router);
 
-
-// 404!
-app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, '../../public/index.html'), function(err) {
-      if (err) {
-        res.status(500).send(err)
-      }
-    })
-  })
-
 app.use(express.static('dist'));
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
