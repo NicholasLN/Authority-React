@@ -7,6 +7,7 @@ import { Route } from 'react-router-dom';
 import Index from '../Index/Index';
 import Register from '../Pages/Register';
 import Login from '../Pages/Login';
+import NotFound from '../Pages/NotFound';
 
 class Routes extends Component{
     render(){
@@ -21,6 +22,7 @@ class Routes extends Component{
                 <Route exact path="/login">
                     <Login/>
                 </Route>
+                <Route component={NotFound}/>
             </>
         );
     }
