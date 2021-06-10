@@ -50,7 +50,7 @@ app.use('/api/misc/development',require('./api/misc/development').router);
 
 // 404!
 app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, '../../public/404.html'), function(err) {
+    res.sendFile(path.join(__dirname, '../../public/index.html'), function(err) {
       if (err) {
         res.status(500).send(err)
       }
