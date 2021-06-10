@@ -13,11 +13,13 @@
   "author": "Phil Scott",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.6.0",
     "cookie-parser": "^1.4.5",
     "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
     "express": "^4.16.3",
     "express-session": "^1.17.2",
     "is-number": "^7.0.0",
