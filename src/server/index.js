@@ -29,8 +29,10 @@ app.get("/api/init",(req,res)=>{
     res.send(req.session.playerData);
 })
 
+// AUTH
+app.use('/api/auth',require('./api/auth/authRoutes').router);
 // GET USER INFO
-app.use('/api/userinfo',require('./api/users/userInfo').router)
+app.use('/api/userinfo',require('./api/users/userInfo').router);
 // GET PARTY INFO
 app.use('/api/partyinfo',require('./api/parties/partyinfo').router);
 // DEVELOPMENT ROUTES
