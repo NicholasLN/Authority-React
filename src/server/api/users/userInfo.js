@@ -25,7 +25,7 @@ router.get('/getLoggedInUser', async function (req, res) {
             var party = new Party(userInfo.party);
             userInfo.partyInfo = await party.fetchPartyInfo().then((response) => { return response[0] });
         }
-        res.send(userInfo);
+        res.send(public_information(userInfo));
     }
     else {
         res.sendStatus(404);
