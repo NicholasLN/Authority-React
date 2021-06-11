@@ -26,18 +26,7 @@ app.get("/api/init",(req,res)=>{
         setSessionDefaults(req);
     }
     //
-    res.sendStatus(200);
-})
-
-app.get("/api/returnSessionData",(req,res)=>{
-    if(req.session.playerData != null){
-        res.send(req.session.playerData);
-    }
-    else{
-        // If they somehow still don't have it...then set it. 
-        setSessionDefaults(req);
-        res.send(req.session.playerData);
-    }
+    res.send(req.session.playerData);
 })
 
 // GET USER INFO

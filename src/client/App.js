@@ -5,6 +5,7 @@ import axios from 'axios';
 import Routes from './components/routes/routes.js';
 
 export default class App extends Component {
+
   componentDidMount(){
     axios.get("/api/init").then(function(response){
       if(response.status != 200){
