@@ -4,9 +4,6 @@ import { userHasPerm } from '../../../../server/classes/Party/Methods';
 
 export default function LoggedInNavBar(props){
     const userData = useContext(UserContext).playerData[0];
-    if(userData.partyInfo){
-        console.log(userHasPerm(userData.id,userData.partyInfo,"sendFunds"));
-    }
 
     return(
         <>
