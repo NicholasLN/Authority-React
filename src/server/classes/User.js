@@ -12,7 +12,6 @@ class User{
             database.query(
                 sql,
                 function(err, rows){          
-                    console.log(err);                                      
                     if(rows === undefined){
                         reject(new Error("No user under that ID"));
                     }else{

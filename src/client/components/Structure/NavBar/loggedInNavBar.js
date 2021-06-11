@@ -22,7 +22,6 @@ export default class LoggedInNavBar extends Component {
     }
     render() {
         if(this.state.rendering){ return null; }
-        console.log(this.props);
         return (
             <>
                 <li className="dropdown">

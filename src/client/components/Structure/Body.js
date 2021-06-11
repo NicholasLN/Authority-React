@@ -25,7 +25,7 @@ export default function Body(props){
         fetchData()
     },[]);
 
-    console.log(sessionData);
+    //console.log(sessionData);
 
     return(
         <>
