@@ -11,8 +11,7 @@ try{
     }
 }
 catch(e){
-    logger.color('red').bold().log("[mySQL] databaseConfig.json does not exist! Use databaseConfigExample.js as a template!");
-    return;
+    logger.color('red').bold().log(e);
 }
 var con = mysql.createPool(server_configuration);
 

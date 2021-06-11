@@ -18,6 +18,7 @@ export default function ContextProvider(props){
         }
         fetchData();
     },[]);
+    
 
     return(
         <>

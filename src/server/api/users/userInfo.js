@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var isnumber = require('is-number');
 
-const Party = require('../../classes/Party');
+const Party = require('../../classes/Party/Party');
 const User = require('../../classes/User');
 
 const public_information = function (userRow) {
@@ -59,9 +59,7 @@ router.get('/fetchUserById/:userId', async function (req, res) {
         if (partyInfo) {
             userInfo.partyInfo = partyInfo
             userInfo.partyInfo.partyRoles = JSON.parse(userInfo.partyInfo.partyRoles);
-        }
-        else {
-            userInfo.partyInfo = { error: "User not in party." };
+
         }
 
         res.send(userInfo);

@@ -3,8 +3,8 @@
  */
 
 import React, { useState, useEffect, useContext } from 'react';
+import NavBar from './NavBar'; 
 import { Row, Col } from 'react-bootstrap';
-import NavBar from './NavBar.js'
 import '../../css/main.css';
 
 export default function Body(props){
@@ -15,7 +15,7 @@ export default function Body(props){
 
     return(
         <>
-            <NavBar/>  
+                <NavBar/>  
                 <div className="main">
                     <div className="gameContainer">
                         <Row>  

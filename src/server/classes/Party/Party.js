@@ -6,7 +6,7 @@ class Party{
     }
     async fetchPartyInfo(){
         var id = this.partyID;
-        let database = require('../db');
+        let database = require('../../db');
         const sql = "SELECT * FROM parties WHERE id = " + database.escape(id);
         return new Promise(function(resolve, reject){
             database.query(
