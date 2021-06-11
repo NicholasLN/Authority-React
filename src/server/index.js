@@ -39,7 +39,6 @@ app.use('/api/misc/development',require('./api/misc/development').router);
 app.use(express.static('dist'));
 
 app.get("/*", function(req,res){
-    console.log("manual");
     res.sendFile(path.join(__dirname + '../../../dist/index.html'));
 })
 
