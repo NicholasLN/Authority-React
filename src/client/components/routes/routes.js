@@ -22,7 +22,6 @@ class Routes extends Component{
                 <Route exact path="/login">
                     <Login/>
                 </Route>
-                <Route component={NotFound}/>
             </>
         );
     }
