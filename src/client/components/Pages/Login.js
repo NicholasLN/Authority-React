@@ -2,8 +2,10 @@ import React, { useState, useContext } from 'react';
 import Body from '../Structure/Body';
 import AuthorizationService from '../../service/AuthService';
 import { UserContext } from '../../context/UserContext';
+import { withRouter } from 'react-router';
 
-export default function Login() {
+
+function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const setSessionData = useContext(UserContext).sessionData[1];
@@ -14,7 +16,9 @@ export default function Login() {
         const response = await AuthorizationService.login(body);
         if(response.data.loggedIn){
             setSessionData(response.data)
-            setPlayerData(await AuthorizationService.getLoggedInData());
+            var loggedInData = await AuthorizationService.getLoggedInData();
+            setPlayerData(loggedInData);
+            props.history.push('/politician/'+loggedInData.id);
         }
         console.log(response);
     }
@@ -52,3 +56,4 @@ export default function Login() {
         </Body>
     )
 }
+export default withRouter(Login);

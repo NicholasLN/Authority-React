@@ -2,14 +2,16 @@ import React, { useContext } from 'react';
 import { UserContext } from '../../../context/UserContext';
 import { userHasPerm } from '../../../../server/classes/Party/Methods';
 import AuthorizationService from '../../../service/AuthService';
+import { withRouter } from 'react-router';
 
-export default function LoggedInNavBar(props){
+function LoggedInNavBar(props){
     const userData = useContext(UserContext).playerData[0];
     const changeSessionData = useContext(UserContext).sessionData[1];
 
     const logout = async function(){
         var newSessionData = await AuthorizationService.logout();
         changeSessionData(newSessionData);
+        props.history.push("/");
     }
 
     return(
@@ -59,3 +61,4 @@ export default function LoggedInNavBar(props){
         </>
     );
 }
+export default withRouter(LoggedInNavBar);
