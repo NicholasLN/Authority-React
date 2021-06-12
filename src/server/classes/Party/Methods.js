@@ -7,7 +7,6 @@ function userHasPerm(userId, partyInfo, permName){
             Object.keys(perms).forEach(function(key){
                 let permission = key;
                 let value = perms[permission];
-                console.log(permission,value);
                 if(permission == "leader" && value == 1){
                     hasPerm = true;
                 }

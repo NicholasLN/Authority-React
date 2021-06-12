@@ -1,8 +1,14 @@
 const express = require('express');
 const logger = require('node-color-log');
-const cookieSession = require('cookie-session');
-const app = express();
 const path = require('path');
+const cookieSession = require('cookie-session');
+const bodyParser = require('body-parser');
+
+const app = express();
+app.use(express.urlencoded({extended:true}));
+app.use(express.json());
+
+
 
 /*  Initialize session which will be used for storing user data and the like. */
 try{

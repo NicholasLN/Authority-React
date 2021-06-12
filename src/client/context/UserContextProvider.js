@@ -11,10 +11,13 @@ export default function ContextProvider(props){
     useEffect(() => {
         async function fetchData(){
             const sessionDataX = await AuthorizationService.getSessionData();
-            const playerDataX = await AuthorizationService.getLoggedInData();
+            
+            if(sessionDataX.loggedIn){
+                const playerDataX = await AuthorizationService.getLoggedInData();
+                setPlayerData(playerDataX);
+            }
             
             setSessionData(sessionDataX);
-            setPlayerData(playerDataX);
         }
         fetchData();
     },[]);

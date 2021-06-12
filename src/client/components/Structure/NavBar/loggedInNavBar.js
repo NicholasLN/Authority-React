@@ -1,9 +1,16 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../../../context/UserContext';
 import { userHasPerm } from '../../../../server/classes/Party/Methods';
+import AuthorizationService from '../../../service/AuthService';
 
 export default function LoggedInNavBar(props){
     const userData = useContext(UserContext).playerData[0];
+    const changeSessionData = useContext(UserContext).sessionData[1];
+
+    const logout = async function(){
+        var newSessionData = await AuthorizationService.logout();
+        changeSessionData(newSessionData);
+    }
 
     return(
         <>
@@ -14,6 +21,7 @@ export default function LoggedInNavBar(props){
                 <ul className="dropdown-menu">
                     <a className="dropdown-item" href={"politician/"+userData.id}>Profile</a>
                     <a className="dropdown-item" href="editprofile">Edit Profile</a>
+                    <a className="dropdown-item" href="#" onClick={logout}>Logout</a>
                 </ul>
             </li>
             <li className="dropdown">
