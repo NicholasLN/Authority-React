@@ -7,10 +7,10 @@ export default function Footer(props) {
     const playerData = context.playerData[0];
 
     return (
-        <div class="footerInformation">
+        <div className="footerInformation">
             <p>
                 <b>AUTHORITY:</b> {playerData.authority} <b>|| </b>
-                <b>CF: $</b><span class="greenFont">
+                <b>CF: $</b><span className="greenFont">
                     <NumberFormat 
                     value={playerData.campaignFinance}
                     displayType={'text'}

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import querystring from 'querystring';
 
 class AuthService{
     constructor(){
@@ -31,6 +30,10 @@ class AuthService{
     getUserData(id){
         return this.auth.get('/userinfo/fetchUserById/'+id)
             .then(response => response.data);
+    }
+    register(user){
+        return this.auth.post('auth/register',user)
+            .then(response=>response.data)
     }
 }
 

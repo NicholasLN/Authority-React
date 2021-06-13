@@ -9,3 +9,6 @@ DB_HOST=(db host)
 DB_USER=(db user)
 DB_DB=(db name)
 DB_PASSWORD=(db password)
+
+CAPTCHA_SITE_KEY = (site key)
+CAPTCHA_SECRET_KEY = (secret key)

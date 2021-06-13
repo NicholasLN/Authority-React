@@ -22,6 +22,7 @@ catch(exception){
 // Default session variables.
 const setSessionDefaults = function(req){
     req.session.playerData = {};
+    req.session.playerData.cookieID = Math.floor(Math.random()*1000000000)
     req.session.playerData.loggedIn = false;
     req.session.playerData.loggedInId = 0;
 }
@@ -41,6 +42,8 @@ app.use('/api/auth',require('./api/auth/authRoutes').router);
 app.use('/api/userinfo',require('./api/users/userInfo').router);
 // GET PARTY INFO
 app.use('/api/partyinfo',require('./api/parties/partyinfo').router);
+// GET STATE INFO
+app.use('/api/stateinfo',require('./api/states/stateinfo').router);
 // DEVELOPMENT ROUTES
 app.use('/api/misc/development',require('./api/misc/development').router);
 
