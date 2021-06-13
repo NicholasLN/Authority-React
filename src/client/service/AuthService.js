@@ -28,6 +28,10 @@ class AuthService{
         return this.auth.get('/init')
             .then(response => response.data);
     }
+    getUserData(id){
+        return this.auth.get('/userinfo/fetchUserById/'+id)
+            .then(response => response.data);
+    }
 }
 
 const AuthorizationService = new AuthService();
