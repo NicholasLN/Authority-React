@@ -9,17 +9,28 @@ export default function ContextProvider(props){
 
 
     useEffect(() => {
-        async function fetchData(){
-            const sessionDataX = await AuthorizationService.getSessionData();
+        const fetchData = async ()=>{
+            try{
+                const sessionDataX = await AuthorizationService.getSessionData();
+        
+                if(sessionDataX.loggedIn){
+                    const playerDataX = await AuthorizationService.getLoggedInData();
+                    setPlayerData(playerDataX);
+                }
             
-            if(sessionDataX.loggedIn){
-                const playerDataX = await AuthorizationService.getLoggedInData();
-                setPlayerData(playerDataX);
+                setSessionData(sessionDataX);
             }
-            
-            setSessionData(sessionDataX);
-        }
+            catch(error){
+                console.log(error);
+            }
+        };
+        const id = setInterval(()=>{
+            fetchData();
+        }, 5000);
+
         fetchData();
+
+        return ()=>clearInterval(id);
     },[]);
     
 
