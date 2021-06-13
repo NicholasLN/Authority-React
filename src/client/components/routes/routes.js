@@ -7,6 +7,7 @@ import { Route } from 'react-router-dom';
 import Index from '../Index/Index';
 import Register from '../Pages/Register';
 import Login from '../Pages/Login';
+import Politician from '../Pages/Politician';
 import NotFound from '../Pages/NotFound';
 
 class Routes extends Component{
@@ -21,6 +22,12 @@ class Routes extends Component{
                 </Route>
                 <Route exact path="/login">
                     <Login/>
+                </Route>
+                <Route exact path="/politician">
+                    <Politician noRequestId={true}/>
+                </Route>
+                <Route path="/politician/:userId">
+                    <Politician/>
                 </Route>
             </>
         );
