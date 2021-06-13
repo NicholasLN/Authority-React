@@ -7,6 +7,7 @@ const outputDirectory = 'dist';
 module.exports = {
   entry: ['babel-polyfill', './src/client/index.js'],
   output: {
+    publicPath:"/",
     path: path.join(__dirname, outputDirectory),
     filename: 'bundle.js'
   },
@@ -35,7 +36,7 @@ module.exports = {
         loader: 'url-loader?limit=100000',
         options: {
           name: '[name].[ext]',
-          outputPath: 'fonts/'
+          outputPath: '/fonts/'
         }
       }
     ]
@@ -54,6 +55,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin([outputDirectory]),
     new HtmlWebpackPlugin({
+      inject:false,
       template: './public/index.html',
       favicon: './public/favicon.ico'
     })
