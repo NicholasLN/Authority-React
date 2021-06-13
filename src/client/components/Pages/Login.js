@@ -29,6 +29,7 @@ function Login(props) {
             <h2>Login</h2>
             <hr />
             <div className='tableForm'>
+            <form onSubmit={(e)=>e.preventDefault()}>
             <table className='table table-striped table-responsive'>
                 <tbody>
                     <tr>
@@ -50,8 +51,9 @@ function Login(props) {
                 </tbody>
             </table>
             <label>
-                <button className="btn btn-primary" value="Login" name="signIn" onClick={login}>Log In</button>
+                <input className="btn btn-primary" type='submit' value="Login" name="signIn" onClick={login}/>
             </label>
+            </form>
             </div>
         </Body>
     )
