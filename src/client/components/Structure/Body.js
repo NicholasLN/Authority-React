@@ -3,7 +3,9 @@
  */
 
 import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../../context/UserContext';
 import NavBar from './NavBar'; 
+import Footer from './Footer';
 import { Row, Col } from 'react-bootstrap';
 import '../../css/main.css';
 
@@ -12,6 +14,7 @@ export default function Body(props){
     if (props.middleColWidth) {
         middleColWidth = props.middleColWidth;
     }
+    let isLoggedIn = useContext(UserContext).sessionData[0].loggedIn;
 
     return(
         <>
@@ -34,6 +37,7 @@ export default function Body(props){
                         </p>
                     </div>
                 </div>
+                {(isLoggedIn) ? (<Footer/>) : (<></>)}
         </>
     )
 }
