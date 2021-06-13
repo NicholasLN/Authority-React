@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { UserContext } from '../../../context/UserContext';
 import { userHasPerm } from '../../../../server/classes/Party/Methods';
 import AuthorizationService from '../../../service/AuthService';
+import { LinkContainer } from 'react-router-bootstrap';
 import { withRouter } from 'react-router';
 
 function LoggedInNavBar(props){
@@ -21,8 +22,10 @@ function LoggedInNavBar(props){
                     <i className="fas fa-user" aria-hidden="true"></i> {userData.politicianName}
                 </a>
                 <ul className="dropdown-menu">
-                    <a className="dropdown-item" href={"politician/"+userData.id}>Profile</a>
-                    <a className="dropdown-item" href="editprofile">Edit Profile</a>
+                    <LinkContainer to={"/politician/"+userData.id}>
+                        <a className="dropdown-item" href="#">Profile</a>
+                    </LinkContainer>
+                    <a className="dropdown-item" href="/editprofile">Edit Profile</a>
                     <a className="dropdown-item" href="#" onClick={logout}>Logout</a>
                 </ul>
             </li>
@@ -31,7 +34,7 @@ function LoggedInNavBar(props){
                     <i className="fas fa-flag" aria-hidden="true"></i> {userData.nation}
                 </a>
                 <ul className="dropdown-menu">
-                    <a className="dropdown-item" href={"politicalparties/"+userData.nation}>Political Parties</a>
+                    <a className="dropdown-item" href={"/politicalparties/"+userData.nation}>Political Parties</a>
                 </ul>
             </li>
             {(userData?.partyInfo) ? (
