@@ -15,7 +15,7 @@ export default function Body(props){
         middleColWidth = props.middleColWidth;
     }
     let isLoggedIn = useContext(UserContext).sessionData[0].loggedIn;
-
+    console.log(isLoggedIn);
     return(
         <>
                 <NavBar/>  
