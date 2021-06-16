@@ -4,10 +4,14 @@ import AuthorizationService from '../../service/AuthService'
 import Body from '../Structure/Body'
 import { withRouter } from 'react-router'
 import { UserContext } from '../../context/UserContext'
+import '../../css/profile.css';
+import ClipLoader from "react-spinners/ClipLoader";
+
 
 function Politician(props){
     var [politicianInfo, setPoliticianInfo] = useState({});
     var [loggedInUserIsUser, setLoggedInUserIsUser] = useState(false);
+    var [loading, setLoading] = useState(true);
     var { userId } = useParams();
     
     useEffect(()=>{
@@ -32,15 +36,25 @@ function Politician(props){
                 setPoliticianInfo(requestedUserInfo);
                 if(sessionData.loggedInId == requestedUserInfo.id){ setLoggedInUserIsUser(true); }
             }
+            setLoading(false);
         }
         fetchData();
     },[])
 
     return(
-        <Body>
-            {loggedInUserIsUser}
+        <Body middleColWidth='7'>
+            {(!loading) ? (
+            <>
             <br/>
-            {politicianInfo.politicianName}
+            <h2>{politicianInfo.politicianName}</h2>
+            <div className="mainProfileContainer">
+                <img className="profilePicture" src={"https://www.europeanperil.com/authority/"+politicianInfo.profilePic} alt="Profile Picture"/>
+                <pre className="bioBox">
+                    <p>{politicianInfo.bio}</p>
+                </pre>
+            </div>
+            </>
+            ) : (<><br/><ClipLoader></ClipLoader></>)}
         </Body>
     )
 }

@@ -2,10 +2,12 @@ import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { UserContext } from './UserContext';
 import AuthorizationService from '../service/AuthService';
+import Loading from '../components/Misc/Loading';
 
 export default function ContextProvider(props){
     const [sessionData, setSessionData] = useState({});
     const [playerData, setPlayerData] = useState({});
+    const [loading, setLoading] = useState(true);
 
 
     useEffect(() => {
@@ -19,6 +21,7 @@ export default function ContextProvider(props){
                 }
             
                 setSessionData(sessionDataX);
+                setLoading(false);
             }
             catch(error){
                 console.log(error);
@@ -36,6 +39,10 @@ export default function ContextProvider(props){
 
     return(
         <>
+        {(loading) ? (
+        
+        <Loading/>
+        ) : (
         <UserContext.Provider value={
             { 
                 sessionData: [sessionData, setSessionData],
@@ -43,6 +50,8 @@ export default function ContextProvider(props){
             }}>
             {props.children}
         </UserContext.Provider>
+        )
+        }
         </>
     )
 }
