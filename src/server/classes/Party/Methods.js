@@ -1,5 +1,5 @@
 function userHasPerm(userId, partyInfo, permName){
-    partyRoles = JSON.parse(partyInfo.partyRoles);
+    const partyRoles = partyInfo.partyRoles;
     var hasPerm = false;
     if(partyInfo){
         Object.keys(partyRoles).forEach(function(key){

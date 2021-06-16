@@ -19,17 +19,24 @@ class AuthService{
         return this.auth.get('/auth/logout',{})
             .then(response => response.data);
     }
-    getLoggedInData(){
-        return this.auth.get('/userinfo/getLoggedInUser')
+    getLoggedInData(partyInfo="true",stateInfo="true",sensitive="false"){
+        let url = `/userinfo/getLoggedInUser/${partyInfo}/${stateInfo}/${sensitive}`
+        return this.auth.get(url)
             .then(response => response.data);
     }
     getSessionData(){
         return this.auth.get('/init')
             .then(response => response.data);
     }
-    getUserData(id){
-        return this.auth.get('/userinfo/fetchUserById/'+id)
-            .then(response => response.data);
+    getUserData(id, partyInfo="true", stateInfo="false"){
+        let url = `/userinfo/fetchUserById/${id}/${partyInfo}/${stateInfo}`
+        return this.auth.get(url)
+            .then(function(response){
+                return response.data;
+            }
+            ).catch(function(error){
+                return "404";
+            });
     }
     register(user){
         return this.auth.post('auth/register',user)

@@ -70,10 +70,10 @@ router.post("/register", async function(req, res) {
     if(matchingUsers == 0){
         var sql = `INSERT INTO users 
         (username, password, regCookie, currentCookie, 
-        regIP, currentIP, politicianName, state, 
+        regIP, currentIP, politicianName, lastOnline, state, 
         nation, ecoPos, socPos) 
         VALUES (${db.escape(username)},${db.escape(hash)},${cookieID},${cookieID},'${ip}','${ip}',
-        ${db.escape(politicianName)},${db.escape(state)},${db.escape(country)},${db.escape(ecoPos)},${db.escape(socPos)})`
+        ${db.escape(politicianName)},${Date.now()},${db.escape(state)},${db.escape(country)},${db.escape(ecoPos)},${db.escape(socPos)})`
 
         db.query(sql,function(err,result){
             if(err) throw err;

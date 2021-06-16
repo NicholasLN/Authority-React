@@ -19,6 +19,7 @@
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "boolean": "^3.1.2",
     "bootstrap": "^4.6.0",
     "cookie-parser": "^1.4.5",
     "cookie-session": "^1.4.0",
@@ -39,7 +40,8 @@
     "react-router-bootstrap": "^0.25.0",
     "react-router-dom": "^5.2.0",
     "react-select": "^4.3.1",
-    "react-spinners": "^0.11.0"
+    "react-spinners": "^0.11.0",
+    "time-ago": "^0.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

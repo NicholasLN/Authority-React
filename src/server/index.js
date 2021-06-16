@@ -3,6 +3,7 @@ const logger = require('node-color-log');
 const path = require('path');
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
+const User = require('./classes/User');
 
 const app = express();
 app.use(express.urlencoded({extended:true}));
@@ -26,6 +27,7 @@ const setSessionDefaults = function(req){
     req.session.playerData.loggedIn = false;
     req.session.playerData.loggedInId = 0;
 }
+const logOut = function(req) { req.session.playerData.loggedIn = false; req.session.playerData.loggedInId = 0; }
 
 app.get("/api/init",(req,res)=>{
     // Initialize session data
@@ -33,6 +35,10 @@ app.get("/api/init",(req,res)=>{
         setSessionDefaults(req);
     }
     //
+    if(User.userDoesExistId(req.session.playerData.loggedInId)){
+        User.updateLastOnline(req.session.playerData.loggedInId);
+    }
+    else{ logOut(req) }
     res.send(req.session.playerData);
 })
 
