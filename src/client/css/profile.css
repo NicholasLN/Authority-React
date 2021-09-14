@@ -1,0 +1,65 @@
+.mainProfileContainer{
+    max-width:80%;
+    margin: auto;
+    word-wrap: break-word;
+}
+.profilePicture{
+    max-width:200px;
+    max-height: 300px;
+    border: solid 1px black;
+}
+.bioContainer{
+    border: 5px groove black
+}
+.recharts-wrapper {
+    margin : 0 auto;
+}
+.extraClass {
+    font-size: 20px !important;
+    pointer-events: auto !important;
+    padding:0;
+}
+.extraClass:hover {
+   visibility: visible !important;
+   opacity: 1 !important;
+}
+.bioBox{
+    font-family: Bahnschrift,"sans-serif";
+    font-size: 16px;
+    font-weight: 100 !important;
+    max-width: 100%;
+    text-align: left;
+    margin:auto;
+    padding: 8px 8px 8px 8px;
+    white-space: pre-wrap;
+}
+#statsTable{
+    max-width:75%;
+    text-align:left;
+    margin: auto;
+}
+.profileStateFlag{
+    border:solid 1px black;
+    max-width:40px;
+    margin-right:3px;
+}
+.profilePartyPic{
+    max-width:30px;
+    margin-right:3px;
+}
+.lastOnline{
+    margin-top: 10px;
+    font-weight: bold;
+    font-size:14px;
+}
+.wmde-markdown p{
+    margin-bottom:0px !important;
+    line-height:20px;
+}
+.wmde-markdown blockquote{
+    margin-bottom:0px !important;
+    line-height:12px
+}
+.wmde-markdown hr{
+    margin:0px !important;
+}

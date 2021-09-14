@@ -1,0 +1,32 @@
+# Port for Express Server
+PORT=8080
+
+# Milliseconds (from now) for user to be considered inactive
+ACTIVITY_THRESHOLD=604800000
+
+# Secret for site cookies. Very important that it's unrecognizable.
+COOKIE_SECRET=
+# Is your development session going to be secure? (HTTPS?)
+SESSION_SECURE=false
+# Environment (production/development)
+ENVIRONMENT=DEVELOPMENT
+
+### SQL INFORMATION, IMPORTANT
+DB_HOST=
+DB_USER=
+DB_DB= 
+DB_PASSWORD=
+DB_PORT=
+
+### Firebase information (not as important, but required for uploading images)
+FIREBASE_API_KEY = 
+FIREBASE_AUTH_DOMAIN = 
+FIREBASE_PROJECT_ID = 
+FIREBASE_STORAGE_BUCKET = 
+FIREBASE_MESSAGING_SENDER_ID = 
+FIREBASE_APP_ID = 
+FIREBASE_MAX_UPLOAD_SIZE = 
+
+### This is used for registration. AKA if you have a captcha users are required to fill out. Probably not required in development.
+CAPTCHA_SITE_KEY = 
+CAPTCHA_SECRET_KEY = 
