@@ -3,8 +3,8 @@ import { withRouter } from "react-router";
 import { userHasPerm } from "../../../../server/classes/Party/Methods";
 import { UserContext } from "../../../context/UserContext";
 import { AlertContext } from "../../../context/AlertContext";
-import CreateRoleForm from "./PartyManagement./createRoleForm";
-import ChangePartyPicture from "./PartyManagement./changePartyPicture";
+import CreateRoleForm from "./PartyManagement/createRoleForm";
+import ChangePartyPicture from "./PartyManagement/changePartyPicture";
 
 function PartyManagement(props) {
   const { sessionData, playerData } = useContext(UserContext);
