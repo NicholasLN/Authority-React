@@ -37,13 +37,14 @@ function PartyMembers(props) {
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
 
+  const fetchData = async () => {
+    var tableDataAPI = await PartyInfoService.fetchPartyMembers(partyInfo.id);
+    console.log(tableDataAPI);
+    setTableData(tableDataAPI);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      var tableDataAPI = await PartyInfoService.fetchPartyMembers(partyInfo.id);
-      console.log(tableDataAPI);
-      setTableData(tableDataAPI);
-      setLoading(false);
-    };
     setPartyInfo(props.partyInfo);
     fetchData();
     return () => {
@@ -56,7 +57,7 @@ function PartyMembers(props) {
   }
   return (
     <>
-      <PartyMemberTable columns={columns} data={tableData} partyInfo={partyInfo} />
+      <PartyMemberTable fetchData={fetchData} setLoading={setLoading} columns={columns} data={tableData} partyInfo={partyInfo} />
     </>
   );
 }
