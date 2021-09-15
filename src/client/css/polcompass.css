@@ -1,0 +1,13 @@
+.xAxis path,.yAxis path {
+  fill: none;
+  stroke: black;
+}
+text {
+  font-size: 12px;
+  stroke: none;
+  fill: black;
+}
+.gridline{
+  stroke: black;
+  stroke-opacity: 0.4;
+  }

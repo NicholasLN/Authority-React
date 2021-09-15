@@ -22,13 +22,6 @@ function Politician(props) {
   var [loading, setLoading] = useState(true);
   var { userId } = useParams();
   var { setAlert } = useContext(AlertContext);
-  function getWindowDimensions() {
-    const { innerWidth: width, innerHeight: height } = window;
-    return {
-      width,
-      height,
-    };
-  }
   useEffect(() => {
     async function fetchData() {
       var requestedUserInfo = {};
@@ -95,7 +88,7 @@ function Politician(props) {
             <hr />
           </div>
           <ReactTooltip id={"positions"} backgroundColor="white" className="extraClass" delayShow={1000} delayHide={1000} effect="float">
-            <PoliticalCompass width={getWindowDimensions().width * 0.5} height={getWindowDimensions().height * 0.5} ecoPos={politicianInfo.ecoPos} socPos={politicianInfo.socPos} />
+            <PoliticalCompass ecoPos={politicianInfo.ecoPos} socPos={politicianInfo.socPos} />
           </ReactTooltip>
           <table className="table table-striped table-bordered" id="statsTable">
             <tbody>
