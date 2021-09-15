@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import "../../../css/polcompass.css";
 
 function PoliticalCompass({ ecoPos, socPos }) {
-  var [windowDims, setWindowDims] = useState({ width: window.innerWidth, height: window.innerHeight });
+  var [windowDims, setWindowDims] = useState({ width: window.innerWidth * 0.6, height: window.innerHeight * 0.45 });
   function updateDims() {
     var { innerWidth: width, innerHeight: height } = window;
     width *= 0.6;
