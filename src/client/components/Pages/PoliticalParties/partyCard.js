@@ -4,6 +4,26 @@ import PartyInfoService from "../../../service/PartyService";
 import { BeatLoader } from "react-spinners";
 import { selectColor, getPositionName } from "../../../../server/classes/Misc/Methods";
 import ReactTooltip from "react-tooltip";
+import "../../../css/profile.css";
+import { Resizable } from "re-resizable";
+import Editor from "rich-markdown-editor";
+import editorTheme from "../../Misc/EditorTheme";
+
+const resizableStyle = {
+  margin: "auto",
+  padding: "10px",
+  backgroundColor: "rgba(240,240,240,0.77)",
+};
+const resizableEnable = {
+  top: false,
+  right: false,
+  bottom: true,
+  left: false,
+  topRight: false,
+  bottomRight: true,
+  bottomLeft: true,
+  topLeft: false,
+};
 
 export default function PartyCard({ party }) {
   const [loading, setLoading] = useState(true);
@@ -59,7 +79,11 @@ export default function PartyCard({ party }) {
                 </a>
               </LinkContainer>
               <hr />
-              <pre className="partyBioContainer">{party.partyBio}</pre>
+              <Resizable className="bioContainer" style={resizableStyle} enable={resizableEnable}>
+                <pre className="bioBox" style={{ maxHeight: "20vh" }}>
+                  <Editor style={{ overflow: "disabled" }} readOnly={true} theme={editorTheme} defaultValue={party.partyBio} />
+                </pre>
+              </Resizable>
               <hr />
               <span>
                 <b>Members:{party.activeMembers}</b>

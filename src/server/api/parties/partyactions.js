@@ -273,4 +273,25 @@ router.post("/createPartyRole", async function (req, res) {
   }
 });
 
+router.post("/updatePartyBio", async function (req, res) {
+  if (req.session.playerData.loggedIn) {
+    var { partyId, newBio } = req.body;
+    if (partyId) {
+      if (req.session.playerData.loggedInInfo.party == partyId) {
+        var party = new Party(partyId);
+        await party.updatePartyInfo();
+
+        if (userHasPerm(req.session.playerData.loggedInId, party.partyInfo, "leader")) {
+          var partyInfo = await party.updateParty("partyBio", newBio);
+          res.send(partyInfo);
+        } else {
+          res.send({ error: "Invalid permissions" });
+        }
+      }
+    } else {
+      res.send({ error: "No party ID provided." });
+    }
+  }
+});
+
 module.exports.router = router;
