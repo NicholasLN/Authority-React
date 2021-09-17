@@ -3,10 +3,9 @@ import { Button, h1 } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 import Body from "../Structure/Body";
-
 import GameLogo from "../../css/images/AuthorityLogoV3.png";
-
 import { UserContext } from "../../context/UserContext";
+import DiscordInvite from "react-discord-invite";
 
 export default function Index(props) {
   const { sessionData } = useContext(UserContext);
@@ -47,6 +46,7 @@ export default function Index(props) {
           <hr />
         </>
       )}
+      <DiscordInvite guild="600212077461897216" />
     </Body>
   );
 }
