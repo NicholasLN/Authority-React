@@ -5,7 +5,6 @@ import Body from "../Structure/Body";
 import { AlertContext } from "../../context/AlertContext";
 import "../../css/politicalparties.css";
 import { LinkContainer } from "react-router-bootstrap";
-import { getLeaderInfo } from "../../../server/classes/Party/Methods";
 import PartyCard from "./PoliticalParties/partyCard";
 import { UserContext } from "../../context/UserContext";
 
