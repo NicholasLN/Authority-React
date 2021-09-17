@@ -81,7 +81,7 @@ export default function PartyCard({ party }) {
               <hr />
               <Resizable className="bioContainer" style={resizableStyle} enable={resizableEnable}>
                 <pre className="bioBox" style={{ maxHeight: "20vh" }}>
-                  <Editor style={{ overflow: "disabled" }} readOnly={true} theme={editorTheme} defaultValue={party.partyBio} />
+                  <Editor readOnly={true} theme={editorTheme} defaultValue={party.partyBio} />
                 </pre>
               </Resizable>
               <hr />
