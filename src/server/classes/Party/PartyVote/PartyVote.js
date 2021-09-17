@@ -175,6 +175,36 @@ class PartyVote {
     }
     return rtn;
   }
+  async handleBillSuccess() {
+    var party = new Party(this.partyInfo.id);
+    await party.updatePartyInfo();
+    forEach(this.voteInfo.actions, async (vote, idx) => {
+      switch (vote.action) {
+        case "changeVotes":
+          await party.updateParty("votes", vote.newVotes);
+          break;
+        case "changeFees":
+          await party.updateParty("fees", vote.newFees);
+          break;
+        case "replaceChair":
+          await party.changeOccupant(getLeaderInfo(party.partyInfo, "uniqueID"), vote.newOccupant);
+          break;
+        case "changePermissions":
+          await party.changeRolePerms(vote.uniqueId, vote.newPerms);
+          break;
+        case "renameParty":
+          await party.updateParty("name", vote.proposedName);
+          break;
+        case "deleteRole":
+          await party.deleteRole(vote.uniqueId);
+          break;
+        case "changeOccupant":
+          await party.changeOccupant(vote.uniqueId, vote.newOccupant);
+          break;
+      }
+      await this.updatePartyVote("passed", 1);
+    });
+  }
   async getUserVotes(userId) {
     var user = new User(userId);
     await user.updateUserInfo();
@@ -199,6 +229,8 @@ class PartyVote {
       var ayeVoterArray = await this.getVoters(voteInformation.ayes);
       var nayVoterArray = await this.getVoters(voteInformation.nays);
 
+      this.voteInfo.autoPassPercentage = ((ayes / this.partyInfo.votes) * 100).toFixed(2);
+      this.voteInfo.regularPassPercentage = ((ayes / (ayes + nays)) * 100).toFixed(2) == "NaN" ? "0" : ((ayes / (ayes + nays)) * 100).toFixed(2);
       this.voteInfo.actionString = actionString;
       this.voteInfo.author = await userCosmeticInfo(voteInformation.author);
       this.voteInfo.sumAyes = ayes;

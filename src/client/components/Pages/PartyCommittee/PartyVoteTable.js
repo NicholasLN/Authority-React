@@ -73,7 +73,13 @@ function PartyVoteTable({ columns, data }) {
                     <td>
                       <span dangerouslySetInnerHTML={{ __html: row.original.statusString }} />
                     </td>
-                    <td>{timeago.ago(row.original.expiresAt).replace("hours from now", "hours")}</td>
+                    <td>
+                      {row.original.passed == -1 ? (
+                        <span>{timeago.ago(row.original.expiresAt).replace("hours from now", "hours")}</span>
+                      ) : (
+                        <span dangerouslySetInnerHTML={{ __html: row.original.statusString }} />
+                      )}
+                    </td>
                   </tr>
                 );
               })

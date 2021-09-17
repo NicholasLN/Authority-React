@@ -78,7 +78,7 @@ function PartyVote(props) {
         <hr />
         {sessionData.loggedIn && (
           <>
-            {userHasPerm(sessionData.loggedInId, partyInfo, "delayVote") && playerData.party == partyInfo.id && (
+            {userHasPerm(sessionData.loggedInId, partyInfo, "delayVote") && playerData.party == partyInfo.id && voteInfo.passed == -1 && (
               <>
                 <button className="btn btn-danger mb-2">Delay Vote (lose 1/6th of Party Influence!)</button>
                 <br />
@@ -103,15 +103,15 @@ function PartyVote(props) {
                 </b>
               </span>
             )}
-            {voteInfo.passed == 0 && <span class="greenFont">This vote has passed through the party committee.</span>}
-            {voteInfo.passed == 1 && <span class="redFont">This vote has failed to pass through the party committee.</span>}
+            {voteInfo.passed == 1 && <span class="greenFont">This vote has passed through the party committee.</span>}
+            {voteInfo.passed == 0 && <span class="redFont">This vote has failed to pass through the party committee.</span>}
           </>
         )}
         <hr />
         <div className="row">
           <div className="col" style={{ minHeight: "40vh", borderRight: "1px solid black" }}>
             <h5>Ayes</h5>
-            {sessionData.loggedIn && playerData.party == partyInfo.id && (
+            {sessionData.loggedIn && playerData.party == partyInfo.id && voteInfo.passed == -1 && (
               <>
                 <button className="btn btn-primary" onClick={voteAye}>
                   Vote Aye
@@ -134,7 +134,7 @@ function PartyVote(props) {
           </div>
           <div className="col" style={{ minHeight: "40vh", borderLeft: "1px solid black" }}>
             <h5>Nays</h5>
-            {sessionData.loggedIn && playerData.party == partyInfo.id && (
+            {sessionData.loggedIn && playerData.party == partyInfo.id && voteInfo.passed == -1 && (
               <>
                 <button className="btn btn-danger" onClick={voteNay}>
                   Vote Nay
@@ -162,6 +162,18 @@ function PartyVote(props) {
           </div>
           <div className="col">
             <p className="mt-2">{voteInfo.sumNays} Nays</p>
+          </div>
+        </div>
+        <div className="row" style={{ borderTop: "2px solid black" }}>
+          <div className="col">
+            <b className="bold">REGULAR PASS PERCENTAGE (51% of existing votes to pass)</b>
+            <br />
+            {voteInfo.autoPassPercentage < 51 ? <span className="redFont">{voteInfo.regularPassPercentage}%</span> : <span className="greenFont">{voteInfo.regularPassPercentage}%</span>}
+          </div>
+          <div className="col">
+            <b className="bold">AUTO PASS PERCENTAGE (60% of all votes in party to pass)</b>
+            <br />
+            {voteInfo.autoPassPercentage < 60 ? <span className="redFont">{voteInfo.autoPassPercentage}%</span> : <span className="greenFont">{voteInfo.autoPassPercentage}%</span>}
           </div>
         </div>
         <br />

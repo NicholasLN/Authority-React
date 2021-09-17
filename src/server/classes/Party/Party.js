@@ -223,6 +223,16 @@ class Party {
     });
   }
 
+  async changeRolePerms(uniqueId, newPerms) {
+    var newRoleInfo = Methods.changePerms(this.partyInfo, uniqueId, newPerms);
+    await this.updateParty("partyRoles", JSON.stringify(newRoleInfo));
+  }
+
+  async deleteRole(uniqueId) {
+    var newRoleInfo = Methods.deleteRole(this.partyInfo, uniqueId);
+    await this.updateParty("partyRoles", JSON.stringify(newRoleInfo));
+  }
+
   /**
    *
    * @param {String} variable Variable being updated.

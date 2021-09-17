@@ -43,7 +43,7 @@ async function changePermissionsAction(req) {
     if (perms) {
       forEach(perms, (perm, key) => {
         if (perm == true) {
-          var obj = { [key]: true };
+          var obj = { [key]: +true };
           newPerms = { ...newPerms, ...obj };
         }
       });

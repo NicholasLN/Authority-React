@@ -149,10 +149,32 @@ function changeOccupant(partyInfo, uniqueRoleID, newOccupant) {
   return roles;
 }
 
+function changePerms(partyInfo, uniqueRoleID, newPerms) {
+  var roles = parseRoles(partyInfo);
+  each(roles, function (role, roleTitle) {
+    if (role.uniqueID == uniqueRoleID) {
+      role.perms = newPerms;
+    }
+  });
+  return roles;
+}
+
+function deleteRole(partyInfo, uniqueRoleID) {
+  var roles = parseRoles(partyInfo);
+  each(roles, function (role, roleTitle) {
+    if (role.uniqueID == uniqueRoleID) {
+      delete roles[roleTitle];
+    }
+  });
+  return roles;
+}
+
 module.exports = {
   userHasPerm,
   getLeaderInfo,
   generateRoleList,
   getUserRole,
   changeOccupant,
+  changePerms,
+  deleteRole,
 };
