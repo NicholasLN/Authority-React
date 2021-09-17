@@ -17,7 +17,7 @@ function ProposeVote(props) {
     data.partyId = props.partyInfo.id;
     var resp = await PartyInfoService.createPartyVote(data);
     if (resp.hasOwnProperty("success")) {
-      props.history.push(`/partyVote/${resp.id}`);
+      props.history.push(`/partyVote/${resp.success}`);
       setAlert("Vote successfully created!");
       setAlertType("success");
     } else {
