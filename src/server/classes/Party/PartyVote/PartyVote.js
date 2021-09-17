@@ -1,6 +1,6 @@
 const User = require("../../User");
 const { forEach } = require("async-foreach");
-const { getLeaderInfo } = require("../Methods");
+const { getLeaderInfo, getUserRole } = require("../Methods");
 const Party = require("../Party");
 const { userCosmeticInfo } = require("../../User");
 
@@ -150,9 +150,10 @@ class PartyVote {
       arr.map(async (voter, idx) => {
         var user = new User(voter);
         await user.updateUserInfo();
-
-        var obj = { politicianName: user.userInfo.politicianName, id: user.userInfo.id, state: user.userInfo.state, votes: await this.getUserVotes(voter) };
-        newArr.push(obj);
+        if (user.userInfo.party == this.partyInfo.id) {
+          var obj = { politicianName: user.userInfo.politicianName, id: user.userInfo.id, state: user.userInfo.state, votes: await this.getUserVotes(voter) };
+          newArr.push(obj);
+        }
       })
     );
     return newArr;
@@ -199,6 +200,7 @@ class PartyVote {
           await party.deleteRole(vote.uniqueId);
           break;
         case "changeOccupant":
+          await party.changeOccupant(getUserRole(party.partyInfo, vote.newOccupant, "uniqueID"), 0);
           await party.changeOccupant(vote.uniqueId, vote.newOccupant);
           break;
       }
@@ -209,8 +211,12 @@ class PartyVote {
     var user = new User(userId);
     await user.updateUserInfo();
 
-    var share = (user.userInfo.partyInfluence / this.partyInfo.totalPartyInfluence).toFixed(3);
-    var votes = Math.round(share * this.partyInfo.votes);
+    if (user.userInfo.party == this.partyInfo.id) {
+      var share = (user.userInfo.partyInfluence / this.partyInfo.totalPartyInfluence).toFixed(3);
+      var votes = Math.round(share * this.partyInfo.votes);
+    } else {
+      var votes = 0;
+    }
 
     return votes;
   }
