@@ -193,13 +193,13 @@ class PartyVote {
       await party.updatePartyInfo();
       this.partyInfo = party.partyInfo;
 
-      var pvActionString = await this.actionToString();
+      var actionString = await this.actionToString();
       var ayes = await this.getVotes(voteInformation.ayes);
       var nays = await this.getVotes(voteInformation.nays);
       var ayeVoterArray = await this.getVoters(voteInformation.ayes);
       var nayVoterArray = await this.getVoters(voteInformation.nays);
 
-      this.voteInfo.actionString = pvActionString;
+      this.voteInfo.actionString = actionString;
       this.voteInfo.author = await userCosmeticInfo(voteInformation.author);
       this.voteInfo.sumAyes = ayes;
       this.voteInfo.ayeVoters = ayeVoterArray;

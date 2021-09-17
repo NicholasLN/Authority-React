@@ -38,7 +38,7 @@ export default function PartyCard({ party }) {
       setLoading(false);
     }
     fetchData();
-  }, []);
+  }, [party]);
 
   if (loading) {
     return (
@@ -73,13 +73,22 @@ export default function PartyCard({ party }) {
               <br />
               <span>{leaderCosmetics.title}</span>
               <br />
-              <LinkContainer to={"/politician/" + leaderCosmetics.id}>
-                <a>
+              {leaderCosmetics.name != "Vacant" ? (
+                <LinkContainer to={"/politician/" + leaderCosmetics.id}>
+                  <a>
+                    <img className="leaderImg" src={leaderCosmetics.picture} />
+                    <br />
+                    <span>{leaderCosmetics.name}</span>
+                  </a>
+                </LinkContainer>
+              ) : (
+                <>
+                  {" "}
                   <img className="leaderImg" src={leaderCosmetics.picture} />
                   <br />
-                  <span>{leaderCosmetics.name}</span>
-                </a>
-              </LinkContainer>
+                  <span>Vacant</span>
+                </>
+              )}
               <hr />
               <Resizable className="bioContainer" style={resizableStyle} enable={resizableEnable}>
                 <pre className="bioBox" style={{ maxHeight: "20vh" }}>

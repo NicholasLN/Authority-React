@@ -9,6 +9,7 @@ var { getLeaderInfo } = require("../../classes/Party/Methods");
 const each = require("foreach");
 const Party = require("../../classes/Party/Party");
 const { boolean } = require("boolean");
+const { userDoesExistId } = require("../../classes/User");
 
 router.get("/fetchPartyById/:partyId", async function (req, res) {
   let database = require("../../db");
@@ -71,30 +72,24 @@ router.get("/partyLeaderInfo/:partyId", async function (req, res) {
   let partyId = req.params.partyId;
 
   const party = new partyClass(partyId);
-  var partyInformation = await party
-    .fetchPartyInfo()
-    .then((result) => {
-      return result[0];
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  await party.updatePartyInfo();
+  var partyInfo = party.partyInfo;
+
   var leaderInformation = {
-    id: getLeaderInfo(partyInformation, "id"),
-    title: getLeaderInfo(partyInformation, "title"),
+    id: getLeaderInfo(partyInfo, "id"),
+    title: getLeaderInfo(partyInfo, "title"),
     picture: null,
     name: null,
   };
-  if (leaderInformation.id != "0") {
+  if (leaderInformation.id != "0" && (await userDoesExistId(leaderInformation.id))) {
     const user = new userClass(leaderInformation.id);
     var userInformation = await user.fetchUserInfo();
-
     leaderInformation.picture = userInformation.profilePic;
     leaderInformation.name = userInformation.politicianName;
   } else {
     leaderInformation.picture = "https://firebasestorage.googleapis.com/v0/b/authorityimagestorage.appspot.com/o/userPics%2Fdefault.jpg?alt=media&token=554a387f-ee3c-4224-bfd8-47562c223a77";
+    leaderInformation.name = "Vacant";
   }
-
   res.send(leaderInformation);
 });
 

@@ -66,21 +66,25 @@ router.get("/fetchUserById/:userId/:fetchParty?/:fetchState?", async function (r
 
   var user = new User(userId);
   await user.updateUserInfo();
-  var userInfo = public_information(user.userInfo);
-  if (!userInfo.hasOwnProperty("error")) {
-    if (fetchParty) {
-      var party = new Party(userInfo.party);
-      await party.updatePartyInfo();
-      userInfo.partyInfo = party.partyInfo;
+  if (user.userInfo) {
+    var userInfo = public_information(user.userInfo);
+    if (!userInfo.hasOwnProperty("error")) {
+      if (fetchParty) {
+        var party = new Party(userInfo.party);
+        await party.updatePartyInfo();
+        userInfo.partyInfo = party.partyInfo;
+      }
+      if (fetchState) {
+        var state = new State(userInfo.state);
+        await state.updateStateInfo();
+        userInfo.stateInfo = state.stateInfo;
+      }
+      res.send(userInfo);
+    } else {
+      res.send({ error: "No user with that ID." });
     }
-    if (fetchState) {
-      var state = new State(userInfo.state);
-      await state.updateStateInfo();
-      userInfo.stateInfo = state.stateInfo;
-    }
-    res.send(userInfo);
   } else {
-    res.send({ error: "No user with that ID." });
+    res.send({ error: "User does not exist." });
   }
 });
 
