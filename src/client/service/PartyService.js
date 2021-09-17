@@ -70,6 +70,13 @@ class PartyService {
       .then((response) => response.data)
       .catch((err) => "error");
   }
+  fetchPartyVotes(partyID, limit = 25) {
+    let url = `/partyvoteinfo/fetchVotes/${partyID}/${limit}`;
+    return this.auth
+      .get(url)
+      .then((response) => response.data)
+      .catch((err) => "error");
+  }
   joinParty(partyId) {
     let url = `/partyactions/joinParty/${partyId}`;
     return this.auth
@@ -123,6 +130,30 @@ class PartyService {
         },
       })
       .then((response) => response.data);
+  }
+  createPartyVote(body) {
+    return this.auth
+      .post("partyvoteactions/createPartyVote", body)
+      .then((response) => response.data)
+      .catch((err) => "error");
+  }
+  getPartyVote(id) {
+    return this.auth
+      .get(`partyvoteinfo/getVote/${id}`)
+      .then((response) => response.data)
+      .catch((err) => "error");
+  }
+  voteNay(voteId, partyId) {
+    return this.auth
+      .post("/partyvoteactions/voteNay", { voteId: voteId, partyId: partyId })
+      .then((response) => response.data)
+      .catch((err) => "error");
+  }
+  voteAye(voteId, partyId) {
+    return this.auth
+      .post("/partyvoteactions/voteAye", { voteId: voteId, partyId: partyId })
+      .then((response) => response.data)
+      .catch((err) => "error");
   }
 }
 const PartyInfoService = new PartyService();

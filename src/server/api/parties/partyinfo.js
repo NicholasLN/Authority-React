@@ -7,7 +7,6 @@ var partyClass = require("../../classes/Party/Party");
 var userClass = require("../../classes/User");
 var { getLeaderInfo } = require("../../classes/Party/Methods");
 const each = require("foreach");
-const forEach = require("foreach");
 const Party = require("../../classes/Party/Party");
 const { boolean } = require("boolean");
 

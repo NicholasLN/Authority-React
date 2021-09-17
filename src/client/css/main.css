@@ -75,7 +75,15 @@ a{
 .bold{
     font-weight: bold;
 }
-
+.extraClass {
+    font-size: 15px !important;
+    pointer-events: auto !important;
+    padding:0;
+}
+.extraClass:hover {
+   visibility: visible !important;
+   opacity: 1 !important;
+}
 .tableForm table>tbody>tr>td{
     text-align:left;
     padding-right:6px;

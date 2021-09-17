@@ -14,15 +14,6 @@
 .recharts-wrapper {
     margin : 0 auto;
 }
-.extraClass {
-    font-size: 20px !important;
-    pointer-events: auto !important;
-    padding:0;
-}
-.extraClass:hover {
-   visibility: visible !important;
-   opacity: 1 !important;
-}
 .bioBox{
     font-family: Bahnschrift,"sans-serif";
     font-size: 16px;

@@ -15,6 +15,8 @@ const PoliticalParties = lazy(() => import("../Pages/PoliticalParties"));
 const CreateParty = lazy(() => import("../Pages/CreateParty"));
 const Actions = lazy(() => import("../Pages/Actions/Actions"));
 const PartyCommittee = lazy(() => import("../Pages/PartyCommittee/PartyCommittee"));
+const PartyVote = lazy(() => import("../Pages/PartyCommittee/PartyVote"));
+
 import Loading from "../Misc/Loading";
 //import Politician from "../Pages/Politician/Politician";
 
@@ -88,6 +90,12 @@ class Routes extends Component {
         <Route path="/createParty">
           <Suspense fallback={<Loading />}>
             <CreateParty />
+          </Suspense>
+        </Route>
+
+        <Route path="/partyVote/:voteId?">
+          <Suspense fallback={<Loading />}>
+            <PartyVote />
           </Suspense>
         </Route>
 

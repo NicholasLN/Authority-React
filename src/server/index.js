@@ -73,6 +73,8 @@ app.use("/api/userinfo", require("./api/users/userInfo").router);
 app.use("/api/useractions", require("./api/users/userActions").router);
 // GET PARTY INFO
 app.use("/api/partyinfo", require("./api/parties/partyinfo").router);
+app.use("/api/partyvoteinfo", require("./api/parties/partyVotes/partyvoteinfo").router);
+app.use("/api/partyvoteactions", require("./api/parties/partyVotes/partyvoteactions").router);
 app.use("/api/partyactions", require("./api/parties/partyactions").router);
 // GET STATE INFO
 app.use("/api/stateinfo", require("./api/states/stateinfo").router);

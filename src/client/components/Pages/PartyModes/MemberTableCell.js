@@ -8,7 +8,7 @@ export default function MemberCell(props) {
     <>
       <LinkContainer to={"/politician/" + props.userInfo.userID}>
         <a>
-          <img style={{ maxWidth: "40px", maxHeight: "40px" }} src={props.userInfo.userPicture} />
+          {props.includePic && <img style={{ maxWidth: "40px", maxHeight: "40px" }} src={props.userInfo.userPicture} />}
           <p style={{ margin: 0 }}>{props.userInfo.userName}</p>
         </a>
       </LinkContainer>

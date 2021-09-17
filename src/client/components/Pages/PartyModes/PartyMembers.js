@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useContext } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { SyncLoader } from "react-spinners";
 import PartyInfoService from "../../../service/PartyService";
 import PartyMemberTable from "./PartyMemberTable";
@@ -39,7 +39,6 @@ function PartyMembers(props) {
 
   const fetchData = async () => {
     var tableDataAPI = await PartyInfoService.fetchPartyMembers(partyInfo.id);
-    console.log(tableDataAPI);
     setTableData(tableDataAPI);
     setLoading(false);
   };

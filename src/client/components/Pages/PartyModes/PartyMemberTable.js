@@ -59,7 +59,7 @@ function PartyMemberTable({ setLoading, fetchData, partyInfo, columns, data }) {
               return (
                 <tr {...row.getRowProps()}>
                   <td>
-                    <MemberCell userInfo={row.original.userInfo} />
+                    <MemberCell includePic={true} userInfo={row.original.userInfo} />
                   </td>
                   <td>{row.original.role}</td>
                   <td>{row.original.userInfo.userState}</td>
@@ -90,7 +90,7 @@ function PartyMemberTable({ setLoading, fetchData, partyInfo, columns, data }) {
                       </>
                     )}
                   </td>
-                  <td>{row.original.votingFor == 0 ? "Nobody" : <MemberCell userInfo={row.original.votingFor} />}</td>
+                  <td>{row.original.votingFor == 0 ? "Nobody" : <MemberCell includePic={true} userInfo={row.original.votingFor} />}</td>
                 </tr>
               );
             })

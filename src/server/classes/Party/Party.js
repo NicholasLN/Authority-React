@@ -90,11 +90,11 @@ class Party {
     });
   }
 
-  static async doesPartyExist(partyName) {
+  static async doesPartyExist(party) {
     let db = require("../../db");
-    let sql = `SELECT * FROM parties WHERE name = ?`;
+    let sql = `SELECT * FROM parties WHERE name OR id = ?`;
     return new Promise((resolve, reject) => {
-      db.query(sql, [partyName], (err, results) => {
+      db.query(sql, [party], (err, results) => {
         if (err) {
           reject(err);
         } else {
@@ -168,6 +168,34 @@ class Party {
         }
       });
     });
+  }
+
+  async getRole(role, nameOrId, returnType = "role") {
+    var rtn;
+    if (this.partyInfo == null) {
+      await this.updatePartyInfo(true);
+    } else {
+      each(this.partyInfo.partyRoles, (thisRole, key) => {
+        if (nameOrId == "uniqueId") {
+          if (thisRole.uniqueID == role) {
+            if (returnType == "role") {
+              rtn = role;
+            } else if (returnType == "key") {
+              rtn = key;
+            }
+          }
+        } else if (nameOrId == "name") {
+          if (key == role) {
+            if (returnType == "role") {
+              rtn = role;
+            } else if (returnType == "key") {
+              rtn = key;
+            }
+          }
+        }
+      });
+    }
+    return rtn;
   }
 
   /**
