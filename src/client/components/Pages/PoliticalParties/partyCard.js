@@ -9,7 +9,9 @@ import { Resizable } from "re-resizable";
 import Editor from "rich-markdown-editor";
 import editorTheme from "../../Misc/EditorTheme";
 
-const resizableStyle = {
+const resizableStne = {
+  overflow: "auto",
+  overflowX: "hidden",
   margin: "auto",
   padding: "10px",
   backgroundColor: "rgba(240,240,240,0.77)",
