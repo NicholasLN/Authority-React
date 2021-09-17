@@ -150,9 +150,11 @@ class PartyVote {
       arr.map(async (voter, idx) => {
         var user = new User(voter);
         await user.updateUserInfo();
-        if (user.userInfo.party == this.partyInfo.id) {
-          var obj = { politicianName: user.userInfo.politicianName, id: user.userInfo.id, state: user.userInfo.state, votes: await this.getUserVotes(voter) };
-          newArr.push(obj);
+        if (user.userInfo) {
+          if (user.userInfo.party == this.partyInfo.id) {
+            var obj = { politicianName: user.userInfo.politicianName, id: user.userInfo.id, state: user.userInfo.state, votes: await this.getUserVotes(voter) };
+            newArr.push(obj);
+          }
         }
       })
     );
@@ -211,11 +213,15 @@ class PartyVote {
     var user = new User(userId);
     await user.updateUserInfo();
 
-    if (user.userInfo.party == this.partyInfo.id) {
-      var share = (user.userInfo.partyInfluence / this.partyInfo.totalPartyInfluence).toFixed(3);
-      var votes = Math.round(share * this.partyInfo.votes);
+    if (user.userInfo) {
+      if (user.userInfo.party == this.partyInfo.id) {
+        var share = (user.userInfo.partyInfluence / this.partyInfo.totalPartyInfluence).toFixed(3);
+        var votes = Math.round(share * this.partyInfo.votes);
+      } else {
+        var votes = 0;
+      }
     } else {
-      var votes = 0;
+      votes = 0;
     }
 
     return votes;
