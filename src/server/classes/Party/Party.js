@@ -148,6 +148,8 @@ class Party {
     });
   }
 
+  async voterPieChartData() {}
+
   /**
    * Asynchronous function handling whenever a member joins the party
    * @param {Int} memberID ID of member joining the party
