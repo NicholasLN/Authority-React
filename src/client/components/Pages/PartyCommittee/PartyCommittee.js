@@ -36,7 +36,7 @@ function PartyCommittee(props) {
 
   if (!loading) {
     return (
-      <Body middleColWidth="10">
+      <Body middleColWidth="11">
         <br />
         <LinkContainer to={`/party/${partyId}`}>
           <a>

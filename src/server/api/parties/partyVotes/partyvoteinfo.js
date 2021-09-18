@@ -8,16 +8,17 @@ const { userCosmeticInfo } = require("../../../classes/User");
 const PartyVote = require("../../../classes/Party/PartyVote/PartyVote");
 var router = express.Router();
 
-router.get("/fetchVotes/:partyId/:limit?", async (req, res) => {
-  var { limit, partyId, fetchUserInfo } = req.params;
-  var limit = limit == undefined ? 25 : Math.abs(limit);
-  if (is_number(limit)) {
+router.get("/fetchVotes/:partyId/:lowerLimit?/:upperLimit?", async (req, res) => {
+  var { lowerLimit, upperLimit, partyId, fetchUserInfo } = req.params;
+  var lowerLimit = lowerLimit == undefined ? 25 : Math.abs(lowerLimit);
+  var upperLimit = upperLimit == undefined ? 25 : Math.abs(upperLimit);
+  if (is_number(lowerLimit) && is_number(upperLimit)) {
     if (is_number(partyId)) {
       var partyExists = await doesPartyExist(partyId);
       if (partyExists) {
         var db = require("../../../db");
         var votesPromise = new Promise((resolve, reject) => {
-          db.query("SELECT * FROM partyVotes WHERE party=? ORDER BY expiresAt DESC LIMIT ?", [partyId, limit], (err, results) => {
+          db.query("SELECT * FROM partyVotes WHERE party=? ORDER BY id DESC LIMIT ? OFFSET ?", [partyId, upperLimit, lowerLimit], (err, results) => {
             if (err) {
               reject(err);
             }

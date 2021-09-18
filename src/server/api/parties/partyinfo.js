@@ -10,6 +10,8 @@ const each = require("foreach");
 const Party = require("../../classes/Party/Party");
 const { boolean } = require("boolean");
 const { userDoesExistId } = require("../../classes/User");
+const { getUserVotes } = require("../../classes/Party/PartyVote/PartyVote");
+const User = require("../../classes/User");
 
 router.get("/fetchPartyById/:partyId", async function (req, res) {
   let database = require("../../db");
@@ -116,6 +118,67 @@ router.get("/partyMembers/:partyId/:resultCount?", async function (req, res) {
     }
   }
   res.send(partyMembers);
+});
+
+router.get("/committeePieChart/:partyId", async function (req, res) {
+  if (req.params.partyId != null) {
+    var db = require("../../db");
+    var query = `SELECT id FROM users WHERE party=? AND lastOnline>? ORDER BY partyInfluence DESC`;
+    var dbQuery = new Promise((resolve, reject) => {
+      db.query(query, [req.params.partyId, Date.now() - process.env.ACTIVITY_THRESHOLD], (err, rows) => {
+        if (err) {
+          reject(undefined);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+    var rows = await dbQuery;
+    var party = new Party(req.params.partyId);
+    await party.updatePartyInfo();
+    if (party.partyInfo) {
+      var arr = [];
+      var otherData = {
+        y: 0,
+        label: "Other Politicians",
+        share: 0,
+      };
+      if (rows) {
+        // Promise for filling arr with values
+        var fetchData = Promise.all(
+          rows.map(async (value, idx) => {
+            var user = new userClass(value.id);
+            await user.updateUserInfo();
+            var userVotes = await getUserVotes(value.id, party.partyInfo);
+            var share = ((user.userInfo.partyInfluence / party.partyInfo.totalPartyInfluence) * 100).toFixed(2);
+            if (share > 10) {
+              var data = {
+                y: userVotes,
+                label: user.userInfo.politicianName,
+                share: parseFloat(share),
+              };
+              arr.push(data);
+            } else {
+              otherData.y += userVotes;
+              otherData.share += parseFloat(share);
+            }
+          })
+        );
+        if (parseFloat(otherData.share) >= 0) {
+          arr.push(otherData);
+        }
+        await fetchData;
+
+        // Sort the results based on share.
+        arr.sort((a, b) => (a.share < b.share ? 1 : -1));
+        res.send(arr);
+      }
+    } else {
+      res.send({ error: "invalid party" });
+    }
+  } else {
+    res.send({ error: "no partyid specified" });
+  }
 });
 
 router.get("/partyMemberCount/:partyID", async function (req, res) {

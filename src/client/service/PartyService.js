@@ -70,8 +70,8 @@ class PartyService {
       .then((response) => response.data)
       .catch((err) => "error");
   }
-  fetchPartyVotes(partyID, limit = 25) {
-    let url = `/partyvoteinfo/fetchVotes/${partyID}/${limit}`;
+  fetchPartyVotes(partyID, lowerLimit = 0, upperLimit = 10) {
+    let url = `/partyvoteinfo/fetchVotes/${partyID}/${lowerLimit}/${upperLimit}`;
     return this.auth
       .get(url)
       .then((response) => response.data)
@@ -166,6 +166,12 @@ class PartyService {
       .post("/partyactions/updatePartyBio", { partyId: partyId, newBio: newBio })
       .then((response) => response.data)
       .catch((err) => "error");
+  }
+  fetchCommitteeChartData(partyId) {
+    return this.auth
+      .get(`/partyinfo/committeePieChart/${partyId}`)
+      .then((response) => response.data)
+      .catch((err) => console.error(err));
   }
 }
 const PartyInfoService = new PartyService();

@@ -220,7 +220,22 @@ class PartyVote {
     } else {
       votes = 0;
     }
+    return votes;
+  }
+  static async getUserVotes(userId, partyInfo) {
+    var user = new User(userId);
+    await user.updateUserInfo();
 
+    if (user.userInfo) {
+      if (user.userInfo.party == partyInfo.id) {
+        var share = (user.userInfo.partyInfluence / partyInfo.totalPartyInfluence).toFixed(3);
+        var votes = Math.round(share * partyInfo.votes);
+      } else {
+        var votes = 0;
+      }
+    } else {
+      votes = 0;
+    }
     return votes;
   }
   async updateVoteInformation() {
