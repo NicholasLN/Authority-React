@@ -1,12 +1,11 @@
 var express = require("express");
 const forEach = require("foreach");
+const { userHasPerm } = require("../../../classes/Party/Methods");
 const Party = require("../../../classes/Party/Party");
 const PartyVote = require("../../../classes/Party/PartyVote/PartyVote");
 const { userDoesExistId } = require("../../../classes/User");
 const User = require("../../../classes/User");
 var router = express.Router();
-
-module.exports.router = router;
 
 async function newChairAction(req) {
   var { newChair } = req.body;
@@ -268,3 +267,40 @@ router.post("/voteNay/", async (req, res) => {
     res.send({ error: "Not logged in!" });
   }
 });
+
+router.post("/delayVote", async function (req, res) {
+  if (req.session.playerData.loggedInId) {
+    var party = new Party(req.session.playerData.loggedInInfo.party);
+    await party.updatePartyInfo();
+    if (party.partyInfo) {
+      if (userHasPerm(req.session.playerData.loggedInId, party.partyInfo, "delayVote")) {
+        if (req.body.voteId) {
+          var vote = new PartyVote(req.body.voteId);
+          await vote.updateVoteInformation();
+          if (vote.voteInfo) {
+            await vote.updatePartyVote("expiresAt", vote.voteInfo.expiresAt + 24 * 60 * 60 * 1000);
+            await vote.updatePartyVote("delay", 1);
+
+            var user = new User(req.session.playerData.loggedInId);
+            await user.updateUserInfo();
+            await user.updateUser("partyInfluence", user.userInfo.partyInfluence - user.userInfo.partyInfluence * (1 / 6));
+
+            res.send(vote.voteInfo);
+          } else {
+            res.send({ error: "Can't find vote." });
+          }
+        } else {
+          res.send({ error: "No vote ID provided." });
+        }
+      } else {
+        res.send({ error: "Invalid permissions.." });
+      }
+    } else {
+      res.send({ error: "Can't find party." });
+    }
+  } else {
+    res.send({ error: "Not logged in." });
+  }
+});
+
+module.exports.router = router;

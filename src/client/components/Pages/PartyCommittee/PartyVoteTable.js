@@ -75,7 +75,15 @@ function PartyVoteTable({ columns, data }) {
                     </td>
                     <td>
                       {row.original.passed == -1 ? (
-                        <span>{timeago.ago(row.original.expiresAt).replace("hours from now", "hours")}</span>
+                        <>
+                          <span>{timeago.ago(row.original.expiresAt).replace("hours from now", "hours")}</span>
+                          {row.original.delay == 1 && (
+                            <span className="redFont">
+                              <br />
+                              Delayed! (+12 hours)
+                            </span>
+                          )}
+                        </>
                       ) : (
                         <span dangerouslySetInnerHTML={{ __html: row.original.statusString }} />
                       )}

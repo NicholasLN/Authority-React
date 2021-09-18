@@ -19,6 +19,14 @@ function PartyVote(props) {
 
   var { voteId } = useParams();
 
+  async function delayVote() {
+    var newVoteInfo = await PartyInfoService.delayVote(voteInfo.id, partyInfo.id);
+    if (!newVoteInfo.hasOwnProperty(error)) {
+      setVoteInfo(newVoteInfo);
+    } else {
+      setAlert(newVoteInfo.error);
+    }
+  }
   async function voteAye() {
     var newVoteInfo = await PartyInfoService.voteAye(voteInfo.id, partyInfo.id);
     if (!newVoteInfo.hasOwnProperty("error")) {
@@ -80,7 +88,9 @@ function PartyVote(props) {
           <>
             {userHasPerm(sessionData.loggedInId, partyInfo, "delayVote") && playerData.party == partyInfo.id && voteInfo.passed == -1 && (
               <>
-                <button className="btn btn-danger mb-2">Delay Vote (lose 1/6th of Party Influence!)</button>
+                <button className="btn btn-danger mb-2" onClick={delayVote}>
+                  Delay Vote (lose 1/6th of Party Influence!)
+                </button>
                 <br />
               </>
             )}

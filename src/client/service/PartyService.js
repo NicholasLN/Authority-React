@@ -155,6 +155,12 @@ class PartyService {
       .then((response) => response.data)
       .catch((err) => "error");
   }
+  delayVote(voteId, partyId) {
+    return this.auth
+      .post("/partyvoteactions/delayVote", { voteId, partyId })
+      .then((response) => response.data)
+      .catch((err) => "error");
+  }
   changePartyBio(partyId, newBio) {
     return this.auth
       .post("/partyactions/updatePartyBio", { partyId: partyId, newBio: newBio })

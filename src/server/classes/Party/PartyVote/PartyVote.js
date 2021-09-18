@@ -172,9 +172,6 @@ class PartyVote {
       case 1:
         rtn = "<span class='greenFont'>Vote Passed</span>";
         break;
-      case 2:
-        rtn = "Ongoing <br/> <span class='redFont'><u><b>DELAYED</b></u></span>";
-        break;
     }
     return rtn;
   }

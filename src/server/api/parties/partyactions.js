@@ -6,6 +6,7 @@ var each = require("foreach");
 const { getLeaderInfo, getUserRole, userHasPerm } = require("../../classes/Party/Methods");
 const { randomString } = require("../../classes/Misc/setSessionDefaults");
 const is_number = require("is-number");
+const PartyVote = require("../../classes/Party/PartyVote/PartyVote");
 
 /**
  * This just extracts the information for the client such as updated party/user info (for a SEAMLESS experience :P)
@@ -293,5 +294,4 @@ router.post("/updatePartyBio", async function (req, res) {
     }
   }
 });
-
 module.exports.router = router;
