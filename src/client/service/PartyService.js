@@ -173,6 +173,30 @@ class PartyService {
       .then((response) => response.data)
       .catch((err) => console.error(err));
   }
+  fetchTreasuryData(partyId, lowerLimit = 0, upperLimit = 10) {
+    return this.auth
+      .get(`/partyinfo/getFundingRequests/${partyId}/${lowerLimit}/${upperLimit}`)
+      .then((response) => response.data)
+      .catch((err) => console.error(err));
+  }
+  submitNewFundRequest(requestAmount, requestReason) {
+    return this.auth
+      .post("/partyactions/createFundRequest", { requestAmount, requestReason })
+      .then((response) => response.data)
+      .catch((err) => console.error(err));
+  }
+  approveFundingReq(requestId, partyId) {
+    return this.auth
+      .post("/partyactions/approveFundingReq", { requestId, partyId })
+      .then((response) => response.data)
+      .catch((err) => console.error(err));
+  }
+  denyFundingReq(requestId, partyId) {
+    return this.auth
+      .post("/partyactions/denyFundingReq", { requestId, partyId })
+      .then((response) => response.data)
+      .catch((err) => console.error(err));
+  }
 }
 const PartyInfoService = new PartyService();
 export default PartyInfoService;

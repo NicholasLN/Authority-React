@@ -79,26 +79,28 @@ class User {
       if (err) throw err;
     });
   }
+
+  /**
+   * Method for obtaining user cosmetic information
+   * @param {int} userId
+   * @returns Array with cosmetic information
+   */
   static async userCosmeticInfo(userId) {
-    let database = require("../db");
-    return new Promise(function (resolve, reject) {
-      database.query(`SELECT * FROM users WHERE id = ?`, [userId], function (err, result) {
-        if (err) {
-          reject(new Error(err));
-        } else {
-          var userVars = {
-            userPicture: null,
-            userName: null,
-            userState: null,
-          };
-          userVars.userPicture = result[0].profilePic;
-          userVars.userName = result[0].politicianName;
-          userVars.userState = result[0].state;
-          userVars.userID = result[0].id;
-          resolve(userVars);
-        }
-      });
-    });
+    var user = new User(userId);
+    await user.updateUserInfo();
+    var userVars = {
+      userPicture: null,
+      userName: null,
+      userState: null,
+      userID: -1,
+    };
+    if (user.userInfo) {
+      userVars.userPicture = user.userInfo.profilePic;
+      userVars.userName = user.userInfo.politicianName;
+      userVars.userState = user.userInfo.state;
+      userVars.userID = user.userInfo.id;
+    }
+    return userVars;
   }
 
   /**

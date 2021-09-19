@@ -75,10 +75,10 @@ function PartyOverview(props) {
           partyRoles.map((role, i) => (
             <div key={Math.random()} className="col-sm-3" style={{ marginTop: "8px" }}>
               <span>{role.roleName}</span>
-              <ReactTooltip id={`${i}`} delayShow={500} place="left">
+              <ReactTooltip key={Math.random()} id={`${i}`} delayShow={500} place="left">
                 {role.rolePermissions.map((permission, index) => (
                   <>
-                    <span key={index}>
+                    <span key={Math.random()}>
                       {rolePermTooltip(permission)}
                       <br />
                     </span>
@@ -87,7 +87,7 @@ function PartyOverview(props) {
               </ReactTooltip>
               <br />
               {role.roleOccupant != 0 ? (
-                <LinkContainer to={"/politician/" + role.roleOccupant}>
+                <LinkContainer key={Math.random()} to={"/politician/" + role.roleOccupant}>
                   <a>
                     <img data-tip data-for={`${i}`} style={{ maxWidth: "80px", height: "75px", border: "5px ridge darkgrey" }} src={role.occupantPicture} />
                     <p>{role.occupantName}</p>

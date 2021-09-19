@@ -3,7 +3,7 @@
  */
  .select-search {
   position: relative;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Bahnschrift', sans-serif;
     box-sizing: border-box;
 }
 
@@ -38,14 +38,14 @@
   display: block;
   height: 36px;
   width: 100%;
-  padding: 0 40px 0 16px;
+  padding: 6px 12px;
   background: #fff;
   border: 1px solid transparent;
   box-shadow: 0 .0625rem .125rem rgba(0, 0, 0, 0.15);
   border-radius: 3px;
   outline: none;
-  font-family: 'Noto Sans', sans-serif;
-  font-size: 14px;
+  font-family: 'Bahnschrift', sans-serif;
+  font-size: 1rem;
   text-align: left;
   text-overflow: ellipsis;
   line-height: 36px;

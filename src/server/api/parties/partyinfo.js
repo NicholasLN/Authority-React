@@ -7,9 +7,10 @@ var partyClass = require("../../classes/Party/Party");
 var userClass = require("../../classes/User");
 var { getLeaderInfo } = require("../../classes/Party/Methods");
 const each = require("foreach");
+const { forEach } = require("async-foreach");
 const Party = require("../../classes/Party/Party");
 const { boolean } = require("boolean");
-const { userDoesExistId } = require("../../classes/User");
+const { userDoesExistId, userCosmeticInfo } = require("../../classes/User");
 const { getUserVotes } = require("../../classes/Party/PartyVote/PartyVote");
 const User = require("../../classes/User");
 
@@ -250,6 +251,35 @@ router.get("/fetchPoliticalParties/:country?/:mode?", async function (req, res) 
       res.send(results[1]);
     }
   });
+});
+
+router.get("/getFundingRequests/:partyId/:lowerLimit?/:upperLimit?", async (req, res) => {
+  var { lowerLimit, upperLimit, partyId } = req.params;
+  partyId = parseInt(partyId);
+  var lowerLimit = lowerLimit == undefined ? 10 : Math.abs(lowerLimit);
+  var upperLimit = upperLimit == undefined ? 0 : Math.abs(upperLimit);
+
+  if (isnumber(upperLimit) && isnumber(lowerLimit)) {
+    if (isnumber(partyId)) {
+      var db = require("../../db");
+      var sql = "SELECT * FROM fundRequests WHERE party = ? AND fulfilled = 0 ORDER BY id DESC LIMIT ? OFFSET ?";
+      db.query(sql, [partyId, lowerLimit, upperLimit], async (err, results) => {
+        if (err) {
+          res.send({ error: err });
+        } else {
+          var newResults = [];
+          var fd = Promise.all(
+            results.map(async (result, key) => {
+              result.author = await userCosmeticInfo(result.requester);
+              newResults.push(result);
+            })
+          );
+          await fd;
+          res.send(newResults);
+        }
+      });
+    }
+  }
 });
 
 router.post("/searchUsersInParty", async function (req, res) {

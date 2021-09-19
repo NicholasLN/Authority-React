@@ -294,4 +294,115 @@ router.post("/updatePartyBio", async function (req, res) {
     }
   }
 });
+
+router.post("/createFundRequest", async function (req, res) {
+  var { requestAmount, requestReason } = req.body;
+  if (req.session.playerData.loggedIn) {
+    if (requestAmount && requestAmount > 0) {
+      if (requestReason) {
+        var db = require("../../db");
+        var createRequestPromise = new Promise(function (resolve, reject) {
+          db.query(
+            "INSERT INTO fundRequests (party, requester, requesting, reason) VALUES (?, ?, ?, ?)",
+            [req.session.playerData.loggedInInfo.party, req.session.playerData.loggedInId, requestAmount, requestReason],
+            (err, results) => {
+              if (err) {
+                reject(err);
+              }
+              if (results) {
+                resolve(results);
+              }
+            }
+          );
+        });
+        await createRequestPromise.then((results) => res.sendStatus(200)).catch((err) => res.status(400).send({ err }));
+      } else {
+        res.send({ error: "No reason provided" });
+      }
+    }
+  }
+});
+
+router.post("/approveFundingReq", async function (req, res) {
+  var { requestId, partyId } = req.body;
+  if (req.session.playerData.loggedIn) {
+    var party = new Party(partyId);
+    await party.updatePartyInfo();
+    if (party) {
+      if (
+        userHasPerm(req.session.playerData.loggedInId, party.partyInfo, "sendFunds") ||
+        userHasPerm(req.session.playerData.loggedInId, party.partyInfo, "leader") ||
+        userHasPerm(req.session.playerData.loggedInId, party.partyInfo, "approveFundingReq")
+      ) {
+        var db = require("../../db");
+        var voteInfo = new Promise((resolve, reject) => {
+          db.query("SELECT * FROM fundRequests WHERE id = ?", [requestId], (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result[0]);
+            }
+          });
+        });
+        voteInfo
+          .then(async (result) => {
+            if (party.partyInfo.partyTreasury >= result.requesting) {
+              await party.updateParty("partyTreasury", party.partyInfo.partyTreasury - result.requesting);
+              var user = new User(result.requester);
+              await user.updateUserInfo();
+              await user.updateUser("campaignFinance", user.userInfo.campaignFinance + result.requesting);
+              res.sendStatus(200);
+
+              await db.query("UPDATE fundRequests SET fulfilled = 1 WHERE id = ?", [requestId]);
+            } else {
+              res.send({ error: "Not enough money in the party treasury." });
+            }
+          })
+          .catch((err) => {
+            res.send({ error: "Funding request could not be found." });
+          });
+      } else {
+        res.send({ error: "Invalid permissions." });
+      }
+    } else {
+      res.send({ error: "Party does not exist" });
+    }
+  }
+});
+
+router.post("/denyFundingReq", async (req, res) => {
+  var { requestId, partyId } = req.body;
+  if (req.session.playerData.loggedIn) {
+    var party = new Party(partyId);
+    await party.updatePartyInfo();
+    if (party) {
+      if (
+        userHasPerm(req.session.playerData.loggedInId, party.partyInfo, "sendFunds") ||
+        userHasPerm(req.session.playerData.loggedInId, party.partyInfo, "leader") ||
+        userHasPerm(req.session.playerData.loggedInId, party.partyInfo, "approveFundingReq")
+      ) {
+        var db = require("../../db");
+        var resp = new Promise((resolve, reject) => {
+          db.query("UPDATE fundRequests SET fulfilled = 1 WHERE id = ?", [requestId], (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result[0]);
+            }
+          });
+        });
+        await resp
+          .then((result) => {
+            res.sendStatus(200);
+          })
+          .catch((err) => res.send({ error: "Error denying request" }));
+      }
+    } else {
+      res.send({ error: "Party not found." });
+    }
+  } else {
+    res.send({ error: "No user logged in." });
+  }
+});
+
 module.exports.router = router;

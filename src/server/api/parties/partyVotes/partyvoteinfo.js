@@ -11,7 +11,7 @@ var router = express.Router();
 router.get("/fetchVotes/:partyId/:lowerLimit?/:upperLimit?", async (req, res) => {
   var { lowerLimit, upperLimit, partyId, fetchUserInfo } = req.params;
   var lowerLimit = lowerLimit == undefined ? 25 : Math.abs(lowerLimit);
-  var upperLimit = upperLimit == undefined ? 25 : Math.abs(upperLimit);
+  var upperLimit = upperLimit == undefined ? 0 : Math.abs(upperLimit);
   if (is_number(lowerLimit) && is_number(upperLimit)) {
     if (is_number(partyId)) {
       var partyExists = await doesPartyExist(partyId);

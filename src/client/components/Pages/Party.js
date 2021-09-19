@@ -9,6 +9,7 @@ import PartyOverview from "./PartyModes/PartyOverview";
 import PartyMembers from "./PartyModes/PartyMembers";
 import { getLeaderInfo, getUserRole, userHasPerm } from "../../../server/classes/Party/Methods";
 import PartyManagement from "./PartyModes/PartyManagement";
+import PartyTreasury from "./PartyModes/PartyTreasury";
 
 function Party(props) {
   var [partyID, setPartyID] = useState(null);
@@ -20,35 +21,36 @@ function Party(props) {
   const { setAlert } = useContext(AlertContext);
   const { sessionData, playerData } = useContext(UserContext);
 
-  useEffect(() => {
-    console.debug(requestedPartyId, mode);
-    async function fetchData() {
-      if (mode != "overview" && mode != "treasury" && mode != "management" && mode != "committee" && mode != "members") {
-        setPartyMode("overview");
-      } else {
-        setPartyMode(mode);
-      }
-      // For some reason, they don't provide a party ID.
-      if (requestedPartyId === undefined) {
-        setAlert("Party ID not provided.");
+  async function fetchData() {
+    if (mode != "overview" && mode != "treasury" && mode != "management" && mode != "committee" && mode != "members") {
+      setPartyMode("overview");
+    } else {
+      setPartyMode(mode);
+    }
+    // For some reason, they don't provide a party ID.
+    if (requestedPartyId === undefined) {
+      setAlert("Party ID not provided.");
+      props.history.push("/");
+    } else {
+      setPartyID(requestedPartyId);
+      var info = await PartyInfoService.fetchPartyById(requestedPartyId);
+      console.log(info);
+      // Fetching party returns error
+      if (info.hasOwnProperty("error")) {
+        setAlert("Party not found.");
+        // Redirect to index. Because I'm lazy.
         props.history.push("/");
       } else {
-        setPartyID(requestedPartyId);
-        var info = await PartyInfoService.fetchPartyById(requestedPartyId);
-        console.log(info);
-        // Fetching party returns error
-        if (info.hasOwnProperty("error")) {
-          setAlert("Party not found.");
-          // Redirect to index. Because I'm lazy.
-          props.history.push("/");
-        } else {
-          setPartyInfo(info);
-        }
+        setPartyInfo(info);
       }
-      // Set loading to false to remove loading screen.
-      setLoading(false);
-      document.title = `${info.name} | AUTHORITY`;
     }
+    // Set loading to false to remove loading screen.
+    setLoading(false);
+    document.title = `${info.name} | AUTHORITY`;
+  }
+
+  useEffect(() => {
+    console.debug(requestedPartyId, mode);
     fetchData();
 
     return function cleanup() {
@@ -182,9 +184,17 @@ function Party(props) {
             >
               Party Committee
             </button>
+            <button
+              className={"btn btn-primary partyButton" + (partyMode == "treasury" ? " active" : "")}
+              onClick={() => {
+                setPartyMode("treasury");
+              }}
+            >
+              Party Treasury
+            </button>
             {userHasPerm(playerData.id, partyInfo, "leader") && (
               <button
-                className={"btn btn-primary partyButton" + (partyMode == "partyManagement" ? " active" : "")}
+                className={"btn btn-primary partyButton" + (partyMode == "management" ? " active" : "")}
                 onClick={() => {
                   setPartyMode("management");
                 }}
@@ -202,6 +212,8 @@ function Party(props) {
         {partyMode == "members" && <PartyMembers partyInfo={partyInfo} />}
 
         {partyMode == "management" && <PartyManagement partyInfo={partyInfo} />}
+
+        {partyMode == "treasury" && <PartyTreasury fetchPartyData={fetchData} partyInfo={partyInfo} />}
 
         {partyMode == "committee" && props.history.push(`/partyCommittee/${partyInfo.id}`)}
       </Body>

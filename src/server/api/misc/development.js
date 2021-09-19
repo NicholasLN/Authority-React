@@ -4,7 +4,7 @@ var express = require("express");
 var router = express.Router();
 
 if (process.env.ENVIRONMENT == "DEVELOPMENT") {
-  router.use("/loginAsUser/:userId", function (req, res) {
+  router.get("/loginAsUser/:userId", function (req, res) {
     var userID = req.params.userId;
 
     req.session.playerData = {};
