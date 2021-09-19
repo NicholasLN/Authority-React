@@ -25,4 +25,4 @@ yarn-debug.log*
 yarn-error.log*
 
 .env
-src/client/firebase/firebaseConfig.js
+gcloudkey.json
