@@ -122,7 +122,7 @@ class PartyService {
   }
   updatePartyPicture(file) {
     let data = new FormData();
-    data.append("picture", file, file.name);
+    data.append("file", file, file.name);
     return this.auth
       .post("imageupload/newPartyImg", data, {
         headers: {
