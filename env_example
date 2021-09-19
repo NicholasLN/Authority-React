@@ -18,14 +18,12 @@ DB_DB=
 DB_PASSWORD=
 DB_PORT=
 
-### Firebase information (not as important, but required for uploading images)
-FIREBASE_API_KEY = 
-FIREBASE_AUTH_DOMAIN = 
-FIREBASE_PROJECT_ID = 
-FIREBASE_STORAGE_BUCKET = 
-FIREBASE_MESSAGING_SENDER_ID = 
-FIREBASE_APP_ID = 
-FIREBASE_MAX_UPLOAD_SIZE = 
+### Google Cloud Bucket Storage Name
+STORAGE_BUCKET_NAME=authority-react-images
+STORAGE_BUCKET_ID=
+
+### Max upload size for image (in mb)
+MAX_UPLOAD_SIZE = 5
 
 ### This is used for registration. AKA if you have a captcha users are required to fill out. Probably not required in development.
 CAPTCHA_SITE_KEY = 
