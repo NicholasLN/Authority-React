@@ -4,7 +4,6 @@ import Editor from "rich-markdown-editor";
 import { AlertContext } from "../../context/AlertContext";
 import { UserContext } from "../../context/UserContext";
 import "../../css/profile.css";
-import firebase from "../../firebase/firebase";
 import AuthorizationService from "../../service/AuthService";
 import light from "../Misc/EditorTheme";
 import Body from "../Structure/Body";
