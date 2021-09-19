@@ -2,9 +2,7 @@ const express = require("express");
 const logger = require("node-color-log");
 const path = require("path");
 const User = require("./classes/User");
-const axios = require("axios");
-const { setSessionDefaults, randomString, setSessionAuthorized, remove_useless_information, public_information } = require("./classes/Misc/setSessionDefaults");
-const dotenv = require("dotenv").config();
+const { setSessionDefaults, randomString, public_information } = require("./classes/Misc/setSessionDefaults");
 
 // RATE LIMIT MIDDLEWARE: https://www.npmjs.com/package/express-rate-limit
 const rateLimit = require("express-rate-limit");
@@ -13,11 +11,20 @@ const limiter = rateLimit({
   max: 200, // limit each IP to 100 requests per windowMs
 });
 
+const multer = require("multer");
+const multerMid = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024 * 1024,
+  },
+});
+
 const app = express();
+
+app.use(multerMid.single("file"));
 app.use(limiter);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: "50mb" }));
-
 /*  Initialize session which will be used for storing user data and the like. */
 try {
   app.use(require("./sessionInit"));
