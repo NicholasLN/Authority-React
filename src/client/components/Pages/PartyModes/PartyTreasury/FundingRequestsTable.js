@@ -4,6 +4,7 @@ import { UserContext } from "./../../../../context/UserContext";
 import { AlertContext } from "./../../../../context/AlertContext";
 import { LinkContainer } from "react-router-bootstrap";
 import PartyInfoService from "../../../../service/PartyService";
+import ReactTooltip from "react-tooltip";
 
 function FundingRequestsTable({ fetchPartyData, fetchData, partyInfo, columns, data }) {
   const tableInstance = useTable(
@@ -91,7 +92,19 @@ function FundingRequestsTable({ fetchPartyData, fetchData, partyInfo, columns, d
                       </b>
                     )}
                   </td>
-                  <td>{row.original.reason}</td>
+                  <td>
+                    {row.original.reason.length > 7 ? (
+                      <>
+                        <ReactTooltip id={`${row.original.id}ReasonTooltip`}>{row.original.reason}</ReactTooltip>
+                        <span data-tip data-for={`${row.original.id}ReasonTooltip`}>
+                          {row.original.reason.substring(0, 10)}...
+                        </span>
+                      </>
+                    ) : (
+                      <span>{row.original.reason}</span>
+                    )}
+                    n
+                  </td>
                   <td>{row.original.author.userState}</td>
                   <td>
                     <button className="btn btn-primary mx-1" onClick={() => approveFundingReq(row.original.id)}>

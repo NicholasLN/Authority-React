@@ -447,13 +447,16 @@ router.post("/donateMoney", async function (req, res) {
         var user = new User(req.session.playerData.loggedInId);
         await party.updatePartyInfo();
         await user.updateUserInfo();
-
-        if (user.userInfo.campaignFinance >= moneyAmount) {
-          await party.updateParty("partyTreasury", parseFloat(party.partyInfo.partyTreasury) + parseFloat(moneyAmount));
-          await user.updateUser("campaignFinance", parseFloat(user.userInfo.campaignFinance) - parseFloat(moneyAmount));
-          res.status(200).send("Successfully donated funds.");
+        if (userHasPerm(req.session.playerData.loggedInId, party.partyInfo, "sendFunds") || userHasPerm(req.session.playerData.loggedInId, party.partyInfo, "leader")) {
+          if (user.userInfo.campaignFinance >= moneyAmount) {
+            await party.updateParty("partyTreasury", parseFloat(party.partyInfo.partyTreasury) + parseFloat(moneyAmount));
+            await user.updateUser("campaignFinance", parseFloat(user.userInfo.campaignFinance) - parseFloat(moneyAmount));
+            res.status(200).send("Successfully donated funds.");
+          } else {
+            res.send({ error: "Not enough money." });
+          }
         } else {
-          res.send({ error: "Not enough money." });
+          res.send({ error: "Invalid permissions." });
         }
       } else {
         res.send({ error: "Not in a party." });

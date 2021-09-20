@@ -17,6 +17,7 @@ function PartyTreasury(props) {
   var [newFundReqData, setNewFundReqData] = useState({ amount: 0, reason: "" });
   var [donateAmount, setDonateAmount] = useState(0);
   var [sendAmount, setSendAmount] = useState(0);
+  var [page, setPage] = useState(0);
 
   var onSubmitNewRequest = async () => {
     var resp = await PartyInfoService.submitNewFundRequest(newFundReqData.amount, newFundReqData.reason);
@@ -80,7 +81,7 @@ function PartyTreasury(props) {
       {
         Header: "Reason",
         accessor: "reason",
-        width: "auto",
+        width: "30%",
       },
       {
         Header: "State",
@@ -95,7 +96,7 @@ function PartyTreasury(props) {
   );
 
   async function fetchTableData() {
-    var data = await PartyInfoService.fetchTreasuryData(props.partyInfo.id, 10, 0);
+    var data = await PartyInfoService.fetchTreasuryData(props.partyInfo.id, 10, page);
     setFundingReqData(data);
   }
 
@@ -106,7 +107,7 @@ function PartyTreasury(props) {
       props.history.push("/");
       setAlert("NO. NO. YOU DO NOT BELONG HERE!");
     }
-  }, [props.partyInfo, sendMoneyTo]);
+  }, [props.partyInfo, sendMoneyTo, page]);
 
   return (
     <>
@@ -198,7 +199,31 @@ function PartyTreasury(props) {
           {(userHasPerm(sessionData.loggedInId, props.partyInfo, "leader") ||
             userHasPerm(sessionData.loggedInId, props.partyInfo, "sendFunds") ||
             userHasPerm(sessionData.loggedInId, props.partyInfo, "approveFundingReq")) && (
-            <FundingRequestsTable fetchPartyData={props.fetchPartyData} fetchData={fetchTableData} columns={columns} data={fundingReqData} partyInfo={props.partyInfo} />
+            <>
+              <FundingRequestsTable fetchPartyData={props.fetchPartyData} fetchData={fetchTableData} columns={columns} data={fundingReqData} partyInfo={props.partyInfo} />
+              <nav>
+                <ul className="pagination">
+                  <li className="page-item">
+                    <button
+                      onClick={() => {
+                        if (page != 0) {
+                          setPage(page - 10);
+                        }
+                      }}
+                      className="page-link"
+                      href="#"
+                    >
+                      Previous
+                    </button>
+                  </li>
+                  <li className="page-item">
+                    <button onClick={() => setPage(page + 10)} className="page-link" href="#">
+                      Next
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </>
           )}
         </div>
       </div>

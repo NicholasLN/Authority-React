@@ -46,12 +46,12 @@ class Party {
    * @param {number} results Max # of results to fetch.
    * @returns {Promise} A promise with an array of users.
    */
-  async fetchPartyMembers(results = 50) {
+  async fetchPartyMembers(results = 0) {
     var id = this.partyID;
     let database = require("../../db");
     var users = [];
 
-    const sql = `SELECT * FROM users WHERE party = ? LIMIT ?`;
+    const sql = `SELECT * FROM users WHERE party = ? LIMIT 15 OFFSET ? `;
     return new Promise(function (resolve, reject) {
       database.query(sql, [id, results], function (err, rows) {
         if (err) {

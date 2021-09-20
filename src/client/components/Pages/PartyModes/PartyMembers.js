@@ -36,9 +36,10 @@ function PartyMembers(props) {
   const [partyInfo, setPartyInfo] = useState(props.partyInfo);
   const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState([]);
+  const [page, setPage] = useState(0);
 
   const fetchData = async () => {
-    var tableDataAPI = await PartyInfoService.fetchPartyMembers(partyInfo.id);
+    var tableDataAPI = await PartyInfoService.fetchPartyMembers(partyInfo.id, page);
     setTableData(tableDataAPI);
     setLoading(false);
   };
@@ -49,7 +50,7 @@ function PartyMembers(props) {
     return () => {
       setLoading(true);
     };
-  }, [props.partyInfo]);
+  }, [props.partyInfo, page]);
 
   if (loading) {
     return <SyncLoader size={10} />;
@@ -57,6 +58,28 @@ function PartyMembers(props) {
   return (
     <>
       <PartyMemberTable fetchData={fetchData} setLoading={setLoading} columns={columns} data={tableData} partyInfo={partyInfo} />
+      <nav>
+        <ul className="pagination">
+          <li className="page-item">
+            <button
+              onClick={() => {
+                if (page != 0) {
+                  setPage(page - 10);
+                }
+              }}
+              className="page-link"
+              href="#"
+            >
+              Previous
+            </button>
+          </li>
+          <li className="page-item">
+            <button onClick={() => setPage(page + 10)} className="page-link" href="#">
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
     </>
   );
 }
