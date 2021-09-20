@@ -12,14 +12,18 @@ import PartyInfoService from "../../../service/PartyService";
 function PartyTreasury(props) {
   var { sessionData, playerData } = useContext(UserContext);
   var [sendMoneyTo, setSendMoneyTo] = useState(0);
-  var { setAlert } = useContext(AlertContext);
+  var { setAlert, setAlertType } = useContext(AlertContext);
   var [fundingReqData, setFundingReqData] = useState([]);
   var [newFundReqData, setNewFundReqData] = useState({ amount: 0, reason: "" });
+  var [donateAmount, setDonateAmount] = useState(0);
+  var [sendAmount, setSendAmount] = useState(0);
 
   var onSubmitNewRequest = async () => {
     var resp = await PartyInfoService.submitNewFundRequest(newFundReqData.amount, newFundReqData.reason);
     if (!resp.hasOwnProperty("error")) {
       fetchTableData();
+      setAlert("Successfully made a new funding request.");
+      setAlertType("success");
     } else {
       setAlert(resp.error);
     }
@@ -34,6 +38,30 @@ function PartyTreasury(props) {
       var newData = newFundReqData;
       newData.reason = e.target.value;
       setNewFundReqData(newData);
+    }
+  };
+  var onDonateMoney = async () => {
+    if (donateAmount > 0) {
+      var resp = await PartyInfoService.donateMoney(donateAmount);
+      if (!resp.hasOwnProperty("error")) {
+        setAlert("Successfully donated money to the party.");
+        setAlertType("success");
+        props.fetchPartyData();
+      } else {
+        setAlert(resp.error);
+      }
+    }
+  };
+  var onSendFunds = async () => {
+    if (sendAmount > 0) {
+      var resp = await PartyInfoService.sendMoney(sendMoneyTo, sendAmount);
+      if (!resp.hasOwnProperty("error")) {
+        setAlert("Successfully sent the money.");
+        setAlertType("success");
+        props.fetchPartyData();
+      } else {
+        setAlert(resp.error);
+      }
     }
   };
 
@@ -109,11 +137,13 @@ function PartyTreasury(props) {
                     <b>Send Funds</b>
                   </td>
                   <td>
-                    <input className="form-control" type="number" placeholder="Amount" />
+                    <input className="form-control" onChange={(e) => setSendAmount(e.target.value)} type="number" placeholder="Amount" />
                     <PartyMemberSearch onChange={setSendMoneyTo} partyInfo={props.partyInfo} />
                   </td>
                   <td>
-                    <button className="btn btn-primary">Send Funds</button>
+                    <button className="btn btn-primary" onClick={onSendFunds}>
+                      Send Funds
+                    </button>
                   </td>
                 </tr>
               )}
@@ -126,10 +156,13 @@ function PartyTreasury(props) {
                     className="form-control"
                     type="number"
                     placeholder={`Amount (you have ${new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(playerData.campaignFinance)})`}
+                    onChange={(e) => setDonateAmount(e.target.value)}
                   />
                 </td>
                 <td>
-                  <button className="btn btn-primary">Donate</button>
+                  <button onClick={onDonateMoney} className="btn btn-primary">
+                    Donate
+                  </button>
                 </td>
               </tr>
             </tbody>

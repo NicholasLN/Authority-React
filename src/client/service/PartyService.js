@@ -197,6 +197,18 @@ class PartyService {
       .then((response) => response.data)
       .catch((err) => console.error(err));
   }
+  donateMoney(moneyAmount, partyId) {
+    return this.auth
+      .post("/partyactions/donateMoney", { moneyAmount })
+      .then((response) => response.data)
+      .catch((err) => console.error(err));
+  }
+  sendMoney(sendTo, sendAmount) {
+    return this.auth
+      .post("/partyActions/sendMoney", { sendTo, sendAmount })
+      .then((response) => response.data)
+      .catch((err) => console.error(err));
+  }
 }
 const PartyInfoService = new PartyService();
 export default PartyInfoService;

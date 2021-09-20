@@ -20,7 +20,7 @@ function NavBar(props) {
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <a href="/" className="navbar-brand" style={{ marginLeft: "15px" }}>
           <b>
-            AUTHORITY<small>It's Not POWER, I Swear!</small>
+            AUTHORITY<small>It's open source, you know?</small>
           </b>
         </a>
         <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#myNavbar" aria-expanded="true">

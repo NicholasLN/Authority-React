@@ -405,4 +405,63 @@ router.post("/denyFundingReq", async (req, res) => {
   }
 });
 
+router.post("/sendMoney", async function (req, res) {
+  var { sendTo, sendAmount } = req.body;
+  if (sendTo != undefined && sendAmount != undefined) {
+    if (req.session.playerData.loggedIn) {
+      if (req.session.playerData.loggedInInfo.party != 0) {
+        var userParty = new Party(req.session.playerData.loggedInInfo.party);
+        await userParty.updatePartyInfo();
+
+        var sendTo = new User(sendTo);
+        await sendTo.updateUserInfo();
+
+        if (sendTo.userInfo.party == req.session.playerData.loggedInInfo.party) {
+          if (userParty.partyInfo.partyTreasury >= sendAmount) {
+            await userParty.updateParty("partyTreasury", parseFloat(userParty.partyInfo.party) - parseFloat(sendAmount));
+            await sendTo.updateUser("campaignFinance", parseFloat(sendTo.userInfo.campaignFinance) + parseFloat(sendAmount));
+            res.sendStatus(200);
+          } else {
+            res.send({ error: "Not enough money within the party treasury." });
+          }
+        } else {
+          res.send({ error: "Not in the same party." });
+        }
+      } else {
+        res.send({ error: "Not in any party." });
+      }
+    } else {
+      res.send({ error: "Not logged in." });
+    }
+  } else {
+    res.send({ error: "Yo, bro, something went wrong." });
+  }
+});
+
+router.post("/donateMoney", async function (req, res) {
+  var { moneyAmount, partyId } = req.body;
+  if (req.session.playerData.loggedIn) {
+    if (is_number(moneyAmount)) {
+      if (req.session.playerData.loggedInInfo.party != 0) {
+        var party = new Party(req.session.playerData.loggedInInfo.party);
+        var user = new User(req.session.playerData.loggedInId);
+        await party.updatePartyInfo();
+        await user.updateUserInfo();
+
+        if (user.userInfo.campaignFinance >= moneyAmount) {
+          await party.updateParty("partyTreasury", parseFloat(party.partyInfo.partyTreasury) + parseFloat(moneyAmount));
+          await user.updateUser("campaignFinance", parseFloat(user.userInfo.campaignFinance) - parseFloat(moneyAmount));
+          res.status(200).send("Successfully donated funds.");
+        } else {
+          res.send({ error: "Not enough money." });
+        }
+      } else {
+        res.send({ error: "Not in a party." });
+      }
+    }
+  } else {
+    res.send({ error: "Not logged in." });
+  }
+});
+
 module.exports.router = router;
