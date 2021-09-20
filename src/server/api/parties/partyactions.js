@@ -418,7 +418,7 @@ router.post("/sendMoney", async function (req, res) {
 
         if (sendTo.userInfo.party == req.session.playerData.loggedInInfo.party) {
           if (userParty.partyInfo.partyTreasury >= sendAmount) {
-            await userParty.updateParty("partyTreasury", parseFloat(userParty.partyInfo.party) - parseFloat(sendAmount));
+            await userParty.updateParty("partyTreasury", parseFloat(userParty.partyInfo.partyTreasury) - parseFloat(sendAmount));
             await sendTo.updateUser("campaignFinance", parseFloat(sendTo.userInfo.campaignFinance) + parseFloat(sendAmount));
             res.sendStatus(200);
           } else {
