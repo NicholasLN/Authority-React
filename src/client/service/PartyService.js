@@ -35,8 +35,8 @@ class PartyService {
       .then((response) => response.data)
       .catch((err) => "error");
   }
-  fetchParties(country, mode = "active") {
-    let url = `/partyinfo/fetchPoliticalParties/${country}/${mode}`;
+  fetchParties(country, mode = "active", page = 0, query) {
+    let url = `/partyinfo/fetchPoliticalParties/${country}/${mode}/${page}/${query}`;
     return this.auth
       .get(url)
       .then((response) => response.data)

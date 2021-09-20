@@ -16,6 +16,8 @@ function PoliticalParties(props) {
   var { sessionData, playerData } = useContext(UserContext);
   var [mode, setMode] = useState("active");
   var [loading, setLoading] = useState(true);
+  var [page, setPage] = useState(0);
+  var [partyQuery, setPartyQuery] = useState(" ");
 
   const switchMode = () => {
     if (mode == "active") {
@@ -27,27 +29,27 @@ function PoliticalParties(props) {
       setLoading(true);
     }
   };
-
-  useEffect(() => {
-    async function fetchData() {
-      var fetchedParties = await PartyInfoService.fetchParties(country, mode);
-      if (!fetchedParties.hasOwnProperty("error")) {
-        setParties(fetchedParties);
-        setLoading(false);
+  async function fetchData() {
+    var fetchedParties = await PartyInfoService.fetchParties(country, mode, page, partyQuery);
+    if (!fetchedParties.hasOwnProperty("error")) {
+      setParties(fetchedParties);
+      setLoading(false);
+    } else {
+      if (!sessionData.loggedIn) {
+        props.history.push(`/`);
+        setAlert("Country not found.");
       } else {
-        if (!sessionData.loggedIn) {
-          props.history.push(`/`);
-          setAlert("Country not found.");
-        } else {
-          setAlert(`Country not found. Defaulting to ${playerData.nation}`);
-          setAlertType("warning");
-          var fetchedParties = await PartyInfoService.fetchParties(playerData.nation, mode);
-          setParties(fetchedParties);
-        }
+        setAlert(`Country not found. Defaulting to ${playerData.nation}`);
+        setAlertType("warning");
+        var fetchedParties = await PartyInfoService.fetchParties(playerData.nation, mode, page);
+        setParties(fetchedParties);
       }
     }
+  }
+  useEffect(() => {
+    setLoading(true);
     fetchData();
-  }, [country, mode]);
+  }, [country, mode, page]);
 
   if (!loading) {
     return (
@@ -81,6 +83,44 @@ function PoliticalParties(props) {
           </>
         )}
         <hr />
+        <div className="row w-100">
+          <div className="col-5">
+            <nav>
+              <ul className="pagination mr-0">
+                <li className="page-item">
+                  <button
+                    onClick={() => {
+                      if (page != 0) {
+                        setPage(page - 9);
+                      }
+                    }}
+                    className="page-link"
+                    href="#"
+                  >
+                    Previous
+                  </button>
+                </li>
+                <li className="page-item">
+                  <button onClick={() => setPage(page + 9)} className="page-link" href="#">
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <div className="col-7">
+            <input
+              onChange={(e) => {
+                setPartyQuery(e.target.value);
+                fetchData();
+              }}
+              style={{ float: "right" }}
+              className="form-control w-50"
+              type="input"
+              placeholder="Search Parties"
+            />
+          </div>
+        </div>
         <div className="row justify-content-center">
           {parties.map((party, idx) => {
             return <PartyCard key={idx} party={party} />;

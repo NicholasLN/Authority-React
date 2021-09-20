@@ -196,7 +196,17 @@ router.get("/partyMemberCount/:partyID", async function (req, res) {
   });
 });
 
-router.get("/fetchPoliticalParties/:country?/:mode?", async function (req, res) {
+router.get("/fetchPoliticalParties/:country?/:mode?/:page?/:query?", async function (req, res) {
+  var { page, query } = req.params;
+  if (page === undefined) {
+    page = 0;
+  } else {
+    page = parseInt(page);
+  }
+  if (query == "" || query == undefined) {
+    query = " ";
+  }
+
   let country = req.params.country;
   var countryProvided = country ? true : false;
   var mode = req.params.mode ? req.params.mode : "active";
@@ -219,7 +229,8 @@ router.get("/fetchPoliticalParties/:country?/:mode?", async function (req, res) 
     LEFT OUTER JOIN (SELECT party, count(*) as activeMembers FROM users WHERE lastOnline > (ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) - ?) GROUP BY party) u ON u.party = p.id
     LEFT OUTER JOIN (SELECT party, count(*) as members FROM users GROUP BY party) n ON n.party = p.id
   WHERE nation = ? AND activeMembers > 0
-  ORDER BY activeMembers DESC
+  AND name LIKE ?
+  ORDER BY activeMembers DESC LIMIT 9 OFFSET ?
     `;
   } else {
     sql = `
@@ -228,10 +239,11 @@ router.get("/fetchPoliticalParties/:country?/:mode?", async function (req, res) 
       LEFT OUTER JOIN (SELECT party, count(*) as activeMembers FROM users WHERE lastOnline > (ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) - ?) GROUP BY party) u ON u.party = p.id
       LEFT OUTER JOIN (SELECT party, count(*) as members FROM users GROUP BY party) n ON n.party = p.id
     WHERE nation = ? AND ISNULL(activeMembers)
-    ORDER BY activeMembers DESC
+    AND name LIKE ?
+    ORDER BY activeMembers DESC LIMIT 9 OFFSET ?
       `;
   }
-  db.query(sql, [country, process.env.ACTIVITY_THRESHOLD, country], async (err, results) => {
+  db.query(sql, [country, process.env.ACTIVITY_THRESHOLD, country, `%${query}%`, page], async (err, results) => {
     if (err) {
       console.log(err);
       res.send({ error: "Error fetching parties." });

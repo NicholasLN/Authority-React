@@ -32,13 +32,17 @@ export default function PartyCard({ party }) {
   const [leaderCosmetics, setLeaderCosmetics] = useState(null);
 
   useEffect(() => {
+    let isSubscribed = true;
     async function fetchData() {
-      var leaderInformation = await PartyInfoService.fetchPartyLeader(party.id);
-      setLeaderCosmetics(leaderInformation);
+      if (isSubscribed) {
+        var leaderInformation = await PartyInfoService.fetchPartyLeader(party.id);
+        setLeaderCosmetics(leaderInformation);
+      }
       setLoading(false);
     }
     fetchData();
-  }, [party]);
+    return () => (isSubscribed = false);
+  }, []);
 
   if (loading) {
     return (
