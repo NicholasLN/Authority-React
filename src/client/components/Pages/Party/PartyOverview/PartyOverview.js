@@ -35,14 +35,14 @@ function PartyOverview({ partyInfo }) {
     <>
       <h3>{partyInfo.leaderCosmetics.title}</h3>
       {partyInfo.leaderCosmetics != 0 && (
-        <LinkContainer to={`/politician/${partyInfo.leaderCosmetics.id}`}>
-          <a>
-            <div className="mx-auto mb-0" style={{ maxWidth: "30%" }}>
+        <div className="mx-auto mb-0" style={{ maxWidth: "30%" }}>
+          <LinkContainer to={`/politician/${partyInfo.leaderCosmetics.id}`}>
+            <a>
               <img src={partyInfo.leaderCosmetics.picture} className="img-thumbnail mw-25" />
-            </div>
-            <h5 className="mt-1">{"" + partyInfo.leaderCosmetics.name}</h5>
-          </a>
-        </LinkContainer>
+              <h5 className="mt-1">{"" + partyInfo.leaderCosmetics.name}</h5>
+            </a>
+          </LinkContainer>
+        </div>
       )}
       <hr />
       <div className="row justify-content-center">

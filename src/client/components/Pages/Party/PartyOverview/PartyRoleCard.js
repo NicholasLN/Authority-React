@@ -25,14 +25,14 @@ export default React.memo(({ roleInfo }) => {
             </div>
           </ReactTooltip>
           <span>{roleInfo.roleName}</span>
-          <LinkContainer to={`/politician/${roleInfo.roleOccupant}`}>
-            <a>
-              <div className="mx-auto" style={{ maxWidth: "20%" }}>
+          <div className="mx-auto" style={{ maxWidth: "20%" }}>
+            <LinkContainer to={`/politician/${roleInfo.roleOccupant}`}>
+              <a>
                 <img data-tip data-for={`${roleInfo.roleName}_rolePermissions`} src={roleInfo.occupantPicture} className="img-fluid img-thumbnail" style={{ border: "5px outset grey" }} />
                 <h5>{roleInfo.occupantName}</h5>
-              </div>
-            </a>
-          </LinkContainer>
+              </a>
+            </LinkContainer>
+          </div>
         </div>
       ) : (
         <div className="col-sm-4 mt-2">
