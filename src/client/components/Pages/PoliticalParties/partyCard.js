@@ -29,7 +29,7 @@ const resizableEnable = {
 
 export default function PartyCard({ party }) {
   return (
-    <div style={{ padding: "4px" }} className="col-sm-4">
+    <div style={{ padding: "4px" }} className="col-md-4">
       <div className="card">
         <div className="partyInfo">
           <div className="partyImgContainer">
