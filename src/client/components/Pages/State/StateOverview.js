@@ -37,7 +37,7 @@ function StateOverview(props) {
         </h1>
         <img width="300" src={stateInfo.flag} className="img-thumbnail" alt={`State flag of ${stateInfo.name}`} />
         <hr />
-        <LinkContainer to={`/demographics/${stateInfo.nation}/${stateInfo.abbreviation}`}>
+        <LinkContainer to={`/demographics/${stateInfo.country}/${stateInfo.abbreviation}`}>
           <button className="btn btn-primary">Demographics</button>
         </LinkContainer>
       </Body>
