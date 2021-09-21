@@ -197,9 +197,10 @@ router.get("/partyMemberCount/:partyID", async function (req, res) {
 
 router.get("/fetchPoliticalParties/:country?/:mode?/:page?/:query?", async function (req, res, next) {
   var { country, mode, page, query } = req.params;
-  query == undefined ? (query = `% %`) : (query = `%${query}%`);
+  query == undefined || query == null ? (query = `% %`) : (query = `%${query}%`);
   mode == undefined && (mode = "active");
   page == undefined ? (page = 0) : (page = parseInt(page));
+
   if (country == undefined) {
     if (req.session.playerData.loggedIn) {
       country = req.session.playerData.loggedInInfo.nation;

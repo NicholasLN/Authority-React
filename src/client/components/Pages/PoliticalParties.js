@@ -106,6 +106,12 @@ function PoliticalParties(props) {
                 setPartyQuery(e.target.value);
                 fetchData();
               }}
+              onKeyUp={(e) => {
+                if (e.target.value.length < 3) {
+                  setPartyQuery(" ");
+                  fetchData();
+                }
+              }}
               style={{ float: "right" }}
               className="form-control w-50"
               type="input"
