@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams, withRouter } from "react-router";
-import { AlertContext } from "../../context/AlertContext";
-import PartyInfoService from "../../service/PartyService";
-import Body from "../Structure/Body";
 import ClipLoader from "react-spinners/ClipLoader";
-import { UserContext } from "../../context/UserContext";
-import PartyOverview from "./PartyModes/PartyOverview";
-import PartyMembers from "./PartyModes/PartyMembers";
-import { getLeaderInfo, getUserRole, userHasPerm } from "../../../server/classes/Party/Methods";
-import PartyManagement from "./PartyModes/PartyManagement";
-import PartyTreasury from "./PartyModes/PartyTreasury";
+import { getLeaderInfo, getUserRole, userHasPerm } from "../../../../server/classes/Party/Methods";
+import { AlertContext } from "../../../context/AlertContext";
+import { UserContext } from "../../../context/UserContext";
+import PartyInfoService from "../../../service/PartyService";
+import Body from "../../Structure/Body";
+import PartyManagement from "./PartyManagement";
+import PartyMembers from "./PartyMembers";
+import PartyOverview from "./PartyOverview/PartyOverview";
+import PartyTreasury from "./PartyTreasury";
 
 function Party(props) {
   var [partyID, setPartyID] = useState(null);

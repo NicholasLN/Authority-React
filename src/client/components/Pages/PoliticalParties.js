@@ -35,15 +35,7 @@ function PoliticalParties(props) {
       setParties(fetchedParties);
       setLoading(false);
     } else {
-      if (!sessionData.loggedIn) {
-        props.history.push(`/`);
-        setAlert("Country not found.");
-      } else {
-        setAlert(`Country not found. Defaulting to ${playerData.nation}`);
-        setAlertType("warning");
-        var fetchedParties = await PartyInfoService.fetchParties(playerData.nation, mode, page);
-        setParties(fetchedParties);
-      }
+      setAlert(fetchedParties.error);
     }
   }
   useEffect(() => {

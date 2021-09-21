@@ -27,6 +27,7 @@ router.get("/fetchPartyById/:partyId", async function (req, res) {
       res.send({ error: "Party not found." });
     } else {
       partyInfo.partyRoles = JSON.parse(partyInfo.partyRoles);
+      partyInfo.leaderCosmetics = await getPartyLeaderInfo(partyId);
       res.send(partyInfo);
     }
   } else {
@@ -71,10 +72,8 @@ router.get("/partyRoleList/:partyId", async function (req, res) {
   res.send(newRoleList);
 });
 
-router.get("/partyLeaderInfo/:partyId", async function (req, res) {
-  let partyId = req.params.partyId;
-
-  const party = new partyClass(partyId);
+const getPartyLeaderInfo = async (partyId) => {
+  var party = new Party(partyId);
   await party.updatePartyInfo();
   var partyInfo = party.partyInfo;
 
@@ -93,8 +92,8 @@ router.get("/partyLeaderInfo/:partyId", async function (req, res) {
     leaderInformation.picture = "https://firebasestorage.googleapis.com/v0/b/authorityimagestorage.appspot.com/o/userPics%2Fdefault.jpg?alt=media&token=554a387f-ee3c-4224-bfd8-47562c223a77";
     leaderInformation.name = "Vacant";
   }
-  res.send(leaderInformation);
-});
+  return leaderInformation;
+};
 
 router.get("/partyMembers/:partyId/:resultCount?", async function (req, res) {
   let partyId = req.params.partyId;
@@ -196,73 +195,64 @@ router.get("/partyMemberCount/:partyID", async function (req, res) {
   });
 });
 
-router.get("/fetchPoliticalParties/:country?/:mode?/:page?/:query?", async function (req, res) {
-  var { page, query } = req.params;
-  if (page === undefined) {
-    page = 0;
-  } else {
-    page = parseInt(page);
-  }
-  if (query == "" || query == undefined) {
-    query = " ";
-  }
-
-  let country = req.params.country;
-  var countryProvided = country ? true : false;
-  var mode = req.params.mode ? req.params.mode : "active";
-
-  if (!countryProvided) {
+router.get("/fetchPoliticalParties/:country?/:mode?/:page?/:query?", async function (req, res, next) {
+  var { country, mode, page, query } = req.params;
+  query == undefined ? (query = `% %`) : (query = `%${query}%`);
+  mode == undefined && (mode = "active");
+  page == undefined ? (page = 0) : (page = parseInt(page));
+  if (country == undefined) {
     if (req.session.playerData.loggedIn) {
       country = req.session.playerData.loggedInInfo.nation;
     } else {
-      res.send({ error: "Could not find the country provided." });
+      res.send({ error: "You are not logged in, and no nation was provided." });
+      next();
     }
   }
+  var db = require("../../db");
 
-  let db = require("../../db");
-  let sql = ``;
-
-  if (mode == "active") {
-    sql = `
-  SELECT * FROM countries WHERE name = ?;
-  SELECT * FROM parties p
-    LEFT OUTER JOIN (SELECT party, count(*) as activeMembers FROM users WHERE lastOnline > (ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) - ?) GROUP BY party) u ON u.party = p.id
-    LEFT OUTER JOIN (SELECT party, count(*) as members FROM users GROUP BY party) n ON n.party = p.id
-  WHERE nation = ? AND activeMembers > 0
-  AND name LIKE ?
-  ORDER BY activeMembers DESC LIMIT 9 OFFSET ?
-    `;
-  } else {
-    sql = `
-    SELECT * FROM countries WHERE name = ?;
-    SELECT * FROM parties p
-      LEFT OUTER JOIN (SELECT party, count(*) as activeMembers FROM users WHERE lastOnline > (ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) - ?) GROUP BY party) u ON u.party = p.id
-      LEFT OUTER JOIN (SELECT party, count(*) as members FROM users GROUP BY party) n ON n.party = p.id
-    WHERE nation = ? AND ISNULL(activeMembers)
-    AND name LIKE ?
-    ORDER BY activeMembers DESC LIMIT 9 OFFSET ?
-      `;
-  }
-  db.query(sql, [country, process.env.ACTIVITY_THRESHOLD, country, `%${query}%`, page], async (err, results) => {
-    if (err) {
-      console.log(err);
-      res.send({ error: "Error fetching parties." });
-    }
-    if (results[0].length == 0) {
-      res.send({ error: "No country under that name exists." });
-    } else {
-      results[1].forEach((value, key) => {
-        delete value.party;
-        if (value.members == null) {
-          value.members = 0;
-        }
-        if (value.activeMembers == null) {
-          value.activeMembers = 0;
-        }
-      });
-      res.send(results[1]);
-    }
+  var sql = "SELECT * FROM parties WHERE nation = ? AND LOWER(name) LIKE ? LIMIT 13 OFFSET ?";
+  var partiesResultPromise = new Promise((resolve, reject) => {
+    db.query(sql, [country, query, page], (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    });
   });
+  var parties = await partiesResultPromise;
+  var newParties = [];
+
+  await Promise.all(
+    parties.map(async (party) => {
+      const activeMembers = new Promise((resolve, reject) => {
+        db.query(`SELECT COUNT(*) as active FROM users WHERE party = ? AND lastOnline > ?`, [party.id, Date.now() - process.env.ACTIVITY_THRESHOLD], (err, count) => {
+          if (err) return reject(err);
+          else {
+            return resolve(count[0].active);
+          }
+        });
+      });
+      var leaderCosmetics = await getPartyLeaderInfo(party.id);
+
+      party.activeMembers = await activeMembers;
+      party.leaderCosmetics = await leaderCosmetics;
+
+      if (mode == "defunct") {
+        if (party.activeMembers == 0) {
+          newParties.push(party);
+        }
+      } else {
+        if (party.activeMembers >= 1) {
+          newParties.push(party);
+        }
+      }
+    })
+  );
+  newParties.sort((a, b) => {
+    return b.activeMembers - a.activeMembers;
+  });
+  res.send(newParties);
 });
 
 router.get("/getFundingRequests/:partyId/:lowerLimit?/:upperLimit?", async (req, res) => {

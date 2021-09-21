@@ -4,7 +4,7 @@ import { SyncLoader } from "react-spinners";
 import { useSortBy, useTable } from "react-table";
 import ReactTooltip from "react-tooltip";
 import timeago from "time-ago";
-import MemberCell from "../PartyModes/MemberTableCell";
+import MemberCell from "../Party/MemberTableCell";
 
 function PartyVoteTable({ columns, data }) {
   var [loading, setLoading] = useState(true);

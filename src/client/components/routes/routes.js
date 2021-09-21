@@ -9,7 +9,7 @@ const Register = lazy(() => import("../Pages/Register"));
 const Login = lazy(() => import("../Pages/Login"));
 const EditProfile = lazy(() => import("../Pages/EditProfile"));
 const Politician = lazy(() => import("../Pages/Politician/Politician"));
-const Party = lazy(() => import("../Pages/Party"));
+const Party = lazy(() => import("../Pages/Party/Party"));
 const NoMatch = lazy(() => import("../Pages/NoMatch"));
 const PoliticalParties = lazy(() => import("../Pages/PoliticalParties"));
 const CreateParty = lazy(() => import("../Pages/CreateParty"));

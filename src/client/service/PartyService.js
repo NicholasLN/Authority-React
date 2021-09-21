@@ -21,13 +21,6 @@ class PartyService {
       .then((response) => response.data)
       .catch((err) => "error");
   }
-  fetchPartyLeader(partyID) {
-    let url = `/partyinfo/partyLeaderInfo/${partyID}`;
-    return this.auth
-      .get(url)
-      .then((response) => response.data)
-      .catch((err) => "error");
-  }
   fetchPartyMembers(partyID, results = 0) {
     let url = `/partyinfo/partyMembers/${partyID}/${results}`;
     return this.auth
