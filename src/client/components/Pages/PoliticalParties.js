@@ -129,7 +129,22 @@ function PoliticalParties(props) {
   } else {
     return (
       <Body>
-        <ClipLoader />
+        <br />
+        <h2>Political Parties</h2>
+        {mode == "active" && (
+          <>
+            <span>Parties that are currently operating (more than 0 active members)</span>
+            <br />
+          </>
+        )}
+        {mode == "defunct" && (
+          <>
+            <span>Parties that are currently defunct (0 active members)</span>
+            <br />
+          </>
+        )}
+        <hr />
+        <ClipLoader size={40} />
       </Body>
     );
   }

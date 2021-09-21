@@ -88,6 +88,8 @@ app.use("/api/stateinfo", require("./api/states/stateinfo").router);
 // DEVELOPMENT ROUTES
 app.use("/api/misc/development", require("./api/misc/development").router);
 app.use("/api/imageupload", require("./api/imageupload/imageupload").router);
+// DEMOGRAPHIC ROUTES
+app.use("/api/demographicinfo", require("./api/demographics/demographicinfo").router);
 
 app.use((req, res, next) => {
   next();
