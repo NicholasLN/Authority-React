@@ -45,7 +45,7 @@ function PoliticalParties(props) {
 
   if (!loading) {
     return (
-      <Body middleColWidth="11">
+      <Body middleColWidth="9">
         <br />
         <h2>Political Parties</h2>
         {mode == "active" && (

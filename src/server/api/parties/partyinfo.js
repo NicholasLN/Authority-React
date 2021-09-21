@@ -239,6 +239,11 @@ router.get("/fetchPoliticalParties/:country?/:mode?/:page?/:query?", async funct
       party.activeMembers = await activeMembers;
       party.leaderCosmetics = await leaderCosmetics;
 
+      const { getColorFromURL } = require("color-thief-node");
+      var palette = await getColorFromURL(party.partyPic);
+      var dominantColor = `rgb(${palette[0]}, ${palette[1]}, ${palette[2]})`;
+      party.dominantColor = dominantColor;
+
       if (mode == "defunct") {
         if (party.activeMembers == 0) {
           newParties.push(party);

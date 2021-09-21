@@ -29,75 +29,60 @@ const resizableEnable = {
 
 export default function PartyCard({ party }) {
   return (
-    <div style={{ padding: "4px" }} className="col-md-4">
-      <div className="card">
-        <div className="partyInfo">
-          <div className="partyImgContainer">
+    <div className="col-lg-4 mt-3">
+      <div className="partyCard" style={{ borderColor: party.dominantColor }}>
+        <LinkContainer to={`/party/${party.id}`}>
+          <a>
             <img className="partyImgLogo" src={party.partyPic} />
-          </div>
-          <div className="partyNameContainer">
-            <LinkContainer to={"/party/" + party.id}>
-              <a>{party.name}</a>
-            </LinkContainer>
-          </div>
-          <div className="card-body">
-            <br />
-            <span>{party.leaderCosmetics.title}</span>
-            <br />
-            {party.leaderCosmetics.name != "Vacant" ? (
-              <LinkContainer to={"/politician/" + party.leaderCosmetics.id}>
-                <a>
-                  <img className="leaderImg" src={party.leaderCosmetics.picture} />
-                  <br />
-                  <span>{party.leaderCosmetics.name}</span>
+            <h4 className="partyName">{party.name}</h4>
+          </a>
+        </LinkContainer>
+        <span className="mt-3 mb-2">
+          {party.partyBio.length > 0 && (
+            <>
+              <ReactTooltip id={`${party.id}.bio`} backgroundColor="white" className="extraClass" delayShow={1000} delayHide={1000} effect="float">
+                <Resizable className="bioContainer" style={resizableStyle} enable={resizableEnable}>
+                  <pre className="bioBox" style={{ maxHeight: "30vh" }}>
+                    <Editor readOnly={true} theme={editorTheme} defaultValue={party.partyBio} />
+                  </pre>
+                </Resizable>
+              </ReactTooltip>
+              <small>
+                <a data-tip data-for={`${party.id}.bio`} href="#">
+                  Bio
                 </a>
-              </LinkContainer>
-            ) : (
-              <>
-                {" "}
-                <img className="leaderImg" src={party.leaderCosmetics.picture} />
-                <br />
-                <span>Vacant</span>
-              </>
-            )}
-            <hr />
-            <Resizable className="bioContainer" style={resizableStyle} enable={resizableEnable}>
-              <pre className="bioBox" style={{ maxHeight: "20vh" }}>
-                <Editor readOnly={true} theme={editorTheme} defaultValue={party.partyBio} />
-              </pre>
-            </Resizable>
-            <hr />
+              </small>
+              <br />
+            </>
+          )}
+          <small>Members: {party.activeMembers}</small>
+        </span>
+        <small>
+          Social Ideology:
+          <ReactTooltip id={`${party.id}SocTool`}>
             <span>
-              <b>Members:{party.activeMembers}</b>
+              Base: {getPositionName("social", party.initialSocPos)} ({party.initialSocPos})
             </span>
-            <hr />
-            Social Ideology:
-            <ReactTooltip id={`${party.id}SocTool`}>
-              <span>
-                Base: {getPositionName("social", party.initialSocPos)} ({party.initialSocPos})
-              </span>
-            </ReactTooltip>
-            <span data-tip data-for={`${party.id}SocTool`} style={{ fontWeight: "bold" }}>
-              <span style={{ color: selectColor(["blue", "#101010", "red"], party.socPos) }}>
-                {" "}
-                {getPositionName("social", party.socPos)} ({party.socPos})
-              </span>
+          </ReactTooltip>
+          <span data-tip data-for={`${party.id}SocTool`} style={{ fontWeight: "bold" }}>
+            <span style={{ color: selectColor(["blue", "#101010", "red"], party.socPos) }}>
+              {" " + getPositionName("social", party.socPos)} ({party.socPos})
             </span>
-            <br />
-            Economic Ideology:
-            <ReactTooltip id={`${party.id}EcoTool`}>
-              <span>
-                Base: {getPositionName("economic", party.initialEcoPos)} ({party.initialEcoPos})
-              </span>
-            </ReactTooltip>
-            <span data-tip data-for={`${party.id}EcoTool`} style={{ fontWeight: "bold" }}>
-              <span style={{ color: selectColor(["blue", "#101010", "red"], party.ecoPos) }}>
-                {" "}
-                {getPositionName("economic", party.ecoPos)} ({party.ecoPos})
-              </span>
+          </span>
+        </small>
+        <small>
+          Economic Ideology:
+          <ReactTooltip id={`${party.id}EcoTool`}>
+            <span>
+              Base: {getPositionName("economic", party.initialEcoPos)} ({party.initialEcoPos})
             </span>
-          </div>
-        </div>
+          </ReactTooltip>
+          <span data-tip data-for={`${party.id}EcoTool`} style={{ fontWeight: "bold" }}>
+            <span style={{ color: selectColor(["blue", "#101010", "red"], party.ecoPos) }}>
+              {" " + getPositionName("economic", party.ecoPos)} ({party.ecoPos})
+            </span>
+          </span>
+        </small>
       </div>
     </div>
   );

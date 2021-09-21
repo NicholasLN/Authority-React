@@ -21,6 +21,7 @@
     "beautify-json": "^1.0.1",
     "boolean": "^3.1.2",
     "chroma-js": "^2.1.2",
+    "color-thief-node": "^1.0.4",
     "compression-webpack-plugin": "^6.1.1",
     "cookie-session": "^1.4.0",
     "copy-webpack-plugin": "^6.4.1",

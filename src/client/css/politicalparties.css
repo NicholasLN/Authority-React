@@ -1,32 +1,12 @@
-.card{
-    padding: 6px 6px 6px 6px;
-    margin-left:12px;
-    margin-right:12px;
-    min-height: 100%;
-    border: 1px black solid;
+.partyCard{
+    padding:12px 6px 12px 6px;
+    background-color: rgba(246,246,246,255);
+    border-top:.15em solid;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
-.col-sm-4{
-    margin-bottom:15px;
-}
-.card-body{
-    padding-top:1px;
-}
-.party-leader-pic{
-    max-width:15%;
-    max-height:12%;
-}
-.partyBioContainer{
-    font-family: Bahnschrift,"sans-serif";
-    text-align: left;
-    font-size: 16px;
-    background-color: rgba(224,224,224,0.88);
-    min-height:130px;
-    max-height: 25vh;
-    vertical-align: center;
-    white-space: pre-wrap;
-    padding: 8px 8px 8px 8px;
-    overflow: auto;
-    border: 5px groove black
+.partyCard h4{
+    width:100%; 
 }
 .partyImgLogo{
     mix-blend-mode: multiply;
@@ -34,25 +14,8 @@
     height:150px;
     margin:auto;
 }
-.partyInfo{
-    min-height:50%;
-}
-.partyImgContainer{
-    vertical-align: center;
-    background-color:rgb(232,232,232);
-    padding-bottom: 8px;
-    padding-top:8px;
-}
-.partyNameContainer{
-    width: 100%;
-    background-color:rgb(220,220,220);
-}
-.partyNameContainer a{
-    margin-top:3px;
-    margin-bottom:3px;
-    font-size: 20px;
-}
-.leaderImg{
-    max-width:170px;
-    height:100px;
+.partyCard{
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
