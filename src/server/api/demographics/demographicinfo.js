@@ -107,11 +107,15 @@ router.get("/generatePoliticalLeanings/:type/:parseForChart?/:country?/:state?/:
     var chartArray = [];
     Object.keys(politicalLeaningsArray).map((position, key) => {
       chartArray.push({
+        x: parseInt(position),
         y: Math.round((politicalLeaningsArray[position] / 100) * sumPopulation),
         label: getPositionName(type, position),
         share: politicalLeaningsArray[position].toFixed(2),
         color: selectColor(["blue", "#101010", "red"], position),
       });
+    });
+    chartArray.sort((a, b) => {
+      return a.x - b.x;
     });
     res.send(chartArray);
   } else {
