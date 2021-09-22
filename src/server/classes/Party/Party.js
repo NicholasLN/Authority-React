@@ -235,6 +235,11 @@ class Party {
     await this.updateParty("partyRoles", JSON.stringify(newRoleInfo));
   }
 
+  async renameRole(uniqueId, newName) {
+    var newRoleInfo = Methods.renameRole(this.partyInfo, uniqueId, newName);
+    await this.updateParty("partyRoles", JSON.stringify(newRoleInfo));
+  }
+
   /**
    *
    * @param {String} variable Variable being updated.

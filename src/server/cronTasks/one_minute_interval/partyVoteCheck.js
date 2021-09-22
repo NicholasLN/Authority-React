@@ -22,7 +22,9 @@ async function handlePassingVotes() {
     await pv.updateVoteInformation();
 
     if (Date.now() > pv.voteInfo.expiresAt) {
-      if (pv.partyInfo.regularPassPercentage >= 51) {
+      var billPassed = pv.voteInfo.regularPassPercentage >= 51;
+      if (billPassed) {
+        console.log("OK!!!");
         await pv.handleBillSuccess();
       } else {
         await pv.updatePartyVote("passed", 0);

@@ -37,6 +37,7 @@ class AuthService {
       });
   }
   register(user) {
+    console.log(user);
     return this.auth.post("auth/register", user).then((response) => response.data);
   }
   updateUserPicture(file) {

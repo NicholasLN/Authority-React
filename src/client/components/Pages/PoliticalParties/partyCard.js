@@ -42,16 +42,14 @@ export default function PartyCard({ party }) {
             <>
               <ReactTooltip id={`${party.id}.bio`} backgroundColor="white" className="extraClass" delayShow={1000} delayHide={1000} effect="float">
                 <Resizable className="bioContainer" style={resizableStyle} enable={resizableEnable}>
-                  <pre className="bioBox" style={{ maxHeight: "30vh" }}>
+                  <pre className="bioBox" style={{ maxWidth: "80vw", maxHeight: "30vh" }}>
                     <Editor readOnly={true} theme={editorTheme} defaultValue={party.partyBio} />
                   </pre>
                 </Resizable>
               </ReactTooltip>
-              <small>
-                <a data-tip data-for={`${party.id}.bio`} href="#">
-                  Bio
-                </a>
-              </small>
+              <a data-tip data-for={`${party.id}.bio`}>
+                Hover for Bio
+              </a>
               <br />
             </>
           )}

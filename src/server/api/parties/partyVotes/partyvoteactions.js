@@ -145,7 +145,7 @@ router.post("/createPartyVote", async (req, res) => {
     if (voteType) {
       switch (voteType) {
         case "renameRole":
-          action = await renameRoleAction(req);
+          action.push(await renameRoleAction(req));
           break;
         case "newChair":
           action.push(await newChairAction(req));
@@ -181,6 +181,7 @@ router.post("/createPartyVote", async (req, res) => {
           }
         });
       } else {
+        console.log(action);
         res.send({ error: "Something went wrong with your vote bro." });
       }
     } else {

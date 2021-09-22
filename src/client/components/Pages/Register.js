@@ -16,6 +16,7 @@ function Register(props) {
   // FORM DATA
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
+  const [email, setEmail] = useState(null);
   const [politicianName, setPoliticianName] = useState(null);
   const [selectedState, setSelectedState] = useState("California");
   const [selectedEcoPosition, setSelectedEcoPosition] = useState(0);
@@ -50,6 +51,7 @@ function Register(props) {
       var body = {
         username: username,
         password: password,
+        email: email,
         politicianName: politicianName,
         state: selectedState,
         country: country,
@@ -57,15 +59,13 @@ function Register(props) {
         socPos: selectedSocPosition,
       };
       var sessionData = await AuthorizationService.register(body);
-      if (sessionData.error) {
-        if (sessionData.error == "Politician already exists!") {
-          setAlert("Politician already exists!");
-        }
-      } else if (sessionData.loggedIn) {
+      if (!sessionData.hasOwnProperty("error")) {
         setSessionData(sessionData);
         let newPlayerData = await AuthorizationService.getLoggedInData();
         setPlayerData(newPlayerData);
         props.history.push("/politician/" + sessionData.loggedInId);
+      } else {
+        setAlert(sessionData.error);
       }
     }
   };
@@ -123,6 +123,14 @@ function Register(props) {
                     required
                     pattern="[^()/><\][\\\x22,;|]+"
                   />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <b>Email Address</b>
+                </td>
+                <td>
+                  <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" className="form-control" placeholder="Email Address" required />
                 </td>
               </tr>
             </tbody>

@@ -158,6 +158,16 @@ function changePerms(partyInfo, uniqueRoleID, newPerms) {
   });
   return roles;
 }
+function renameRole(partyInfo, uniqueId, newRoleTitle) {
+  var roles = parseRoles(partyInfo);
+  each(roles, function (role, roleTitle) {
+    if (role.uniqueID == uniqueId) {
+      roles[newRoleTitle] = role;
+      delete roles[roleTitle];
+    }
+  });
+  return roles;
+}
 
 function deleteRole(partyInfo, uniqueRoleID) {
   var roles = parseRoles(partyInfo);
@@ -177,4 +187,5 @@ module.exports = {
   changeOccupant,
   changePerms,
   deleteRole,
+  renameRole,
 };

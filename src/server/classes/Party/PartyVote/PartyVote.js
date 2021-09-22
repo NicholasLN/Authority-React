@@ -180,6 +180,9 @@ class PartyVote {
     await party.updatePartyInfo();
     forEach(this.voteInfo.actions, async (vote, idx) => {
       switch (vote.action) {
+        case "renameRole":
+          await party.renameRole(vote.uniqueId, vote.renameTo);
+          break;
         case "changeVotes":
           await party.updateParty("votes", vote.newVotes);
           break;
