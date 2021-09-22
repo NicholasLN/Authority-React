@@ -32,6 +32,7 @@ async function handlePassingVotes() {
     } else {
       // auto pass
       if (pv.voteInfo.autoPassPercentage >= 60) {
+        console.log("Autopass, ", pv.voteInfo.name);
         await pv.handleBillSuccess();
       }
     }

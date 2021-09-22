@@ -126,6 +126,10 @@ async function renamePartyAction(req) {
 async function changeVotesAction(req) {
   var { changeVotesTo, partyId } = req.body;
   if (changeVotesTo && partyId) {
+    changeVotesTo = Math.abs(changeVotesTo);
+    if (changeVotesTo > 1000) {
+      changeVotesTo = 1000;
+    }
     var party = new Party(partyId);
     await party.updatePartyInfo();
 
