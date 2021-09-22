@@ -170,7 +170,7 @@ a .morelink {
         width:100vw;
         min-height:80vh;
         text-align:center;
-        background-color: rgba(255,255,255,0.88);
+        background-color: rgba(255,255,255,1);
         margin: auto;
     }
     .footerBar{
