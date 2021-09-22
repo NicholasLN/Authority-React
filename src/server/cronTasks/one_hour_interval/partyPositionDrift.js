@@ -36,16 +36,23 @@ async function updateParties() {
 
     var thisParty = new Party(partyID);
     await thisParty.updatePartyInfo();
-    forEach(await fetchUsers(thisParty.partyID), async (user, userKey) => {
-      var thisUser = new User(user.id);
-      await thisUser.updateUserInfo();
 
-      if (thisUser.active) {
-        var userShare = thisUser.userInfo.partyInfluence / thisParty.partyInfo.totalPartyInfluence / 2;
-        weightedEco += thisUser.userInfo.ecoPos * userShare;
-        weightedSoc += thisUser.userInfo.socPos * userShare;
-      }
-    });
+    var totalPartyInfluence = thisParty.partyInfo.totalPartyInfluence;
+
+    var partyUsers = await fetchUsers(thisParty.partyID);
+
+    await Promise.all(
+      partyUsers.map(async (user, k) => {
+        var thisUser = new User(user.id);
+        await thisUser.updateUserInfo();
+        if (thisUser.active) {
+          var userShare = thisUser.userInfo.partyInfluence / totalPartyInfluence / 2;
+          weightedEco += thisUser.userInfo.ecoPos * userShare;
+          weightedSoc += thisUser.userInfo.socPos * userShare;
+        }
+      })
+    );
+
     // Intial party positions account for 50% of drift //
     weightedEco += thisParty.partyInfo.initialEcoPos * 0.5;
     weightedSoc += thisParty.partyInfo.initialSocPos * 0.5;
