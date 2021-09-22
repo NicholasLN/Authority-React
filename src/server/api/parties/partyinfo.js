@@ -1,4 +1,3 @@
-const { response } = require("express");
 var express = require("express");
 var router = express.Router();
 var isnumber = require("is-number");
@@ -7,15 +6,12 @@ var partyClass = require("../../classes/Party/Party");
 var userClass = require("../../classes/User");
 var { getLeaderInfo } = require("../../classes/Party/Methods");
 const each = require("foreach");
-const { forEach } = require("async-foreach");
 const Party = require("../../classes/Party/Party");
 const { boolean } = require("boolean");
 const { userDoesExistId, userCosmeticInfo } = require("../../classes/User");
 const { getUserVotes } = require("../../classes/Party/PartyVote/PartyVote");
-const User = require("../../classes/User");
 
 router.get("/fetchPartyById/:partyId", async function (req, res) {
-  let database = require("../../db");
   let partyId = req.params.partyId;
 
   if (isnumber(partyId)) {
@@ -146,7 +142,7 @@ router.get("/committeePieChart/:partyId", async function (req, res) {
       if (rows) {
         // Promise for filling arr with values
         var fetchData = Promise.all(
-          rows.map(async (value, idx) => {
+          rows.map(async (value) => {
             var user = new userClass(value.id);
             await user.updateUserInfo();
             var userVotes = await getUserVotes(value.id, party.partyInfo);
@@ -239,10 +235,10 @@ router.get("/fetchPoliticalParties/:country?/:mode?/:page?/:query?", async funct
       party.activeMembers = await activeMembers;
       party.leaderCosmetics = await leaderCosmetics;
 
-      const { getColorFromURL } = require("color-thief-node");
-      var palette = await getColorFromURL(party.partyPic);
-      var dominantColor = `rgb(${palette[0]}, ${palette[1]}, ${palette[2]})`;
-      party.dominantColor = dominantColor;
+      // const { getColorFromURL } = require("color-thief-node");
+      // var palette = await getColorFromURL(party.partyPic);
+      // var dominantColor = `rgb(${palette[0]}, ${palette[1]}, ${palette[2]})`;
+      // party.dominantColor = dominantColor;
 
       if (mode == "defunct") {
         if (party.activeMembers == 0) {
@@ -279,7 +275,7 @@ router.get("/getFundingRequests/:partyId/:lowerLimit?/:upperLimit?", async (req,
         } else {
           var newResults = [];
           var fd = Promise.all(
-            results.map(async (result, key) => {
+            results.map(async (result) => {
               result.author = await userCosmeticInfo(result.requester);
               newResults.push(result);
             })
@@ -332,7 +328,7 @@ router.post("/searchUsersInParty", async function (req, res) {
       await party.updatePartyInfo();
       // --
 
-      each(results, function (result, key) {
+      each(results, function (result) {
         var role = getUserRole(party.partyInfo, result.id, "uniqueID"); // Returns -1 if user does not have a particular role.
         if (role == -1) {
           // If they are a regular user
@@ -344,7 +340,7 @@ router.post("/searchUsersInParty", async function (req, res) {
 
     if (selectSearch) {
       var formatted = [];
-      each(returnRes, (result, key) => {
+      each(returnRes, (result) => {
         var arr = { value: result.id, label: result.politicianName };
         formatted.push(arr);
       });
