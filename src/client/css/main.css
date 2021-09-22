@@ -76,6 +76,7 @@ a{
     font-weight: bold;
 }
 .extraClass {
+    border: 3px black solid !important;
     font-size: 15px !important;
     pointer-events: auto !important;
     padding:0;
@@ -117,18 +118,10 @@ a{
 #leftText > tbody > tr > td {
     text-align: left;
 }
-
 .dark > tr {
     font-family: "Source Sans Pro", 'sans-serif';
     background-color: #111111;
     color: white;
-}
-.xdebug-var-dump{
-    text-align: left;
-    margin: auto;
-    width: 75%;
-    background-color: white;
-    margin-bottom: 80px;
 }
 ::-webkit-scrollbar-track
 {
@@ -137,14 +130,13 @@ a{
 }
 
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
     height: 6px;
     background-color: #F5F5F5;
 }
 ::-webkit-scrollbar-thumb
 {
     background-color: #000000;
-    border: 1px solid #555555;
 }
 
 a .morelink:visited {

@@ -14,7 +14,8 @@ const resizableStyle = {
   overflowX: "hidden",
   margin: "auto",
   padding: "10px",
-  backgroundColor: "rgba(240,240,240,0.77)",
+  backgroundColor: "white",
+  maxWidth: "20vw",
 };
 const resizableEnable = {
   top: false,
@@ -40,12 +41,10 @@ export default function PartyCard({ party }) {
         <span className="mt-3 mb-2">
           {party.partyBio.length > 0 && (
             <>
-              <ReactTooltip id={`${party.id}.bio`} backgroundColor="white" className="extraClass" delayShow={1000} delayHide={1000} effect="float">
-                <Resizable className="bioContainer" style={resizableStyle} enable={resizableEnable}>
-                  <pre className="bioBox" style={{ maxWidth: "80vw", maxHeight: "30vh" }}>
-                    <Editor readOnly={true} theme={editorTheme} defaultValue={party.partyBio} />
-                  </pre>
-                </Resizable>
+              <ReactTooltip id={`${party.id}.bio`} backgroundColor="white" className="extraClass" place="right" delayShow={1000} delayHide={1000} effect="float">
+                <div className="editorTheme">
+                  <Editor readOnly={true} theme={editorTheme} defaultValue={party.partyBio} />
+                </div>
               </ReactTooltip>
               <a data-tip data-for={`${party.id}.bio`}>
                 Hover for Bio
