@@ -103,7 +103,7 @@ function getEcoPositionName(position) {
 function getSocPositionName(position) {
   str = "";
   switch (true) {
-    case position <= -5 && position < -4.5:
+    case position >= -5 && position < -4.5:
       str = "Anarchism";
       break;
     case position >= -4.5 && position <= -4:
