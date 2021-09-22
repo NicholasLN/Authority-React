@@ -7,6 +7,9 @@ import Body from "../../Structure/Body";
 import GenderBreakdown from "./Charts/GenderBreakdown";
 import RaceBreakdown from "./Charts/RaceBreakDown";
 import StateDropdown from "./../../Misc/StateDropdown";
+import DemographicTable from "./Table/DemographicTable";
+import EconomicPositionBreakdown from "./Charts/EconomicPositionBreakdown";
+import SocialPositionBreakdown from "./Charts/SocialPositionBreakdown";
 
 function DemographicOverview(props) {
   const { country, state, gender, race } = useParams();
@@ -32,7 +35,7 @@ function DemographicOverview(props) {
   }
   useEffect(() => {
     fetchDemographics();
-  }, [loading]);
+  }, []);
 
   function changeState(e) {
     console.log(e);
@@ -59,9 +62,9 @@ function DemographicOverview(props) {
               <table className="table table-striped">
                 <thead className="dark">
                   <tr>
-                    <th>State</th>
-                    <th>Race</th>
-                    <th>Gender</th>
+                    <th style={{ width: "33%" }}>State</th>
+                    <th style={{ width: "33%" }}>Race</th>
+                    <th style={{ width: "33%" }}>Gender</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -71,7 +74,7 @@ function DemographicOverview(props) {
                     </td>
                     <td>
                       <select
-                        className="form-control"
+                        className="form-control mt-0"
                         onChange={(e) => {
                           const terms = queryTerms;
                           terms.race = e.target.value;
@@ -91,7 +94,7 @@ function DemographicOverview(props) {
                     </td>
                     <td>
                       <select
-                        className="form-control"
+                        className="form-control mt-0"
                         onChange={(e) => {
                           const terms = queryTerms;
                           terms.gender = e.target.value;
@@ -110,6 +113,16 @@ function DemographicOverview(props) {
                 </tbody>
               </table>
             </div>
+            <div className="row justify-content-center">
+              <h5>Demographic Table</h5>
+              <DemographicTable data={demographics} />
+            </div>
+          </div>
+          <div className="col-md-4">
+            <h4>Economic Positions Breakdown</h4>
+            <EconomicPositionBreakdown demoArray={demographics} mode={queryTerms} />
+            <h4>Social Positions Breakdown</h4>
+            <SocialPositionBreakdown demoArray={demographics} mode={queryTerms} />
           </div>
         </div>
       </Body>

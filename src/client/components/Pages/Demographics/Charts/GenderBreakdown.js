@@ -4,7 +4,7 @@ import CanvasJSReact from "../../../../assets/canvasjs.react";
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-export default function GenderBreakdown({ demoArray }) {
+function GenderBreakdown({ className, demoArray }) {
   const [pieChartData, setPieChartData] = useState([]);
 
   const generateGenderShare = () => {
@@ -61,8 +61,9 @@ export default function GenderBreakdown({ demoArray }) {
   }, [demoArray]);
 
   return (
-    <span>
+    <span className="chart">
       <CanvasJSChart options={pieChartData} />
     </span>
   );
 }
+export default React.memo(GenderBreakdown);

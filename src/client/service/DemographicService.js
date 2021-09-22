@@ -15,6 +15,14 @@ class DemographicHelper {
         console.error(error);
       });
   }
+  generatePoliticalLeanings(type, parseForChart, country, state, race, gender) {
+    return this.auth
+      .get(`/demographicinfo/generatePoliticalLeanings/${type}/${parseForChart}/${country}/${state}/${race}/${gender}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 }
 const DemographicService = new DemographicHelper();
 export default DemographicService;

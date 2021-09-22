@@ -4,7 +4,7 @@ import CanvasJSReact from "../../../../assets/canvasjs.react";
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-export default function RaceBreakdown({ demoArray }) {
+function RaceBreakdown({ demoArray }) {
   const [pieChartData, setPieChartData] = useState([]);
 
   const generateRaceShare = () => {
@@ -48,7 +48,6 @@ export default function RaceBreakdown({ demoArray }) {
       }
     });
 
-    console.log(raceArray);
     var chartArray = [];
 
     Object.keys(raceArray).map((k, v) => {
@@ -57,7 +56,6 @@ export default function RaceBreakdown({ demoArray }) {
         chartArray.push(obj);
       }
     });
-    console.log(chartArray);
     return chartArray;
   };
   var fetchPieChartData = async () => {
@@ -80,8 +78,9 @@ export default function RaceBreakdown({ demoArray }) {
   }, [demoArray]);
 
   return (
-    <span>
+    <span className="chart">
       <CanvasJSChart options={pieChartData} />
     </span>
   );
 }
+export default React.memo(RaceBreakdown);

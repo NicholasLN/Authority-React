@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import StateInfoService from "./../../service/StateService";
 import Select from "react-select";
 
+const styles = {};
+
 export default function StateDropdown(props) {
   const [states, setStates] = useState([]);
 
@@ -21,5 +23,9 @@ export default function StateDropdown(props) {
     fetchStates();
   }, []);
 
-  return <Select className="form-control" options={states} onChange={props.onChange} />;
+  return (
+    <div className="react-select form-control p-0">
+      <Select styles={styles} options={states} onChange={props.onChange} />
+    </div>
+  );
 }

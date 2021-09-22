@@ -58,6 +58,7 @@ function Register(props) {
         ecoPos: selectedEcoPosition,
         socPos: selectedSocPosition,
       };
+      console.log(body);
       var sessionData = await AuthorizationService.register(body);
       if (!sessionData.hasOwnProperty("error")) {
         setSessionData(sessionData);
@@ -166,13 +167,7 @@ function Register(props) {
               <tr>
                 <td>Social Positions</td>
                 <td>
-                  <select
-                    defaultValue={selectedSocPosition}
-                    onChange={(e) => {
-                      (e) => setSelectedSocPosition(e.target.value);
-                    }}
-                    className="form-control"
-                  >
+                  <select defaultValue={selectedSocPosition} onChange={(e) => setSelectedSocPosition(e.target.value)} className="form-control">
                     <SocialPositionDropdown />
                   </select>
                 </td>

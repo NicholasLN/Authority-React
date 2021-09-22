@@ -255,9 +255,11 @@ router.get("/fetchPoliticalParties/:country?/:mode?/:page?/:query?", async funct
       }
     })
   );
-  newParties.sort((a, b) => {
-    return b.activeMembers - a.activeMembers;
+
+  newParties.sort(function (a, b) {
+    return b.activeMembers - a.activeMembers || a.id - b.id;
   });
+
   res.send(newParties);
 });
 

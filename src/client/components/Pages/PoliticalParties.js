@@ -86,14 +86,14 @@ function PoliticalParties(props) {
                         setPage(page - 9);
                       }
                     }}
-                    className="page-link"
+                    className="btn btn-primary rounded-0"
                     href="#"
                   >
                     Previous
                   </button>
                 </li>
                 <li className="page-item">
-                  <button onClick={() => setPage(page + 9)} className="page-link" href="#">
+                  <button onClick={() => setPage(page + 9)} className="btn btn-danger rounded-0" href="#">
                     Next
                   </button>
                 </li>
