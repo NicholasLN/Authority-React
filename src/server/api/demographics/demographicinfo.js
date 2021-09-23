@@ -1,6 +1,8 @@
 var express = require("express");
 const { demoSetPopulation } = require("../../classes/Demographics/Methods");
 const { getPositionName, selectColor } = require("../../classes/Misc/Methods");
+const Poll = require("../../classes/Poll/Poll");
+const User = require("../../classes/User");
 var router = express.Router();
 
 var fetchDemographics = (sql, prepared) => {
@@ -53,7 +55,7 @@ var makeSql = (country, state, race, gender) => {
   return { sql, prepared };
 };
 
-router.get("/fetchDemographics/:country?/:state?/:race?/:gender(*)?", async (req, res, next) => {
+router.get("/fetchDemographics/:country/:state?/:race?/:gender(*)?", async (req, res, next) => {
   var { country, state, race, gender } = req.params;
   var { sql, prepared } = makeSql(country, state, race, gender);
 
@@ -62,6 +64,34 @@ router.get("/fetchDemographics/:country?/:state?/:race?/:gender(*)?", async (req
     next();
   });
   res.status(200).send(results);
+});
+
+router.get("/pollDemographics/:confidenceInterval/:sampleSize/:country/:state?/:race?/:gender(*)?", async (req, res, next) => {
+  var { country, state, race, gender, confidenceInterval, sampleSize } = req.params;
+  var confidenceInterval = parseFloat(confidenceInterval);
+  var sampleSize = parseInt(sampleSize);
+
+  var { sql, prepared } = makeSql(country, state, race, gender);
+
+  var results = await fetchDemographics(sql, prepared).catch((err) => {
+    res.status(400).send({ error: "Fuck shit" });
+  });
+  if (results.length > 0) {
+    if (req.session.playerData.loggedIn) {
+      if (confidenceInterval) {
+        if (sampleSize) {
+          var user = new User(req.session.playerData.loggedInId);
+          await user.updateUser();
+          var poll = new Poll(results, confidenceInterval, sampleSize, user);
+          res.send(await poll.approvalPoll());
+        }
+      }
+    } else {
+      res.send({ error: "You are not logged in." });
+    }
+  } else {
+    res.status(404).send({ error: "Could not find demographic set." });
+  }
 });
 
 router.get("/generatePoliticalLeanings/:type/:parseForChart?/:country?/:state?/:race?/:gender(*)?", async (req, res, next) => {

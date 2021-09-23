@@ -8,6 +8,7 @@ if (process.env.DB_PASSWORD === undefined) {
 
 try {
   var server_configuration = {
+    maxConnections: 100,
     multipleStatements: true,
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
