@@ -6,7 +6,11 @@ import DemographicTable from "./Table/DemographicTable";
 import Dropzone from "react-dropzone";
 
 function Poll(props) {
-  var [pollData, setPollData] = useState(props.history.location.state.pollData);
+  try {
+    var [pollData, setPollData] = useState(props.history.location.state.pollData);
+  } catch (Exception) {
+    var [pollData, setPollData] = useState(undefined);
+  }
 
   useEffect(() => {}, [pollData]);
 
@@ -24,7 +28,9 @@ function Poll(props) {
           <div className="row" {...getRootProps()}>
             <input {...getInputProps()} />
             {pollData == undefined ? (
-              <div>Load Poll JSON</div>
+              <div>
+                <button className="btn btn-primary">Load Poll JSON</button>
+              </div>
             ) : (
               <>
                 <div className="col-md-7">
