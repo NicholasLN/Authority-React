@@ -23,7 +23,6 @@ class Poll {
     if (sampleSize < 10) {
       sampleSize = 10;
     }
-    this.sampleSize = sampleSize;
 
     this.mean = 0;
     this.variance = 0;
@@ -162,6 +161,7 @@ class Poll {
   }
   populateQuestionArray(sampleArray) {
     var questionArray = {
+      "'Who?'": 0,
       "I strongly dislike them": 0,
       "I dislike them": 0,
       "They're ok.": 0,
@@ -169,6 +169,7 @@ class Poll {
       "I like them very much.": 0,
     };
     var questionArrayMOE = {
+      "I don't know who they are.": 0,
       "I strongly dislike them": 0,
       "I dislike them": 0,
       "They're ok.": 0,
@@ -178,6 +179,9 @@ class Poll {
     sampleArray.map((value, i) => {
       this.variance += (value - this.mean) ** 2;
       switch (true) {
+        case value == -1:
+          questionArray["'Who?'"] = questionArray["'Who?'"] + 1;
+          break;
         case value <= 15:
           questionArray["I strongly dislike them"] = questionArray["I strongly dislike them"] + 1;
           break;
@@ -253,7 +257,10 @@ class Poll {
       sql += "SELECT `type`,`demoID`,`-5`,`-4`,`-3`,`-2`,`-1`,`0`,`1`,`2`,`3`,`4`,`5` FROM demoPositions WHERE demoID=" + `${randomDemographic.id} AND type='${"social"}';`;
       sql += "SELECT `type`,`demoID`,`-5`,`-4`,`-3`,`-2`,`-1`,`0`,`1`,`2`,`3`,`4`,`5` FROM demoPositions WHERE demoID=" + `${randomDemographic.id} AND type='${"economic"}';`;
     });
+    console.time("approval");
     var demoPositionResults = await this.getDemoPositions(sql);
+    console.timeEnd("approval");
+
     await Promise.all(
       pollingDemographics.map(async (randomDemographic) => {
         var se = await this.pollRandomDemographic(demoPositionResults, randomDemographic.id);

@@ -23,10 +23,17 @@ class DemographicSupport {
 
     let userSocial = userInfo.socPos;
     let userEco = userInfo.ecoPos;
+    let userHSI = userInfo.hsi;
+    var chance = Math.floor(Math.random() * 101);
 
     let positionApproval = (this.getPositionDifferenceApproval(userSocial, demoSocial) + this.getPositionDifferenceApproval(userEco, demoEco)) / 2;
-    if (positionApproval >= 100) {
-      positionApproval = 100;
+
+    if (chance <= userHSI) {
+      if (positionApproval >= 100) {
+        positionApproval = 100;
+      }
+    } else {
+      positionApproval = -1;
     }
     return positionApproval;
   }
