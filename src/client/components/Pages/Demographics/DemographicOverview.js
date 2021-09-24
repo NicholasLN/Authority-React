@@ -10,11 +10,15 @@ import StateDropdown from "./../../Misc/StateDropdown";
 import DemographicTable from "./Table/DemographicTable";
 import EconomicPositionBreakdown from "./Charts/EconomicPositionBreakdown";
 import SocialPositionBreakdown from "./Charts/SocialPositionBreakdown";
+import { UserContext } from "./../../../context/UserContext";
 
 function DemographicOverview(props) {
   const { country, state, gender, race } = useParams();
   const [loading, setLoading] = useState(true);
   const [demographics, setDemographics] = useState([]);
+  const [sampleSize, setSampleSize] = useState();
+  const [confidenceInterval, setConfidenceInterval] = useState();
+  const { sessionData } = useContext(UserContext);
   const { setAlert } = useContext(AlertContext);
   const [queryTerms, setQueryTerms] = useState({
     country: country,
@@ -22,6 +26,20 @@ function DemographicOverview(props) {
     gender: gender,
     race: race,
   });
+
+  async function conductPoll() {
+    var pollData = await DemographicService.conductPoll(sampleSize, confidenceInterval, queryTerms.country, queryTerms.state, queryTerms.race, queryTerms.gender);
+    if (!pollData.hasOwnProperty("error")) {
+      props.history.push({
+        pathname: "/poll",
+        state: {
+          pollData: pollData,
+        },
+      });
+    } else {
+      setAlert(pollData.error);
+    }
+  }
 
   async function fetchDemographics() {
     var resp = await DemographicService.fetchDemographicArray(queryTerms.country, queryTerms.state, queryTerms.race, queryTerms.gender);
@@ -112,6 +130,51 @@ function DemographicOverview(props) {
                   </tr>
                 </tbody>
               </table>
+
+              {sessionData.loggedIn && (
+                <>
+                  <h5>Conduct Poll</h5>
+                  <table className="table table-striped">
+                    <thead className="dark">
+                      <tr>
+                        <th>Sample Size</th>
+                        <th>Confidence Interval</th>
+                        <th>Submit</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <input
+                            className="form-control"
+                            type="number"
+                            onChange={(e) => {
+                              setSampleSize(e.target.value);
+                            }}
+                            placeholder="Sample Size (10-1000)"
+                          />
+                        </td>
+                        <td>
+                          {" "}
+                          <input
+                            className="form-control"
+                            type="number"
+                            onChange={(e) => {
+                              setConfidenceInterval(e.target.value);
+                            }}
+                            placeholder="Confidence Interval"
+                          />
+                        </td>
+                        <td>
+                          <button className="btn btn-primary" onClick={conductPoll}>
+                            Conduct Poll
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </>
+              )}
             </div>
             <div className="row justify-content-center">
               <h5>Demographic Table</h5>
@@ -138,4 +201,4 @@ function DemographicOverview(props) {
   }
 }
 
-export default DemographicOverview;
+export default withRouter(DemographicOverview);

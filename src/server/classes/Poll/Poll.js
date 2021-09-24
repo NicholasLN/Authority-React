@@ -168,6 +168,13 @@ class Poll {
       "I like them.": 0,
       "I like them very much.": 0,
     };
+    var questionArrayMOE = {
+      "I strongly dislike them": 0,
+      "I dislike them": 0,
+      "They're ok.": 0,
+      "I like them.": 0,
+      "I like them very much.": 0,
+    };
     sampleArray.map((value, i) => {
       this.variance += (value - this.mean) ** 2;
       switch (true) {
@@ -181,14 +188,19 @@ class Poll {
           questionArray["They're ok."] = questionArray["They're ok."] + 1;
           break;
         case value > 60 && value <= 85:
-          questionArray["I like them"] = questionArray["I like them."] + 1;
+          questionArray["I like them."] = questionArray["I like them."] + 1;
           break;
         case value > 85 && value <= 100:
           questionArray["I like them very much."] = questionArray["I like them very much."] + 1;
           break;
       }
     });
-    return questionArray;
+    Object.keys(questionArray).map((value, i) => {
+      var respondents = questionArray[value];
+      console.log(respondents);
+      questionArrayMOE[value] = this.calcMOE(respondents / this.sampleSize);
+    });
+    return { questionArray: questionArray, questionArrayMOE: questionArrayMOE };
   }
 
   getDemoPositions(sql) {
@@ -251,15 +263,20 @@ class Poll {
       })
     );
     this.mean = sumApproval / this.sampleSize;
-    this.questionArray = this.populateQuestionArray(sampleArray);
+
+    const { questionArray, questionArrayMOE } = this.populateQuestionArray(sampleArray);
+    this.questionArray = questionArray;
+    this.questionArrayMOE = questionArrayMOE;
     this.updateStandardDeviation();
     this.updateMarginOfError();
 
     return {
+      zScore: this.z_score(this.confidenceLevel).toFixed(3),
       sampleSize: this.sampleSize,
       confidence: this.confidenceLevel,
       mean: this.mean,
       questionArray: this.questionArray,
+      questionArrayMOE: this.questionArrayMOE,
       standardDeviation: Math.round(this.standardDeviation),
       marginOfError: this.marginOfError,
       demoArray: this.demoArray,

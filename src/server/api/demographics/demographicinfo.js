@@ -83,7 +83,9 @@ router.get("/pollDemographics/:confidenceInterval/:sampleSize/:country/:state?/:
           var user = new User(req.session.playerData.loggedInId);
           await user.updateUser();
           var poll = new Poll(results, confidenceInterval, sampleSize, user);
-          res.send(await poll.approvalPoll());
+          var pollData = await poll.approvalPoll();
+
+          res.send(pollData);
         }
       }
     } else {
