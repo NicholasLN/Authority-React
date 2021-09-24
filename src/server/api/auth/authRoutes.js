@@ -124,15 +124,17 @@ router.post("/setUserImage", function (req, res) {
   }
 });
 
-router.post("/setUserBio", function (req, res) {
+router.post("/setUserBio", function (req, res, next) {
   if (req.session.playerData) {
     if (req.session.playerData.loggedIn) {
       if (req.body.bio.length < 2500) {
         let db = require("../../db");
         var sql = `UPDATE users SET bio=? WHERE id=?`;
         db.query(sql, [req.body.bio, req.session.playerData.loggedInId], function (err, response) {
-          if (err) throw err;
-          else {
+          if (err) {
+            res.send({ error: "Something went wrong with your request. Try being better." });
+            next();
+          } else {
             res.sendStatus(200);
           }
         });
