@@ -176,7 +176,7 @@ router.post("/createPartyVote", async (req, res) => {
       if (action.length > 0) {
         var sql = `INSERT INTO partyVotes (author, party, name, actions, expiresAt) VALUES (?,?,?,?,?)`;
         var db = require("../../../db");
-        var expires = Date.now() + 4 * 24 * 60 * 60 * 1000;
+        var expires = Date.now() + 1 * 24 * 60 * 60 * 1000;
         db.query(sql, [req.session.playerData.loggedInId, req.body.partyId, req.body.voteName, JSON.stringify(action), expires], (err, result) => {
           if (err) {
             res.send({ error: "error" });
