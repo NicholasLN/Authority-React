@@ -90,6 +90,10 @@ app.use("/api/misc/development", require("./api/misc/development").router);
 app.use("/api/imageupload", require("./api/imageupload/imageupload").router);
 // DEMOGRAPHIC ROUTES
 app.use("/api/demographicinfo", require("./api/demographics/demographicinfo").router);
+// LEGISLATURES
+app.use("/api/legislatureinfo", require("./api/legislatures/legislatureinfo").router);
+// COUNTRIES
+app.use("/api/countryinfo", require("./api/countries/countryinfo.js").router);
 
 app.use((req, res, next) => {
   next();

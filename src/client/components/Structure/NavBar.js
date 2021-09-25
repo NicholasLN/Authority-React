@@ -38,16 +38,12 @@ function NavBar(props) {
                     </a>
                     <ul className="dropdown-menu">
                       <LinkContainer to="/politician">
-                        <a className="dropdown-item" href="#">
-                          Profile
-                        </a>
+                        <a className="dropdown-item">Profile</a>
                       </LinkContainer>
                       <LinkContainer to={"/editprofile"}>
-                        <a className="dropdown-item" href="#">
-                          Edit Profile
-                        </a>
+                        <a className="dropdown-item">Edit Profile</a>
                       </LinkContainer>
-                      <a className="dropdown-item" href="#" onClick={logout}>
+                      <a className="dropdown-item" onClick={logout}>
                         Logout
                       </a>
                     </ul>
@@ -60,9 +56,12 @@ function NavBar(props) {
                       <i className="fas fa-flag" aria-hidden="true"></i> {playerData.nation}
                     </a>
                     <ul className="dropdown-menu">
-                      <a className="dropdown-item" href={"/politicalparties/" + playerData.nation}>
-                        Political Parties
-                      </a>
+                      <LinkContainer to={`/legislatures/${playerData.nation}`}>
+                        <a className="dropdown-item">Legislatures</a>
+                      </LinkContainer>
+                      <LinkContainer to={`/politicalparties/${playerData.nation}`}>
+                        <a className="dropdown-item">Political Parties</a>
+                      </LinkContainer>
                     </ul>
                   </li>
                   {playerData?.partyInfo ? (
