@@ -11,7 +11,7 @@ class LegislatureSrvc {
     return this.auth
       .get(`/legislatureinfo/fetchLegislatures/${countryId}`)
       .then((response) => {
-        response.data;
+        return response.data;
       })
       .catch((err) => console.error(err));
   }

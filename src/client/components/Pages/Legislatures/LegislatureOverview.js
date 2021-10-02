@@ -5,19 +5,21 @@ import LegislatureService from "./../../../service/LegislatureService";
 import CountryService from "../../../service/CountryService";
 import { AlertContext } from "./../../../context/AlertContext";
 import { ClipLoader } from "react-spinners";
+import Legislature from "./Legislature/Legislature";
 
 function LegislatureOverview(props) {
   var { country } = useParams();
   const { setAlert } = useContext(AlertContext);
   var [countryInfo, setCountryInfo] = useState({});
   var [legislatures, setLegislatures] = useState({});
+  var [selectedLegislature, setSelectedLegislature] = useState();
   var [loading, setLoading] = useState(true);
 
   async function fetchData() {
     var respCountryInfo = await CountryService.fetchCountryInfo(country);
-    console.log(respCountryInfo);
     if (!respCountryInfo.hasOwnProperty("error")) {
       var respLegislatures = await LegislatureService.fetchLegislatures(country);
+      console.debug(respLegislatures);
       setCountryInfo(respCountryInfo);
       setLegislatures(respLegislatures);
       setLoading(false);
@@ -36,6 +38,20 @@ function LegislatureOverview(props) {
       <Body>
         <br />
         <h1>{countryInfo.name} Legislatures</h1>
+        <hr />
+        <div clasName="row justify-content-center">
+          <div className="col">
+            {legislatures.map((legislature) => {
+              return (
+                <button className="btn btn-primary mx-1" onClick={() => setSelectedLegislature(legislature)}>
+                  {legislature.name}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+        <hr />
+        {selectedLegislature != null && <Legislature legislatureInfo={selectedLegislature} />}
       </Body>
     );
   } else {

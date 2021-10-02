@@ -47,8 +47,6 @@ export default function ContextProvider(props) {
           if (loading) {
             setLoading(false);
           }
-        } else {
-          console.debug("not focused. skipping check");
         }
       } catch (error) {
         console.log(error);

@@ -1,4 +1,5 @@
 var express = require("express");
+const is_number = require("is-number");
 var router = express.Router();
 
 const getLegislaturePositions = (country, legislature) => {
@@ -13,6 +14,26 @@ const getLegislaturePositions = (country, legislature) => {
     });
   });
 };
+
+const getLegislatureVotes = (legislature, limit, page) => {
+  if (limit == undefined) {
+    limit = 15;
+  }
+  if (page == undefined) {
+    page = 0;
+  }
+  var db = require("../../db");
+  return new Promise((resolve, reject) => {
+    db.query("SELECT * FROM legislatureVotes WHERE legislature = ? ORDER BY id DESC LIMIT ? OFFSET ?", [legislature, limit, page], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
 const verifyCountry = (country) => {
   var db = require("../../db");
   return new Promise((resolve, reject) => {
@@ -53,6 +74,15 @@ router.get("/fetchLegislatures/:country", async function (req, res) {
     res.send(newLegislatures);
   } else {
     res.status(404).send({ error: "Couldn't find that country." });
+  }
+});
+
+router.get("/fetchLegislatureVotes/:legislatureId/:limit?/:offset?", async function (req, res) {
+  if (is_number(req.params.legislatureId)) {
+    var votes = await getLegislatureVotes(req.params.legislatureId, req.params.limit, req.params.offset);
+    res.send(votes);
+  } else {
+    res.status(404).send({ error: "Couldn't find that legislature.'" });
   }
 });
 
