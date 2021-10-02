@@ -39,11 +39,11 @@ function LegislatureOverview(props) {
         <br />
         <h1>{countryInfo.name} Legislatures</h1>
         <hr />
-        <div clasName="row justify-content-center">
+        <div className="row justify-content-center">
           <div className="col">
             {legislatures.map((legislature) => {
               return (
-                <button className="btn btn-primary mx-1" onClick={() => setSelectedLegislature(legislature)}>
+                <button key={legislature.id} className="btn btn-primary mx-1" onClick={() => setSelectedLegislature(legislature)}>
                   {legislature.name}
                 </button>
               );

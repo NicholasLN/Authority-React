@@ -18,6 +18,7 @@ function PartyVoteTable({ columns, data }) {
   );
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
   useEffect(() => {
+    console.debug(data);
     setLoading(false);
   });
 

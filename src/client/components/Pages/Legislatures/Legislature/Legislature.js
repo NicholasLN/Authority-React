@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import LegislaturePositions from "./LegislaturePositions";
+import LegislatureVotes from "./LegislatureVotes";
 
 function Legislature({ legislatureInfo }) {
   const [mode, setModes] = useState("votes");
@@ -18,7 +19,7 @@ function Legislature({ legislatureInfo }) {
         </div>
       </div>
       {mode == "positions" && <LegislaturePositions legislatureInfo={legislatureInfo} />}
-      {mode == "votes" && <p>Votes Table Here</p>}
+      {mode == "votes" && <LegislatureVotes legislatureInfo={legislatureInfo} />}
     </div>
   );
 }

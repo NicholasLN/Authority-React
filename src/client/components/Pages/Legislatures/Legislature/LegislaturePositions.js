@@ -5,7 +5,7 @@ function LegislaturePositions({ legislatureInfo }) {
     <div className="legislature-positions-container mt-3">
       {Object.keys(legislatureInfo.positions).map((position) => {
         let currentPosition = legislatureInfo.positions[position];
-        return <p>{currentPosition.officeName}</p>;
+        return <p key={currentPosition.id}>{currentPosition.officeName}</p>;
       })}
     </div>
   );

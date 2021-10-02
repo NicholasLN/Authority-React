@@ -1,5 +1,6 @@
 var express = require("express");
 const is_number = require("is-number");
+const LegislatureVote = require("../../classes/Legislatures/LegislatureVote/LegislatureVote");
 var router = express.Router();
 
 const getLegislaturePositions = (country, legislature) => {
@@ -80,6 +81,18 @@ router.get("/fetchLegislatures/:country", async function (req, res) {
 router.get("/fetchLegislatureVotes/:legislatureId/:limit?/:offset?", async function (req, res) {
   if (is_number(req.params.legislatureId)) {
     var votes = await getLegislatureVotes(req.params.legislatureId, req.params.limit, req.params.offset);
+    await Promise.all(
+      votes.map(async (vote) => {
+        var lv = new LegislatureVote(vote.id);
+        await lv.updateVoteInformation();
+
+        vote.author = lv.voteInfo.author;
+        vote.actions = lv.voteInfo.actions;
+        vote.sumAyes = lv.voteInfo.sumAyes;
+        vote.sumNays = lv.voteInfo.sumNays;
+        vote.statusString = lv.voteInfo.statusString;
+      })
+    );
     res.send(votes);
   } else {
     res.status(404).send({ error: "Couldn't find that legislature.'" });
