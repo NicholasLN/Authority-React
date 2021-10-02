@@ -8,6 +8,7 @@ import NavBar from "./NavBar";
 import Footer from "./Footer";
 import { Row, Col } from "react-bootstrap";
 import "../../css/main.css";
+import { LinkContainer } from "react-router-bootstrap";
 
 export default function Body(props) {
   let middleColWidth = 8;
@@ -34,6 +35,10 @@ export default function Body(props) {
             Developed by Phil Scott
             <br />
             This is a WIP game.
+            <br />
+            <LinkContainer to="/credits">
+              <a className="">A special thanks to all contributors and patrons.</a>
+            </LinkContainer>
           </p>
         </div>
       </div>

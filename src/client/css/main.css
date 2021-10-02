@@ -28,14 +28,14 @@ a{
 }
 
 .footerBar{
-    font-family: "Source Sans Pro", 'sans-serif';
-    font-size: 15px;
+    font-family: "Bahnschrift", 'sans-serif';
+    font-size: 14px;
     width:94vw;
-    background-color: rgba(0, 0, 0, 0.80);
+    background-color: rgba(0, 0, 0, 1);
     margin:auto;
     color:white;
     text-align:center;
-    padding: 4px 4px 4px 4px;
+    padding: 9px 4px 4px 4px;
 }
 .footerBar p{
     margin-bottom: 0;

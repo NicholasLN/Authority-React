@@ -20,6 +20,7 @@ const StateOverview = lazy(() => import("../Pages/State/StateOverview"));
 const DemographicOverview = lazy(() => import("../Pages/Demographics/DemographicOverview"));
 const Poll = lazy(() => import("../Pages/Demographics/Poll"));
 const Legislatures = lazy(() => import("../Pages/Legislatures/LegislatureOverview"));
+const Credits = lazy(() => import("../Pages/Credits"));
 
 import Loading from "../Misc/Loading";
 //import Politician from "../Pages/Politician/Politician";
@@ -32,6 +33,12 @@ class Routes extends Component {
         <Route exact path="/">
           <Suspense fallback={<Loading />}>
             <Index />
+          </Suspense>
+        </Route>
+
+        <Route exact path="/credits">
+          <Suspense fallback={<Loading />}>
+            <Credits />
           </Suspense>
         </Route>
 
