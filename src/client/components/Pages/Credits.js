@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Body from "../Structure/Body";
+import PatronService from "./../../service/PatronService";
 
 export default function Credits() {
+  const [patrons, setPatrons] = useState([]);
+
+  async function fetchPatrons() {
+    var resp = await PatronService.getPatrons();
+    console.log(resp);
+    if (!resp.hasOwnProperty("error")) {
+      setPatrons(resp);
+    }
+  }
+
+  useEffect(() => {
+    fetchPatrons();
+  }, []);
+
   return (
     <Body middleColWidth="11">
       <h1>Credits and Thanks</h1>
@@ -22,15 +37,47 @@ export default function Credits() {
           <div className="row">
             <div className="col-md-4">
               <b className="bold">AUTHORITY Bronze Patrons:</b>
+              {Object.keys(patrons).map((patron) => {
+                let patr = patrons[patron];
+                if (patr.rank == "bronze") {
+                  return (
+                    <div key={patr.id}>
+                      <p>{patr.discord}</p>
+                      <br />
+                    </div>
+                  );
+                }
+              })}
               <br />
             </div>
             <div className="col-md-4">
               <b className="bold">AUTHORITY Silver Patrons:</b>
+              {Object.keys(patrons).map((patron) => {
+                let patr = patrons[patron];
+                if (patr.rank == "silver") {
+                  return (
+                    <div key={patr.id}>
+                      <p>{patr.discord}</p>
+                      <br />
+                    </div>
+                  );
+                }
+              })}
               <br />
-              @KarmaBlaster#1778
             </div>
             <div className="col-md-4">
               <b className="bold">AUTHORITY Gold Patrons:</b>
+              {Object.keys(patrons).map((patron) => {
+                let patr = patrons[patron];
+                if (patr.rank == "gold") {
+                  return (
+                    <div key={patr.id}>
+                      <p>{patr.discord}</p>
+                      <br />
+                    </div>
+                  );
+                }
+              })}
               <br />
             </div>
           </div>
