@@ -49,9 +49,10 @@ function LegislatureVotes({ legislatureInfo }) {
     setLoading(false);
   }
   useEffect(() => {
+    console.log(legislatureInfo);
     fetchVotes();
     return () => setLoading(true);
-  }, []);
+  }, [legislatureInfo]);
 
   if (!loading) {
     return (

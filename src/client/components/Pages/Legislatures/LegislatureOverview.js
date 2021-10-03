@@ -35,7 +35,7 @@ function LegislatureOverview(props) {
 
   if (!loading) {
     return (
-      <Body>
+      <Body middleColWidth="11">
         <br />
         <h1>{countryInfo.name} Legislatures</h1>
         <hr />

@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useTable, useSortBy } from "react-table";
+import MemberCell from "./../../Party/MemberTableCell";
+import timeago from "time-ago";
 
 function LegislatureVoteTable({ columns, data }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
+    console.log(data);
     setLoading(false);
+    return () => {
+      setLoading(true);
+    };
   }, []);
   const tableInstance = useTable(
     {
@@ -37,7 +43,35 @@ function LegislatureVoteTable({ columns, data }) {
               rows.map((row) => {
                 // Prepare the row for display
                 prepareRow(row);
-                return <p>Ok</p>;
+                console.log(row);
+                return (
+                  <tr key={row.id}>
+                    <td>{row.original.id}</td>
+                    <td>
+                      <MemberCell userInfo={row.original.author} />
+                    </td>
+                    <td>{row.original.name}</td>
+                    <td>{row.original.actions}</td>
+                    <td>{row.original.sumAyes}</td>
+                    <td>{row.original.sumNays}</td>
+                    <td>{row.original.status}</td>
+                    <td>
+                      {row.original.passed == -1 ? (
+                        <>
+                          <span>{timeago.ago(row.original.expiresAt)}</span>
+                          {row.original.delay == 1 && (
+                            <span className="redFont">
+                              <br />
+                              Delayed! (+12 hours)
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        <span dangerouslySetInnerHTML={{ __html: row.original.statusString }} />
+                      )}
+                    </td>
+                  </tr>
+                );
               })
             }
           </tbody>
