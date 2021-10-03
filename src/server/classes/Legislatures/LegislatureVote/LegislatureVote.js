@@ -55,7 +55,7 @@ class LegislatureVote {
     await Promise.all(
       Object.keys(fetchedPositions).map((result) => {
         var x = fetchedPositions[result];
-        positions.push({ id: x.id, votePower: x.votePower });
+        positions.push({ id: x.id, votePower: x.votePower, type: x.type });
       })
     );
     return positions;
@@ -79,7 +79,16 @@ class LegislatureVote {
           }
           positions.map((position) => {
             if (usrOffice == position.id) {
-              sumAyes += position.votePower;
+              switch (position.type) {
+                case "singleSeat":
+                  sumAyes += position.votePower;
+                  break;
+                case "multipleSeats":
+                  sumAyes += usr.userInfo.officeSeats;
+                  break;
+                default:
+                  sumAyes += position.votePower;
+              }
             }
           });
         }
@@ -95,7 +104,16 @@ class LegislatureVote {
           }
           positions.map((position) => {
             if (usrOffice == position.id) {
-              sumNays += position.votePower;
+              switch (position.type) {
+                case "singleSeat":
+                  sumAyes += position.votePower;
+                  break;
+                case "multipleSeats":
+                  sumAyes += usr.userInfo.officeSeats;
+                  break;
+                default:
+                  sumAyes += position.votePower;
+              }
             }
           });
         }

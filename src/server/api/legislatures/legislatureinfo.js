@@ -71,7 +71,9 @@ router.get("/fetchLegislatures/:country", async function (req, res) {
         newLegislatures.push(legislature);
       })
     );
-
+    newLegislatures.sort((a, b) => {
+      return a.id - b.id;
+    });
     res.send(newLegislatures);
   } else {
     res.status(404).send({ error: "Couldn't find that country." });
