@@ -44,8 +44,7 @@ export default function Credits() {
                 if (patr.rank == "bronze") {
                   return (
                     <div key={patr.id}>
-                      <p>{patr.discord}</p>
-                      <br />
+                      <p className="mb-2">{patr.discord}</p>
                     </div>
                   );
                 }
@@ -61,8 +60,7 @@ export default function Credits() {
                 if (patr.rank == "silver") {
                   return (
                     <div key={patr.id}>
-                      <p>{patr.discord}</p>
-                      <br />
+                      <p className="mb-2">{patr.discord}</p>
                     </div>
                   );
                 }
@@ -78,8 +76,7 @@ export default function Credits() {
                 if (patr.rank == "gold") {
                   return (
                     <div key={patr.id}>
-                      <p>{patr.discord}</p>
-                      <br />
+                      <p className="mb-2">{patr.discord}</p>
                     </div>
                   );
                 }
