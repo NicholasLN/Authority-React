@@ -1,5 +1,6 @@
 const cookieSession = require("cookie-session");
 const logger = require("node-color-log");
+const { randomString } = require("./classes/Misc/setSessionDefaults");
 const dotenv = require("dotenv").config();
 
 if (process.env.SESSION_SECURE == "false") {
@@ -10,7 +11,7 @@ if (process.env.SESSION_SECURE == "false") {
 
 try {
   var configDetails = {
-    name: "authSession",
+    name: `${randomString(12)}`,
     keys: [process.env.COOKIE_SECRET],
     secure: secureSession,
     maxAge: 24 * 60 * 60 * 1000,
