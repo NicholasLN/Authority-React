@@ -21,6 +21,12 @@ class LegislatureSrvc {
       .then((response) => response.data)
       .catch((err) => console.error(err));
   }
+  fetchVote(voteId) {
+    return this.auth
+      .get(`/legislatureinfo/fetchVote/${voteId}`)
+      .then((response) => response.data)
+      .catch((err) => console.error(err));
+  }
 }
 const LegislatureService = new LegislatureSrvc();
 export default LegislatureService;

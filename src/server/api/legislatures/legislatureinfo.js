@@ -80,6 +80,36 @@ router.get("/fetchLegislatures/:country", async function (req, res) {
   }
 });
 
+router.get("/fetchVote/:voteId", async (req, res) => {
+  if (is_number(req.params.voteId)) {
+    var db = require("../../db");
+    var fetchVote = await new Promise((resolve, reject) => {
+      db.query("SELECT * FROM legislatureVotes WHERE id = ?", [req.params.voteId], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+    if (fetchVote.length > 0) {
+      var vote = fetchVote[0];
+      var lv = new LegislatureVote(vote.id);
+      await lv.updateVoteInformation();
+      vote.author = lv.voteInfo.author;
+      vote.actions = lv.voteInfo.actions;
+      vote.sumAyes = lv.voteInfo.sumAyes;
+      vote.sumNays = lv.voteInfo.sumNays;
+      vote.statusString = lv.voteInfo.statusString;
+      res.send(vote);
+    } else {
+      res.send({ error: "Could not find a vote/bill with that ID." });
+    }
+  } else {
+    res.send({ error: "Invalid bill ID." });
+  }
+});
+
 router.get("/fetchLegislatureVotes/:legislatureId/:limit?/:offset?", async function (req, res) {
   if (is_number(req.params.legislatureId)) {
     var votes = await getLegislatureVotes(req.params.legislatureId, req.params.limit, req.params.offset);

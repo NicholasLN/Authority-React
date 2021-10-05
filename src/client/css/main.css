@@ -60,7 +60,11 @@ a{
 }
 .footerInformation:hover, .footerInformation p:hover{
     opacity: 0;
-    -webkit-transition: opacity 0.4s;
+    -webkit-transition-delay: 2s;
+    -moz-transition-delay: 2s;
+    -ms-transition-delay: 2s;
+    -o-transition-delay: 2s;
+    transition-delay: 0.8s;
 }
 .greenFont{
     display: inline;

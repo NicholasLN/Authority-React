@@ -42,14 +42,12 @@ function LegislatureVotes({ legislatureInfo }) {
   var [loading, setLoading] = useState(true);
   async function fetchVotes() {
     var resp = await LegislatureService.fetchLegislatureVotes(legislatureInfo.id);
-    console.debug(resp);
     if (!resp.hasOwnProperty("error")) {
       setLegislatureVotes(resp);
     }
     setLoading(false);
   }
   useEffect(() => {
-    console.log(legislatureInfo);
     fetchVotes();
     return () => setLoading(true);
   }, [legislatureInfo]);

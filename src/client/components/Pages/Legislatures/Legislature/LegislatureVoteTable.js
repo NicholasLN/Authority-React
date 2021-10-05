@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useTable, useSortBy } from "react-table";
 import MemberCell from "./../../Party/MemberTableCell";
 import timeago from "time-ago";
+import { LinkContainer } from "react-router-bootstrap";
 
 function LegislatureVoteTable({ columns, data }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    console.log(data);
     setLoading(false);
     return () => {
       setLoading(true);
@@ -43,14 +43,17 @@ function LegislatureVoteTable({ columns, data }) {
               rows.map((row) => {
                 // Prepare the row for display
                 prepareRow(row);
-                console.log(row);
                 return (
                   <tr key={row.id}>
                     <td>{row.original.id}</td>
                     <td>
                       <MemberCell userInfo={row.original.author} />
                     </td>
-                    <td>{row.original.name}</td>
+                    <td>
+                      <LinkContainer to={`/legislatureVote/${row.original.id}`}>
+                        <a>{row.original.name}</a>
+                      </LinkContainer>
+                    </td>
                     <td>{row.original.actions}</td>
                     <td>{row.original.sumAyes}</td>
                     <td>{row.original.sumNays}</td>
