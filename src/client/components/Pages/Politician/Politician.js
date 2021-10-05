@@ -87,7 +87,7 @@ function Politician(props) {
             <PoliticianBio bio={politicianInfo.bio} />
             <hr />
           </div>
-          <ReactTooltip id={"positions"} backgroundColor="white" className="extraClass" delayShow={1000} delayHide={999999} effect="float">
+          <ReactTooltip id={"positions"} backgroundColor="white" className="extraClass" delayShow={1000} delayHide={1000} effect="float">
             <PoliticalCompass ecoPos={politicianInfo.ecoPos} socPos={politicianInfo.socPos} />
           </ReactTooltip>
           <table className="table table-striped table-bordered" id="statsTable">
