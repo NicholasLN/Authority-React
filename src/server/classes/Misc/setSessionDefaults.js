@@ -13,7 +13,7 @@ const public_information = function (userRow) {
 };
 const remove_useless_information = function (userRow) {
   var userRow = public_information(userRow);
-  return {
+  var info = {
     id: userRow.id,
     admin: userRow.admin,
     hsi: userRow.hsi,
@@ -24,12 +24,15 @@ const remove_useless_information = function (userRow) {
     campaignFinance: userRow.campaignFinance,
     party: userRow.party,
     active: userRow.active,
-    partyInfo: {
+  };
+  if (userRow.partyInfo) {
+    info.partyInfo = {
       id: userRow.partyInfo.id,
       name: userRow.partyInfo.name,
       partyRoles: userRow.partyInfo.partyRoles,
-    },
-  };
+    };
+  }
+  return info;
 };
 
 function randomString(length) {

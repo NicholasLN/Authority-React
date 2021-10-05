@@ -23,7 +23,7 @@ class AuthService {
     return this.auth.get(url).then((response) => response.data);
   }
   getSessionData() {
-    return this.auth.get("/init").then((response) => response.data);
+    return this.auth.get("/init").then((response) => response.data.data);
   }
   getUserData(id, partyInfo = "true", stateInfo = "false") {
     let url = `/userinfo/fetchUserById/${id}/${partyInfo}/${stateInfo}`;

@@ -69,8 +69,7 @@ app.get("/api/init", async (req, res) => {
       logOut(req);
     }
   }
-  console.log(req.session.playerData);
-  res.send(req.session.playerData);
+  res.send({ data: req.session.playerData });
 });
 
 // AUTH
