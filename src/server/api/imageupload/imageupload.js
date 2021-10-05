@@ -15,7 +15,7 @@ router.post("/postCustomPicture", async function (req, res) {
     }
     metaData.contentType = req.file.mimetype;
     var url = await uploadImage(req.file, directory, metaData);
-    res.send(url);
+    res.send({ url });
   } else {
     res.send(404);
   }
@@ -28,8 +28,7 @@ router.post("/newUserImg", async function (req, res) {
       var url = await uploadImage(req.file, `users/${req.session.playerData.loggedInId}`).catch((err) => {
         res.send({ error: err });
       });
-      console.log(url);
-      res.send(url);
+      res.send({ url });
     } else {
       res.send({ error: "Image too large." });
     }

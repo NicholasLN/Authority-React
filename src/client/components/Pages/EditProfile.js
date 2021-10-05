@@ -20,16 +20,16 @@ function EditProfile(props) {
     }
   };
   const onImageUpload = async function () {
-    var url = await AuthorizationService.updateUserPicture(selectedFile);
-    if (url && !url.hasOwnProperty("error")) {
-      var resp = await AuthorizationService.updateUserPictureURL(url);
+    var resp = await AuthorizationService.updateUserPicture(selectedFile);
+    if (resp && !resp.hasOwnProperty("error")) {
+      var resp = await AuthorizationService.updateUserPictureURL(resp.url);
       if (resp == "OK") {
         setAlert("image successfully uploaded!");
         setAlertType("success");
       }
     } else {
       setAlertType("error");
-      setAlert(url.error);
+      setAlert(resp.error);
     }
   };
 
