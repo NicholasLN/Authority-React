@@ -2,7 +2,7 @@ const express = require("express");
 const logger = require("node-color-log");
 const path = require("path");
 const User = require("./classes/User");
-const { setSessionDefaults, randomString, public_information } = require("./classes/Misc/setSessionDefaults");
+const { setSessionDefaults, randomString, public_information, remove_useless_information } = require("./classes/Misc/setSessionDefaults");
 
 // RATE LIMIT MIDDLEWARE: https://www.npmjs.com/package/express-rate-limit
 const rateLimit = require("express-rate-limit");
@@ -63,12 +63,13 @@ app.get("/api/init", async (req, res) => {
       var user = new User(req.session.playerData.loggedInId);
       await user.updateUserInfo(true);
       if (user.userInfo) {
-        req.session.playerData.loggedInInfo = public_information(user.userInfo);
+        req.session.playerData.loggedInInfo = remove_useless_information(user.userInfo);
       }
     } else {
       logOut(req);
     }
   }
+  console.log(req.session.playerData);
   res.send(req.session.playerData);
 });
 

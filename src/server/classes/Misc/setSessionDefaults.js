@@ -4,6 +4,7 @@ var chars = `!@#$%^&*()_+{}|:qwertyuiop[]asdfghjkl;zxcvbnm,./QWERTYUIOPASDFGHJKL
 const public_information = function (userRow) {
   delete userRow.username;
   delete userRow.password;
+  delete userRow.email;
   delete userRow.regCookie;
   delete userRow.currentCookie;
   delete userRow.regIP;
@@ -12,10 +13,23 @@ const public_information = function (userRow) {
 };
 const remove_useless_information = function (userRow) {
   var userRow = public_information(userRow);
-  delete userRow.bio;
-  delete userRow.profilePic;
-  delete userRow.lastOnline;
-  return userRow;
+  return {
+    id: userRow.id,
+    admin: userRow.admin,
+    hsi: userRow.hsi,
+    politicianName: userRow.politicianName,
+    nation: userRow.nation,
+    state: userRow.state,
+    authority: userRow.authority,
+    campaignFinance: userRow.campaignFinance,
+    party: userRow.party,
+    active: userRow.active,
+    partyInfo: {
+      id: userRow.partyInfo.id,
+      name: userRow.partyInfo.name,
+      partyRoles: userRow.partyInfo.partyRoles,
+    },
+  };
 };
 
 function randomString(length) {
