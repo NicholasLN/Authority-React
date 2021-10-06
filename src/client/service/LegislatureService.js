@@ -27,6 +27,18 @@ class LegislatureSrvc {
       .then((response) => response.data)
       .catch((err) => console.error(err));
   }
+  voteAye(voteId) {
+    return this.auth
+      .post(`/legislatureactions/voteAye`, { voteId })
+      .then((response) => response.data)
+      .catch((err) => console.error(err));
+  }
+  voteNay(voteId) {
+    return this.auth
+      .post(`/legislatureactions/voteNay`, { voteId })
+      .then((response) => response.data)
+      .catch((err) => console.error(err));
+  }
 }
 const LegislatureService = new LegislatureSrvc();
 export default LegislatureService;

@@ -10,13 +10,23 @@ if (process.env.SESSION_SECURE == "false") {
 }
 
 try {
-  var configDetails = {
-    name: `${randomString(12)}`,
-    keys: [process.env.COOKIE_SECRET],
-    secure: secureSession,
-    maxAge: 24 * 60 * 60 * 1000,
-    sameSite: "strict",
-  };
+  if (process.env.ENVIRONMENT.toLowerCase() == "production") {
+    var configDetails = {
+      name: `${randomString(12)}`,
+      keys: [process.env.COOKIE_SECRET],
+      secure: secureSession,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: "strict",
+    };
+  } else {
+    var configDetails = {
+      name: `authDev`,
+      keys: [process.env.COOKIE_SECRET],
+      secure: secureSession,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: "strict",
+    };
+  }
 } catch (e) {
   logger.color("red").bold().log("[session] serverConfig.json does not exist! Use serverConfigExample.js as a template!");
   return;

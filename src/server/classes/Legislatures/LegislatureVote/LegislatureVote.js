@@ -46,6 +46,9 @@ class LegislatureVote {
       this.voteInfo.ayeVoters = await this.getVoters(this.voteInfo.ayes);
       this.voteInfo.nayVoters = await this.getVoters(this.voteInfo.nays);
       this.voteInfo.passPercentage = await this.passPercentage();
+      this.voteInfo.canVote = this.voteInfo.positions.map((position) => {
+        return position.id;
+      });
     }
   }
   async passPercentage() {
@@ -226,6 +229,55 @@ class LegislatureVote {
         break;
     }
     return rtn;
+  }
+
+  /**
+   *
+   * @param {String} variable Variable being updated.
+   * @param {*} updateTo What variable is being updated to
+   * @returns {number} 200 if query worked, 400 if not.
+   */
+  async updateLegislatureVoteVariable(variable, updateTo) {
+    var database = require("../../../db");
+    return new Promise((resolve, reject) => {
+      database.query(`UPDATE legislatureVotes SET ${variable} = ? WHERE id = ?`, [updateTo, this.voteId], async function (err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(200);
+        }
+      });
+    });
+  }
+
+  /**
+   * Ease of use method for updating party vote information within the DB. Does not work if column does not exist within the partyVotes table.
+   * Must use corresponding data type, otherwise will return error.
+   *  eg. updateLegislatureVote("nays",[1,2,3]) -> returns voteInfo object
+   *  eg. updateLegislatureVote("nays","fuck you shithead") -> returns error.
+   *  eg. updateLegislatureVote("thisColumnDoesntExist",99) -> returns error.
+   * @param {String} variable Variable being updated.
+   * @param {*} updateTo What variable is being updated to
+   * @returns {Object} new vote information.
+   */
+  async updateLegislatureVote(variable, updateTo) {
+    await this.updateVoteInformation();
+    var currentLegislatureVoteInfo = this.voteInfo;
+    if (currentLegislatureVoteInfo.hasOwnProperty(variable)) {
+      var error;
+      await this.updateLegislatureVoteVariable(variable, updateTo).catch((err) => {
+        console.log(err);
+        error = { error: "Update failed. Check variable type." };
+      });
+      if (!error) {
+        await this.updateVoteInformation();
+        return this.voteInfo;
+      } else {
+        return error;
+      }
+    } else {
+      return { error: "Column does not exist in LV table." };
+    }
   }
 }
 

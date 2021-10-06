@@ -29,6 +29,7 @@ const getVoteInfo = async (voteId, vote) => {
   vote.ayeVoters = lv.voteInfo.ayeVoters;
   vote.nayVoters = lv.voteInfo.nayVoters;
   vote.passPercentage = parseFloat(lv.voteInfo.passPercentage);
+  vote.canVote = lv.voteInfo.canVote;
 
   return vote;
 };

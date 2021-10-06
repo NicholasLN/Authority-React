@@ -93,6 +93,7 @@ app.use("/api/imageupload", require("./api/imageupload/imageupload").router);
 app.use("/api/demographicinfo", require("./api/demographics/demographicinfo").router);
 // LEGISLATURES
 app.use("/api/legislatureinfo", require("./api/legislatures/legislatureinfo").router);
+app.use("/api/legislatureactions", require("./api/legislatures/legislatureactions").router);
 // COUNTRIES
 app.use("/api/countryinfo", require("./api/countries/countryinfo.js").router);
 

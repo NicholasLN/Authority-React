@@ -24,6 +24,7 @@ const remove_useless_information = function (userRow) {
     campaignFinance: userRow.campaignFinance,
     party: userRow.party,
     active: userRow.active,
+    office: userRow.office,
   };
   if (userRow.partyInfo) {
     info.partyInfo = {

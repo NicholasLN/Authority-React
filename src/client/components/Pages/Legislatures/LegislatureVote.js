@@ -7,12 +7,14 @@ import Body from "../../Structure/Body";
 import ReactTooltip from "react-tooltip";
 import timeago from "time-ago";
 import { LinkContainer } from "react-router-bootstrap";
+import { UserContext } from "./../../../context/UserContext";
 
 function LegislatureVote(props) {
   const [loading, setLoading] = useState(true);
   const [voteInfo, setVoteInfo] = useState({});
   const { voteId } = useParams();
-  const { setAlert } = useContext(AlertContext);
+  const { setAlert, setAlertType } = useContext(AlertContext);
+  const { sessionData, playerData } = useContext(UserContext);
 
   useEffect(() => {
     async function fetchVote() {
@@ -29,6 +31,27 @@ function LegislatureVote(props) {
     }
     fetchVote();
   }, [voteId]);
+
+  async function voteAye() {
+    var newVoteInfo = await LegislatureService.voteAye(voteInfo.id);
+    if (!newVoteInfo.hasOwnProperty("error")) {
+      setVoteInfo(newVoteInfo);
+      setAlert("Successfully voted.");
+      setAlertType("success");
+    } else {
+      setAlert(newVoteInfo.error);
+    }
+  }
+  async function voteNay() {
+    var newVoteInfo = await LegislatureService.voteNay(voteInfo.id);
+    if (!newVoteInfo.hasOwnProperty("error")) {
+      setVoteInfo(newVoteInfo);
+      setAlert("Successfully voted.");
+      setAlertType("success");
+    } else {
+      setAlert(newVoteInfo.error);
+    }
+  }
 
   if (loading) {
     return (
@@ -67,6 +90,14 @@ function LegislatureVote(props) {
         <div className="row">
           <div className="col" style={{ minHeight: "40vh", borderRight: "1px solid black" }}>
             <h5>Ayes</h5>
+            {sessionData.loggedIn && voteInfo.canVote.includes(playerData.office) && voteInfo.passed == -1 && (
+              <>
+                <button className="btn btn-primary" onClick={voteAye}>
+                  Vote Aye
+                </button>
+                <hr />
+              </>
+            )}
             {voteInfo.ayeVoters.map((politician, idx) => {
               return (
                 <div key={idx} style={{ marginTop: "3px" }}>
@@ -82,6 +113,14 @@ function LegislatureVote(props) {
           </div>
           <div className="col" style={{ minHeight: "40vh", borderLeft: "1px solid black" }}>
             <h5>Nays</h5>
+            {sessionData.loggedIn && voteInfo.canVote.includes(playerData.office) && voteInfo.passed == -1 && (
+              <>
+                <button className="btn btn-danger" onClick={voteNay}>
+                  Vote Nay
+                </button>
+                <hr />
+              </>
+            )}
             {voteInfo.nayVoters.map((politician, idx) => {
               return (
                 <div key={idx} style={{ marginTop: "3px" }}>
