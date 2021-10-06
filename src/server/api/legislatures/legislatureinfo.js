@@ -16,6 +16,23 @@ const getLegislaturePositions = (country, legislature) => {
   });
 };
 
+const getVoteInfo = async (voteId, vote) => {
+  var lv = new LegislatureVote(voteId);
+  await lv.updateVoteInformation();
+
+  vote.author = lv.voteInfo.author;
+  vote.actions = lv.voteInfo.actions;
+  vote.sumAyes = lv.voteInfo.sumAyes;
+  vote.sumNays = lv.voteInfo.sumNays;
+  vote.statusString = lv.voteInfo.statusString;
+  vote.actionString = lv.voteInfo.actionString;
+  vote.ayeVoters = lv.voteInfo.ayeVoters;
+  vote.nayVoters = lv.voteInfo.nayVoters;
+  vote.passPercentage = parseFloat(lv.voteInfo.passPercentage);
+
+  return vote;
+};
+
 const getLegislatureVotes = (legislature, limit, page) => {
   if (limit == undefined) {
     limit = 15;
@@ -94,14 +111,7 @@ router.get("/fetchVote/:voteId", async (req, res) => {
     });
     if (fetchVote.length > 0) {
       var vote = fetchVote[0];
-      var lv = new LegislatureVote(vote.id);
-      await lv.updateVoteInformation();
-      vote.author = lv.voteInfo.author;
-      vote.actions = lv.voteInfo.actions;
-      vote.sumAyes = lv.voteInfo.sumAyes;
-      vote.sumNays = lv.voteInfo.sumNays;
-      vote.statusString = lv.voteInfo.statusString;
-      res.send(vote);
+      res.send(await getVoteInfo(vote.id, vote));
     } else {
       res.send({ error: "Could not find a vote/bill with that ID." });
     }
@@ -117,12 +127,7 @@ router.get("/fetchLegislatureVotes/:legislatureId/:limit?/:offset?", async funct
       votes.map(async (vote) => {
         var lv = new LegislatureVote(vote.id);
         await lv.updateVoteInformation();
-
-        vote.author = lv.voteInfo.author;
-        vote.actions = lv.voteInfo.actions;
-        vote.sumAyes = lv.voteInfo.sumAyes;
-        vote.sumNays = lv.voteInfo.sumNays;
-        vote.statusString = lv.voteInfo.statusString;
+        vote = await getVoteInfo(vote.id, vote);
       })
     );
     res.send(votes);

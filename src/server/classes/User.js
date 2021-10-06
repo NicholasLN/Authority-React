@@ -58,6 +58,11 @@ class User {
       });
     });
   }
+  /**
+   * Same as userDoesExist, but with ID instead of name.
+   * @param {*} userId
+   * @returns
+   */
   static async userDoesExistId(userId) {
     let database = require("../db");
     const sql = "SELECT * FROM users WHERE id = ?";
@@ -79,7 +84,15 @@ class User {
       if (err) throw err;
     });
   }
-
+  static getUserLegislativePosition(positions, usrPosition) {
+    var rtn = "none";
+    positions.map((position) => {
+      if (position.id == usrPosition) {
+        rtn = position.officeName;
+      }
+    });
+    return rtn;
+  }
   /**
    * Method for obtaining user cosmetic information
    * @param {int} userId
@@ -102,7 +115,6 @@ class User {
     }
     return userVars;
   }
-
   /**
    *
    * @param {String} variable Variable being updated.
@@ -121,7 +133,6 @@ class User {
       });
     });
   }
-
   /**
    * Ease of use method for updating user information within the DB. Does not work if column does not exist within the User table.
    * Must use corresponding data type, otherwise will return error.

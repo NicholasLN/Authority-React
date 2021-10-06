@@ -54,10 +54,18 @@ function LegislatureVoteTable({ columns, data }) {
                         <a>{row.original.name}</a>
                       </LinkContainer>
                     </td>
-                    <td>{row.original.actions}</td>
+                    <td>
+                      <span dangerouslySetInnerHTML={{ __html: row.original.actionString }} />
+                      {row.original.constitutional && (
+                        <>
+                          <br />
+                          <b className="bold">Constitutional Vote!</b>
+                        </>
+                      )}
+                    </td>
                     <td>{row.original.sumAyes}</td>
                     <td>{row.original.sumNays}</td>
-                    <td>{row.original.status}</td>
+                    <td>{row.original.statusString}</td>
                     <td>
                       {row.original.passed == -1 ? (
                         <>
