@@ -112,7 +112,6 @@ function LegislatureVote(props) {
               (voteInfo.passPercentage >= 66 ? <span className="greenFont">{voteInfo.passPercentage}%</span> : <span className="redFont">{voteInfo.passPercentage}%</span>)}
             {voteInfo.constitutional == 0 &&
               (voteInfo.passPercentage >= 51 ? <span className="greenFont">{voteInfo.passPercentage}%</span> : <span className="redFont">{voteInfo.passPercentage}%</span>)}
-            x{" "}
           </div>
         </div>
         <ReactTooltip />
