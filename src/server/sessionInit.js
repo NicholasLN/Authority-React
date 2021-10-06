@@ -10,7 +10,8 @@ if (process.env.SESSION_SECURE == "false") {
 }
 
 try {
-  if (process.env.ENVIRONMENT.toLowerCase() == "production") {
+  console.log(process.env.ENVIRONMENT.toLowerCase());
+  if (process.env.ENVIRONMENT.toLowerCase() != "development") {
     var configDetails = {
       name: `${randomString(12)}`,
       keys: [process.env.COOKIE_SECRET],
