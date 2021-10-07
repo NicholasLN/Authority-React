@@ -201,6 +201,7 @@ class LegislatureVote {
         }
       })
     );
+    newArr.sort((a, b) => b.votes - a.votes);
     return newArr;
   }
   async getVoteAction() {
