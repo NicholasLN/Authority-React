@@ -203,7 +203,9 @@ class LegislatureVote {
             votes: await this.getUserVotes(voter),
             office: getUserLegislativePosition(this.voteInfo.positions, user.userInfo.office),
           };
-          newArr.push(obj);
+          if (obj.votes > 0) {
+            newArr.push(obj);
+          }
         }
       })
     );
