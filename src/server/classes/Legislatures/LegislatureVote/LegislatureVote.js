@@ -66,6 +66,11 @@ class LegislatureVote {
     }
   }
 
+  /**
+   * Method for getting the total possible number of votes for this bill.
+   * Used for constitutional bills.
+   * @returns {int} Sum of possible votes.
+   */
   async getTotalPossibleVotes() {
     var sum = 0;
     var db = require("../../../db");
@@ -214,13 +219,16 @@ class LegislatureVote {
     return newArr;
   }
 
+  /**
+   * @returns {boolean} Is the bill passing?
+   */
   isPassing() {
     return this.voteInfo.passPercentage > this.voteInfo.passThreshold;
   }
 
   async getVoteAction() {
     var action = this.voteInfo.actions;
-    var str = "boobs";
+    var str = "";
     switch (action.action) {
       case "renameLegislature":
         if (action.originalName && action.renameTo) {
@@ -334,11 +342,15 @@ class LegislatureVote {
           var thisVote = new LegislatureVote(vote.id);
           await thisVote.updateVoteInformation();
           if (Date.now() > thisVote.voteInfo.expiresAt) {
+            // If the vote is passing.
             if (thisVote.isPassing()) {
               passing++;
               if (thisVote.voteInfo.status != 2) {
                 thisVote.updateLegislatureVoteVariable("status", 2);
               }
+              // This only happens if the legislature doesn't require a vote.
+            } else if (eval(thisVote.legislatureInfo.rules).includes("notRequired") && thisVote.voteInfo.sumAyes + thisVote.voteInfo.sumNays == 0) {
+              passing++;
             } else {
               failed++;
             }

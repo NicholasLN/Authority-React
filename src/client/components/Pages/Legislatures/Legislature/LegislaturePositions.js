@@ -11,4 +11,4 @@ function LegislaturePositions({ legislatureInfo }) {
   );
 }
 
-export default LegislaturePositions;
+export default React.memo(LegislaturePositions);

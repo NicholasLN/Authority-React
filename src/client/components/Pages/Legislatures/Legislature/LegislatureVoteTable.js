@@ -96,4 +96,4 @@ function LegislatureVoteTable({ columns, data }) {
   }
 }
 
-export default LegislatureVoteTable;
+export default React.memo(LegislatureVoteTable);

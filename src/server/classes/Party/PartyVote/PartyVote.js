@@ -213,17 +213,21 @@ class PartyVote {
     var user = new User(userId);
     await user.updateUserInfo();
 
-    if (user.userInfo) {
-      if (user.userInfo.party == this.partyInfo.id) {
-        var share = (user.userInfo.partyInfluence / this.partyInfo.totalPartyInfluence).toFixed(3);
-        var votes = Math.round(share * this.partyInfo.votes);
+    if (user.active) {
+      if (user.userInfo) {
+        if (user.userInfo.party == this.partyInfo.id) {
+          var share = (user.userInfo.partyInfluence / this.partyInfo.totalPartyInfluence).toFixed(3);
+          var votes = Math.round(share * this.partyInfo.votes);
+        } else {
+          var votes = 0;
+        }
       } else {
-        var votes = 0;
+        votes = 0;
       }
+      return votes;
     } else {
-      votes = 0;
+      return 0; 
     }
-    return votes;
   }
   static async getUserVotes(userId, partyInfo) {
     var user = new User(userId);

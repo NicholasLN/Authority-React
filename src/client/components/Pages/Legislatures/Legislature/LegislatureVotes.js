@@ -69,4 +69,4 @@ function LegislatureVotes({ legislatureInfo }) {
   }
 }
 
-export default LegislatureVotes;
+export default React.memo(LegislatureVotes);
