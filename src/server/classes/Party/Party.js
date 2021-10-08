@@ -51,9 +51,9 @@ class Party {
     let database = require("../../db");
     var users = [];
 
-    const sql = `SELECT * FROM users WHERE party = ? LIMIT 15 OFFSET ? `;
+    const sql = `SELECT * FROM users WHERE party = ? AND lastOnline > ? LIMIT 15 OFFSET ? `;
     return new Promise(function (resolve, reject) {
-      database.query(sql, [id, results], function (err, rows) {
+      database.query(sql, [id, Date.now() - process.env.ACTIVITY_THRESHOLD, results], function (err, rows) {
         if (err) {
           reject(err);
         } else {
@@ -80,7 +80,7 @@ class Party {
   static async getUserVotes(userId) {
     var database = require("../../db");
     return new Promise(function (resolve, reject) {
-      database.query(`SELECT * FROM users WHERE partyVotingFor = ?`, [userId], function (err, rows) {
+      database.query(`SELECT * FROM users WHERE partyVotingFor = ? AND lastOnline > ?`, [userId, Date.now() - process.env.ACTIVITY_THRESHOLD], function (err, rows) {
         if (err) {
           reject(new Error(err));
         } else {

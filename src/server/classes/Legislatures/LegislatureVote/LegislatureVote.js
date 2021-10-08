@@ -42,6 +42,7 @@ class LegislatureVote {
       const { sumAyes, sumNays } = await this.getVotes();
       this.voteInfo.sumAyes = sumAyes;
       this.voteInfo.sumNays = sumNays;
+
       this.voteInfo.statusString = await this.statusAsString();
       this.voteInfo.actionString = await this.getVoteAction();
       this.voteInfo.ayeVoters = await this.getVoters(this.voteInfo.ayes);
@@ -72,7 +73,7 @@ class LegislatureVote {
       this.voteInfo.positions.map(async (position) => {
         if (position.type == "singleSeat") {
           var occupants = await new Promise((resolve, reject) => {
-            db.query("SELECT * FROM users WHERE office = ?", [position.id], (err, results) => {
+            db.query("SELECT id FROM users WHERE office = ?", [position.id], (err, results) => {
               if (err) {
                 reject(err);
               } else {
