@@ -17,7 +17,7 @@ class User {
     WHERE id = ?`;
     return new Promise(function (resolve, reject) {
       database.query(sql, [process.env.ACTIVITY_THRESHOLD, id], function (err, result) {
-        if (result.length == 0) {
+        if (!result) {
           resolve(undefined);
         } else {
           resolve(result[0]);

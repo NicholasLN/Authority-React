@@ -65,7 +65,9 @@ function LegislatureVoteTable({ columns, data }) {
                     </td>
                     <td>{row.original.sumAyes}</td>
                     <td>{row.original.sumNays}</td>
-                    <td>{row.original.statusString}</td>
+                    <td>
+                      <span dangerouslySetInnerHTML={{ __html: row.original.statusString }} />
+                    </td>
                     <td>
                       {row.original.passed == -1 ? (
                         <>

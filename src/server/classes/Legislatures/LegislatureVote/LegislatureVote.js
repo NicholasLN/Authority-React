@@ -31,6 +31,7 @@ class LegislatureVote {
       this.legislatureInfo = legislature.legislatureInfo;
       this.voteInfo.ayes = eval(voteInformation.ayes);
       this.voteInfo.nays = eval(voteInformation.nays);
+      this.voteInfo.authorId = this.voteInfo.author;
       this.voteInfo.author = await userCosmeticInfo(voteInformation.author);
       this.voteInfo.positions = await this.getPositionsThatCanVote();
       try {
@@ -46,6 +47,11 @@ class LegislatureVote {
       this.voteInfo.ayeVoters = await this.getVoters(this.voteInfo.ayes);
       this.voteInfo.nayVoters = await this.getVoters(this.voteInfo.nays);
       this.voteInfo.passPercentage = await this.passPercentage();
+      if (this.voteInfo.constitutional) {
+        this.voteInfo.passThreshold = 66;
+      } else {
+        this.voteInfo.passThreshold = 51;
+      }
       this.voteInfo.canVote = this.voteInfo.positions.map((position) => {
         return position.id;
       });
@@ -204,6 +210,11 @@ class LegislatureVote {
     newArr.sort((a, b) => b.votes - a.votes);
     return newArr;
   }
+
+  isPassing() {
+    return this.voteInfo.passPercentage > this.voteInfo.passThreshold;
+  }
+
   async getVoteAction() {
     var action = this.voteInfo.actions;
     var str = "boobs";
@@ -216,9 +227,10 @@ class LegislatureVote {
     }
     return str;
   }
+
   statusAsString() {
     var rtn = "IDK.";
-    switch (this.voteInfo.passed) {
+    switch (this.voteInfo.status) {
       case -1:
         rtn = "Ongoing";
         break;
@@ -228,10 +240,133 @@ class LegislatureVote {
       case 1:
         rtn = "<span class='greenFont'>Vote Passed</span>";
         break;
+      case 2:
+        rtn = "<u>Waiting on other legislature.</u>";
+        break;
     }
     return rtn;
   }
 
+  async handleSuccess() {
+    var db = require("../../../db");
+    // If this is the original vote (not from the other legislatures)
+    // This is mainly used to insert the same vote into the other legislatures, but it's also used for a unicameral government.
+    if (this.voteInfo.fromLegislature == 0 && this.voteInfo.status != 2) {
+      let countryId = this.legislatureInfo.countryId;
+      var otherLegislatures = await new Promise(function (resolve, reject) {
+        db.query("SELECT * FROM legislatures WHERE countryId = ?", [countryId], function (err, results) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve({ length: results.length, results: results });
+          }
+        });
+      });
+      if (otherLegislatures.length > 0) {
+        await this.updateLegislatureVoteVariable("passed", 2);
+        await this.updateLegislatureVoteVariable("status", 2);
+        // TODO: Handle bill action.
+        // Here we will insert it into other legislatures.
+        otherLegislatures.results.map(async (legislature) => {
+          // Don't reinsert it into the same legislature.
+          if (legislature.id != this.voteInfo.legislature) {
+            var voteId = this.voteId;
+            var fromLegislature = this.legislatureInfo.id;
+            // Check if the bill is already in the legislature.
+            var alreadyInLegislature = await new Promise(function (resolve, reject) {
+              db.query("SELECT * FROM legislatureVotes WHERE fromLegislature = ? AND fromVote = ?", [fromLegislature, voteId], function (err, results) {
+                if (err) {
+                  reject(err);
+                } else {
+                  if (results.length > 0) {
+                    resolve(true);
+                  } else {
+                    resolve(false);
+                  }
+                }
+              });
+            });
+
+            // Add bill to other legislature.
+            if (!alreadyInLegislature) {
+              try {
+                var actions = JSON.stringify(this.voteInfo.actions);
+              } catch (Exception) {
+                var actions = this.voteInfo.actions;
+              }
+
+              db.query(
+                "INSERT INTO legislatureVotes (author, legislature, name, actions, expiresAt, status, constitutional, fromLegislature, fromVote) VALUES (?,?,?,?,?,?,?,?,?)",
+                [this.voteInfo.authorId, legislature.id, this.voteInfo.name, actions, Date.now() + 24 * 60 * 60 * 1000, -1, this.voteInfo.constitutional, this.voteInfo.legislature, this.voteInfo.id],
+                function (err, results) {
+                  if (err) {
+                    console.log(err);
+                  }
+                }
+              );
+            }
+          }
+        });
+      }
+    }
+    // If the vote is from another legislature.
+    else {
+      console.log(this.voteInfo.id);
+      var voteId = this.voteInfo.fromVote;
+      var votes = await new Promise(function (resolve, reject) {
+        db.query("SELECT * FROM legislatureVotes WHERE id = ? OR fromVote =?", [voteId, voteId], function (err, results) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve({ length: results.length, results: results });
+          }
+        });
+      });
+
+      var passing = 0;
+      var failed = 0;
+
+      await Promise.all(
+        votes.results.map(async (vote) => {
+          var thisVote = new LegislatureVote(vote.id);
+          await thisVote.updateVoteInformation();
+          if (Date.now() > thisVote.voteInfo.expiresAt) {
+            if (thisVote.isPassing()) {
+              passing++;
+              if (thisVote.voteInfo.status != 2) {
+                thisVote.updateLegislatureVoteVariable("status", 2);
+              }
+            } else {
+              failed++;
+            }
+          }
+        })
+      );
+
+      // If any one bill fails in any of the legislature, fail them all.
+      if (failed > 0) {
+        await Promise.all(
+          votes.results.map(async (vote) => {
+            var thisVote = new LegislatureVote(vote.id);
+            await thisVote.updateLegislatureVoteVariable("status", 0);
+            await thisVote.updateLegislatureVoteVariable("passed", 0);
+          })
+        );
+      }
+
+      // If no bills failed and they've all passed, and they're all past the expiration, success. Handle vote action.
+      if (failed == 0 && passing == votes.length) {
+        // TODO: Handle Action.
+        await Promise.all(
+          votes.results.map(async (vote) => {
+            var thisVote = new LegislatureVote(vote.id);
+            await thisVote.updateLegislatureVoteVariable("status", 1);
+            await thisVote.updateLegislatureVoteVariable("passed", 1);
+          })
+        );
+      }
+    }
+  }
   /**
    *
    * @param {String} variable Variable being updated.
