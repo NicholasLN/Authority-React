@@ -21,9 +21,7 @@ function Legislature({ legislatureInfo }) {
     return rtn;
   };
 
-  useEffect(() => {
-    return () => setModes("votes");
-  });
+  useEffect(() => {}, [legislatureInfo]);
 
   return (
     <div className="legislature-container">
