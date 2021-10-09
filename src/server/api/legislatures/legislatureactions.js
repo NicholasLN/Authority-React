@@ -1,6 +1,9 @@
 var express = require("express");
+const is_number = require("is-number");
+const Legislature = require("../../classes/Legislatures/Legislature");
 var router = express.Router();
 var LegislatureVote = require("../../classes/Legislatures/LegislatureVote/LegislatureVote");
+const User = require("../../classes/User");
 
 router.post("/voteNay/", async (req, res) => {
   if (req.session.playerData.loggedIn) {
@@ -78,6 +81,100 @@ router.post("/voteAye/", async (req, res) => {
     }
   } else {
     res.send({ error: "Not logged in!" });
+  }
+});
+
+function generateAction(billData) {
+  var action = {};
+  switch (billData.type) {
+    case "optionSelect":
+      action = {
+        action: "changeLawOption",
+        billType: billData.action,
+        newOption: billData.option,
+      };
+      break;
+    case "inputBill":
+      action = {
+        action: "changeLawInput",
+        billType: billData.action,
+        inputName: billData.inputName,
+        newValue: billData.newValue.inputValue,
+      };
+      break;
+  }
+  return action;
+}
+
+router.post("/postVote", async (req, res) => {
+  if (req.session.playerData.loggedIn) {
+    var author = req.session.playerData.loggedInId;
+    if (req.body.formData) {
+      if (req.body.formData.legislatureId) {
+        if (is_number(req.body.formData.legislatureId)) {
+          var legislature = new Legislature(req.body.formData.legislatureId);
+          await legislature.updateLegislatureInformation();
+          if (await legislature.userCanProposeVote(author)) {
+            var activeVotes = await User.getActiveLegislatureVotes(author);
+            if (activeVotes == 0) {
+              if (req.body.formData.billData) {
+                var billName = req.body.formData.voteName;
+                var billData = req.body.formData.billData;
+                var ok = true;
+                switch (billData.type) {
+                  case "optionSelect":
+                    if (!billData.hasOwnProperty("option")) {
+                      ok = false;
+                      res.send({ error: "No bill option provided." });
+                    }
+                    break;
+                  case "inputBill":
+                    if (!billData.hasOwnProperty("newValue")) {
+                      ok = false;
+                      res.send({ error: "No input (try to retype the value...my bad)." });
+                    }
+                    break;
+                }
+                if (ok) {
+                  const getRandomPin = (chars, len) => [...Array(len)].map((i) => chars[Math.floor(Math.random() * chars.length)]).join("");
+                  var billName = billName != "" ? billName : getRandomPin("123456789", 6);
+                  var db = require("../../db");
+                  var actions = JSON.stringify(generateAction(billData));
+                  var newBillId = await new Promise((resolve, reject) => {
+                    db.query(
+                      "INSERT INTO legislatureVotes (author, legislature, name, actions, expiresAt, constitutional) VALUES (?, ?, ?, ?, ?, ?)",
+                      [author, legislature.legislatureId, billName, actions, Date.now() + 24 * 60 * 60 * 1000, billData.constitutional],
+                      (err, result) => {
+                        if (err) {
+                          reject(err);
+                        } else {
+                          resolve(result.insertId);
+                        }
+                      }
+                    );
+                  });
+                  res.send({ billId: newBillId });
+                }
+              } else {
+                res.send({ error: "No bill data provided." });
+              }
+            } else {
+              res.send({ error: `You already have ${activeVotes} active votes.` });
+            }
+          } else {
+            res.send({ error: "Invalid permissions. Cannot propose vote." });
+          }
+        } else {
+          res.send({ error: "Invalid legislature ID" });
+        }
+      } else {
+        res.send({ error: "No legislature ID provided." });
+      }
+    } else {
+      res.send({ error: "No form data provided." });
+    }
+  } else {
+    res.send({ error: "Not logged in." });
   }
 });
 

@@ -235,6 +235,12 @@ class LegislatureVote {
           str = `<span class='redFont'>Rename Legislature</span>: <u>${action.originalName}</u> to <u>${action.renameTo}</u>`;
           break;
         }
+      case "changeLawOption":
+        str = `<span class='redFont'>${action.billType}</span>, <u>${action.newOption}</u>`;
+        break;
+      case "changeLawInput":
+        str = `<span class='redFont'>${action.billType}</span>, <u>${action.newValue}</u>`;
+        break;
     }
     return str;
   }

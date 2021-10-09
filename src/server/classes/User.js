@@ -115,6 +115,21 @@ class User {
     }
     return userVars;
   }
+
+  static async getActiveLegislatureVotes(authorId) {
+    var db = require("../db");
+    var activeVotes = await new Promise((resolve, reject) => {
+      db.query("SELECT id FROM legislatureVotes WHERE author = ? AND expiresAt < ? AND passed != 2 AND fromLegislature = 0 AND fromVote = 0", [authorId, Date.now()], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result.length);
+        }
+      });
+    });
+    return activeVotes;
+  }
+
   /**
    *
    * @param {String} variable Variable being updated.

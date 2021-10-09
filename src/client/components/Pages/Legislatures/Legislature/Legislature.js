@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import LegislaturePositions from "./LegislaturePositions";
 import LegislatureVotes from "./LegislatureVotes";
 import { UserContext } from "./../../../../context/UserContext";
+import ProposeVote from "./ProposeVote";
 
 function Legislature({ legislatureInfo }) {
   const [mode, setModes] = useState("votes");
@@ -40,6 +41,7 @@ function Legislature({ legislatureInfo }) {
       </div>
       {mode == "positions" && <LegislaturePositions legislatureInfo={legislatureInfo} />}
       {mode == "votes" && <LegislatureVotes legislatureInfo={legislatureInfo} />}
+      {mode == "proposeVote" && <ProposeVote legislatureInfo={legislatureInfo} />}
     </div>
   );
 }

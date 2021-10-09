@@ -39,6 +39,12 @@ class LegislatureSrvc {
       .then((response) => response.data)
       .catch((err) => console.error(err));
   }
+  postVote(formData) {
+    return this.auth
+      .post(`/legislatureactions/postVote`, { formData: formData })
+      .then((response) => response.data)
+      .catch((err) => console.error(err));
+  }
 }
 const LegislatureService = new LegislatureSrvc();
 export default LegislatureService;

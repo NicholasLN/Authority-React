@@ -1,0 +1,140 @@
+{
+  "Healthcare":{
+    "action":"Healthcare",
+    "type":"optionSelect",
+     "options":[
+        "No federal option/Medicare abolished",
+        "Medicare & Medicaid",
+        "Medicare & Medicaid, eligibility expanded",
+        "Medicare for All",
+        "National Health Service, private health insurance outlawed"
+     ],
+     "constitutional":0,
+     "countrySpecific":"all"
+
+  },
+  "United States Postal Service":{
+    "action":"United States Postal Service",
+    "type":"optionSelect",
+    "options":[
+      "Federal postal service abolished",
+      "Service must make a profit",
+      "USPS, no profit requirement",
+      "Robust federal postal service with basic banking services",
+      "Private national postage services outlawed"
+    ],
+    "constitutional":0,
+    "countrySpecific":"United States"
+  },
+  "Public Education":{
+    "action":"Public Education",
+    "type":"optionSelect",
+    "options":[
+      "No federal funding for education",
+      "Private school vouchers",
+      "Public primary and secondary education.",
+      "Significant student grants for post-secondary education",
+      "Tuition-free federally funded universities and trade schools."
+    ],
+    "constitutional":0,
+    "countrySpecific":"all"
+  },
+  "Election Laws":{
+    "action":"Election Laws",
+    "type":"optionSelect",
+    "options":[
+      "Regions may institute poll taxes",
+      "Regions may institute Voter ID laws",
+      "Regions may institute mail-in voting restrictions",
+      "All citizens registered to vote automatically upon turning 18",
+      "All eligible citizens are mailed a ballot",
+      "National holiday on Election Day",
+      "Mandatory voting"
+    ],
+    "constitutional":0,
+    "countrySpecific":"all"
+  },
+  "Hard Drugs":{
+    "action":"Hard Drugs",
+    "type":"optionSelect",
+    "options":[
+      "Banned",
+      "Decriminalized",
+      "Regulated",
+      "No regulation"
+    ],
+    "constitutional":0,
+    "countrySpecific":"all"
+  },
+  "Environmental Protection":{
+    "action":"Environmental Protection",
+    "type":"optionSelect",
+    "options":[
+      "None",
+      "Minimal Funding",
+      "EPA/Regular Funding",
+      "Increased Protections",
+      "Heavy fines on polluting."
+    ],
+    "constitutional":0,
+    "countrySpecific":"all"
+  },
+  "Capital Gains Tax":{
+    "action":"Capital Gains Tax",
+    "type":"inputBill",
+    "inputOptions":[
+      {
+        "type":"number",
+        "inputName":"newTax",
+        "minValue":0,
+        "maxValue":50,
+        "placeholder":"Capital Gains Tax (0-50%)"
+      }
+    ],
+    "constitutional":0,
+    "countrySpecific":"all"
+  },
+  "Marijuana Tax":{
+    "action":"Marijuana Tax",
+    "type":"inputBill",
+    "inputOptions":[
+      {
+        "type":"number",
+        "inputName":"marijuanaTax",
+        "minValue":0,
+        "maxValue":25,
+        "placeholder":"Marijuana Tax (0-25%)"
+      }
+    ],
+    "constitutional":0,
+    "countrySpecific":"all"
+  },
+  "Defense Budget":{
+    "action":"Defense Budget",
+    "type":"inputBill",
+    "inputOptions":[
+      {
+        "type":"number",
+        "inputName":"defenseBudget",
+        "minValue":0,
+        "maxValue":100,
+        "placeholder":"Defense Budget (% of GDP)"
+      }
+    ],
+    "constitutional":0,
+    "countrySpecific":"all"
+  },
+  "State Religion":{
+    "action":"State Religion",
+    "type":"optionSelect",
+    "options":[
+      "Persecution of Religious Minorities",
+      "Intolerance of Religious Minorities",
+      "Secular State",
+      "State Atheism",
+      "Religion banned, actively persecuted."
+    ],
+    "constitutional":1,
+    "countrySpecific":"all"
+  }
+}
