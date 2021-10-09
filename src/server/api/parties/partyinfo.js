@@ -207,7 +207,7 @@ router.get("/fetchPoliticalParties/:country?/:mode?/:page?/:query?", async funct
   }
   var db = require("../../db");
 
-  var sql = "SELECT * FROM parties WHERE nation = ? AND LOWER(name) LIKE ? LIMIT 13 OFFSET ?";
+  var sql = "SELECT * FROM parties WHERE nation = ? AND LOWER(name) LIKE ?";
   var partiesResultPromise = new Promise((resolve, reject) => {
     db.query(sql, [country, query, page], (err, results) => {
       if (err) {

@@ -119,7 +119,7 @@ class User {
   static async getActiveLegislatureVotes(authorId) {
     var db = require("../db");
     var activeVotes = await new Promise((resolve, reject) => {
-      db.query("SELECT id FROM legislatureVotes WHERE author = ? AND expiresAt < ? AND passed != 2 AND fromLegislature = 0 AND fromVote = 0", [authorId, Date.now()], (err, result) => {
+      db.query("SELECT id FROM legislatureVotes WHERE author = ? AND passed = -1 OR passed = 2 AND fromLegislature = 0 AND fromVote = 0", [authorId], (err, result) => {
         if (err) {
           reject(err);
         } else {
