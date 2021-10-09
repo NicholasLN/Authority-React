@@ -109,7 +109,6 @@ function generateAction(billData) {
 router.post("/postVote", async (req, res) => {
   if (req.session.playerData.loggedIn) {
     var author = req.session.playerData.loggedInId;
-    console.log(office);
     if (req.body.formData) {
       if (req.body.formData.legislatureId) {
         if (is_number(req.body.formData.legislatureId)) {
