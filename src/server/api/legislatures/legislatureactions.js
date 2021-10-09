@@ -109,13 +109,14 @@ function generateAction(billData) {
 router.post("/postVote", async (req, res) => {
   if (req.session.playerData.loggedIn) {
     var author = req.session.playerData.loggedInId;
+    var office = req.session.playerData.loggedInInfo.office;
     if (req.body.formData) {
       if (req.body.formData.legislatureId) {
         if (is_number(req.body.formData.legislatureId)) {
           var legislature = new Legislature(req.body.formData.legislatureId);
           await legislature.updateLegislatureInformation();
           if (await legislature.userCanProposeVote(author)) {
-            var activeVotes = await User.getActiveLegislatureVotes(author);
+            var activeVotes = await User.getActiveLegislatureVotes(office);
             if (activeVotes == 0) {
               if (req.body.formData.billData) {
                 var billName = req.body.formData.voteName;
