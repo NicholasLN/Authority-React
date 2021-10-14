@@ -14,12 +14,30 @@ import AuthorizationService from "../../../service/AuthService";
 import Body from "../../Structure/Body";
 import PoliticalCompass from "./PoliticalCompass";
 import PoliticianBio from "./PoliticianBio";
+import ReactPlayer from "react-player";
+import { ProgressBar } from "react-bootstrap";
 
 function Politician(props) {
   var { sessionData } = useContext(UserContext);
   var [politicianInfo, setPoliticianInfo] = useState({});
   var [loggedInUserIsUser, setLoggedInUserIsUser] = useState(false);
   var [loading, setLoading] = useState(true);
+
+  // Video Player
+  var [playing, setPlaying] = useState(true);
+  var [played, setPlayed] = useState(0);
+  var [duration, setDuration] = useState(1);
+
+  const switchPlaying = () => {
+    if (playing) {
+      setPlaying(false);
+    } else {
+      setPlaying(true);
+    }
+  };
+
+  //
+
   var { userId } = useParams();
   var { setAlert } = useContext(AlertContext);
   useEffect(() => {
@@ -81,7 +99,28 @@ function Politician(props) {
             <img className="profilePicture" src={politicianInfo.profilePic} alt="Profile Picture" />
 
             {!loggedInUserIsUser ? <div className="lastOnline">{timeAgoString(politicianInfo.lastOnline)}</div> : <></>}
-
+            <hr />
+            {politicianInfo.songURL != "none" && (
+              <>
+                <ReactPlayer
+                  url={politicianInfo.songURL}
+                  playing={playing}
+                  onProgress={(progress) => {
+                    setPlayed(progress.playedSeconds);
+                  }}
+                  onDuration={(duration) => {
+                    setDuration(duration);
+                  }}
+                  width={0}
+                  height={0}
+                />
+                <span>{politicianInfo.songName}</span>
+                <ProgressBar className="m-0 p-0" id="playBar" now={`${(played / duration) * 100}`} style={{ width: "100%" }} />
+                <button id="playButton" className="btn btn-default btn-xs">
+                  <span class={playing ? "fas fa-pause" : "fas fa-play"} onClick={switchPlaying}></span>
+                </button>
+              </>
+            )}
             <hr />
             <h4>Biography and Details</h4>
             <PoliticianBio bio={politicianInfo.bio} />

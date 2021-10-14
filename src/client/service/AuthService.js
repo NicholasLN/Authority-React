@@ -70,6 +70,9 @@ class AuthService {
   updateUserBio(bio) {
     return this.auth.post("auth/setUserBio", { bio }).then((response) => response.data);
   }
+  updateUserSong(songURL, songName) {
+    return this.auth.post("auth/setUserSong", { songURL, songName }).then((response) => response.data);
+  }
   changePositions(body) {
     return this.auth.post("useractions/changeUserPositions", body).then((response) => response.data);
   }

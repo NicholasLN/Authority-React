@@ -14,11 +14,25 @@ function EditProfile(props) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [bioText, setBioText] = useState("");
 
+  const [songURL, setSongURL] = useState("none");
+  const [songName, setSongName] = useState("none");
+
   const onImageChange = function (e) {
     if (e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
     }
   };
+
+  const onSongChange = async function () {
+    var resp = await AuthorizationService.updateUserSong(songURL, songName);
+    if (!resp.hasOwnProperty("error")) {
+      setAlert("Song successfully updated.");
+      setAlertType("success");
+    } else {
+      setAlert(resp.error);
+    }
+  };
+
   const onImageUpload = async function () {
     var resp = await AuthorizationService.updateUserPicture(selectedFile);
     if (resp && !resp.hasOwnProperty("error")) {
@@ -81,6 +95,18 @@ function EditProfile(props) {
             <td>
               <button className="btn btn-primary" onClick={onImageUpload}>
                 Change Picture
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>Change Profile Song</td>
+            <td>
+              <input className="form-control" type="input" placeholder="Song URL (youtube, soundcloud, etc...)" onChange={(e) => setSongURL(e.target.value)} />
+              <input className="form-control" type="input" placeholder="Your own description/name for the song (50 chars max)" onChange={(e) => setSongName(e.target.value)} />
+            </td>
+            <td>
+              <button className="btn btn-primary" onClick={onSongChange}>
+                Change Song
               </button>
             </td>
           </tr>

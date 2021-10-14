@@ -143,4 +143,29 @@ router.post("/setUserBio", function (req, res, next) {
   }
 });
 
+router.post("/setUserSong", function (req, res) {
+  var { songURL, songName } = req.body;
+  if (req.session.playerData.loggedIn) {
+    if (songURL) {
+      if (songName) {
+        let db = require("../../db");
+        var sql = `UPDATE users SET songURL = ?, songName = ? WHERE id = ?`;
+        db.query(sql, [songURL, songName, req.session.playerData.loggedInId], function (err, results) {
+          if (err) {
+            res.send({ error: "Something went wrong with your request. Try being a better person." });
+          } else {
+            res.sendStatus(200);
+          }
+        });
+      } else {
+        res.send({ error: "No song name provided." });
+      }
+    } else {
+      res.send({ error: "No URL provided." });
+    }
+  } else {
+    res.send({ error: "Not logged in." });
+  }
+});
+
 module.exports.router = router;
