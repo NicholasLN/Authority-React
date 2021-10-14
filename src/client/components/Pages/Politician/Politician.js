@@ -44,7 +44,6 @@ function Politician(props) {
     async function fetchData() {
       var requestedUserInfo = {};
       var userExists = false;
-      var sessionData = await AuthorizationService.getSessionData();
       // If the URL has no politician ID
       if (props.noRequestId) {
         // If they're logged in, then just send them their own page.
@@ -99,10 +98,11 @@ function Politician(props) {
             <img className="profilePicture" src={politicianInfo.profilePic} alt="Profile Picture" />
 
             {!loggedInUserIsUser ? <div className="lastOnline">{timeAgoString(politicianInfo.lastOnline)}</div> : <></>}
-            <hr />
-            {politicianInfo.songURL != "none" && (
+            {politicianInfo.songURL && (
               <>
+                <hr />
                 <ReactPlayer
+                  style={{ display: "none" }}
                   url={politicianInfo.songURL}
                   playing={playing}
                   onProgress={(progress) => {
@@ -111,13 +111,11 @@ function Politician(props) {
                   onDuration={(duration) => {
                     setDuration(duration);
                   }}
-                  width={0}
-                  height={0}
                 />
                 <span>{politicianInfo.songName}</span>
                 <ProgressBar className="m-0 p-0" id="playBar" now={`${(played / duration) * 100}`} style={{ width: "100%" }} />
                 <button id="playButton" className="btn btn-default btn-xs">
-                  <span class={playing ? "fas fa-pause" : "fas fa-play"} onClick={switchPlaying}></span>
+                  <span className={playing ? "fas fa-pause" : "fas fa-play"} onClick={switchPlaying}></span>
                 </button>
               </>
             )}
