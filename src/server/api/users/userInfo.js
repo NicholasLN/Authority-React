@@ -14,6 +14,7 @@ const public_information = function (userRow) {
   delete userRow.currentCookie;
   delete userRow.regIP;
   delete userRow.currentIP;
+  delete userRow.email;
   return userRow;
 };
 
