@@ -63,6 +63,10 @@ function LegislatureVote(props) {
     return (
       <Body>
         <br />
+        <LinkContainer to={`/legislatures/${voteInfo.country}/${voteInfo.legislature}/votes`}>
+          <a className="btn btn-primary">Go to Legislature</a>
+        </LinkContainer>
+        <hr />
         <h4>{voteInfo.name}</h4>
         <h6 dangerouslySetInnerHTML={{ __html: voteInfo.actionString }} />
         {voteInfo.constitutional && (

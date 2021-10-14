@@ -93,7 +93,7 @@ class Routes extends Component {
         </Route>
 
         {/*Legislature Overview*/}
-        <Route path="/legislatures/:country">
+        <Route path="/legislatures/:country/:legislatureId?/:mode?">
           <Suspense fallback={<Loading />}>
             <Legislatures />
           </Suspense>

@@ -4,8 +4,8 @@ import LegislatureVotes from "./LegislatureVotes";
 import { UserContext } from "./../../../../context/UserContext";
 import ProposeVote from "./ProposeVote";
 
-function Legislature({ legislatureInfo }) {
-  const [mode, setModes] = useState("votes");
+function Legislature({ legislatureInfo, reqMode }) {
+  const [mode, setModes] = useState(reqMode);
   const { sessionData, playerData } = useContext(UserContext);
 
   const hasOffice = (office) => {
@@ -21,7 +21,13 @@ function Legislature({ legislatureInfo }) {
     return rtn;
   };
 
-  useEffect(() => {}, [legislatureInfo]);
+  useEffect(() => {
+    if (reqMode) {
+      setModes(reqMode);
+    } else {
+      setModes("votes");
+    }
+  }, [legislatureInfo]);
 
   return (
     <div className="legislature-container">

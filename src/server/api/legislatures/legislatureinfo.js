@@ -20,6 +20,7 @@ const getVoteInfo = async (voteId, vote) => {
   var lv = new LegislatureVote(voteId);
   await lv.updateVoteInformation();
 
+  vote.country = lv.legislatureInfo.countryId;
   vote.author = lv.voteInfo.author;
   vote.actions = lv.voteInfo.actions;
   vote.sumAyes = lv.voteInfo.sumAyes;

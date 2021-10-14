@@ -8,7 +8,7 @@ import { ClipLoader } from "react-spinners";
 import Legislature from "./Legislature/Legislature";
 
 function LegislatureOverview(props) {
-  var { country } = useParams();
+  var { country, legislatureId, mode } = useParams();
   const { setAlert } = useContext(AlertContext);
   var [countryInfo, setCountryInfo] = useState({});
   var [legislatures, setLegislatures] = useState({});
@@ -22,6 +22,17 @@ function LegislatureOverview(props) {
       console.debug(respLegislatures);
       setCountryInfo(respCountryInfo);
       setLegislatures(respLegislatures);
+      if (legislatureId) {
+        respLegislatures.map((legislature) => {
+          if (legislature.id == legislatureId) {
+            setSelectedLegislature(legislature);
+          }
+        });
+      } else {
+        if (respLegislatures.length > 0) {
+          setSelectedLegislature(respLegislatures[0]);
+        }
+      }
       setLoading(false);
     } else {
       setAlert(countryInfo.error);
@@ -51,7 +62,7 @@ function LegislatureOverview(props) {
           </div>
         </div>
         <hr />
-        {selectedLegislature != null && <Legislature legislatureInfo={selectedLegislature} />}
+        {selectedLegislature != null && <Legislature legislatureInfo={selectedLegislature} reqMode={mode} />}
       </Body>
     );
   } else {
