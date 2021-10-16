@@ -10,8 +10,9 @@ const Party = require("../../classes/Party/Party");
 const { boolean } = require("boolean");
 const { userDoesExistId, userCosmeticInfo } = require("../../classes/User");
 const { getUserVotes } = require("../../classes/Party/PartyVote/PartyVote");
+const cache = require("../../cache");
 
-router.get("/fetchPartyById/:partyId", async function (req, res) {
+router.get("/fetchPartyById/:partyId", cache(10), async function (req, res) {
   let partyId = req.params.partyId;
 
   if (isnumber(partyId)) {
@@ -31,7 +32,7 @@ router.get("/fetchPartyById/:partyId", async function (req, res) {
   }
 });
 
-router.get("/partyRoleList/:partyId", async function (req, res) {
+router.get("/partyRoleList/:partyId", cache(10), async function (req, res) {
   let partyId = req.params.partyId;
 
   const party = new partyClass(partyId);
@@ -91,7 +92,7 @@ const getPartyLeaderInfo = async (partyId) => {
   return leaderInformation;
 };
 
-router.get("/partyMembers/:partyId/:resultCount?", async function (req, res) {
+router.get("/partyMembers/:partyId/:resultCount?", cache(10), async function (req, res) {
   let partyId = req.params.partyId;
   let results = req.params.resultCount;
 
@@ -116,7 +117,7 @@ router.get("/partyMembers/:partyId/:resultCount?", async function (req, res) {
   res.send(partyMembers);
 });
 
-router.get("/committeePieChart/:partyId", async function (req, res) {
+router.get("/committeePieChart/:partyId", cache(10), async function (req, res) {
   if (req.params.partyId != null) {
     var db = require("../../db");
     var query = `SELECT id FROM users WHERE party=? AND lastOnline>? ORDER BY partyInfluence DESC`;
@@ -177,7 +178,7 @@ router.get("/committeePieChart/:partyId", async function (req, res) {
   }
 });
 
-router.get("/partyMemberCount/:partyID", async function (req, res) {
+router.get("/partyMemberCount/:partyID", cache(10), async function (req, res) {
   let partyID = req.params.partyID;
   let db = require("../../db");
   let sql = `SELECT id FROM users WHERE party = ?`;
@@ -191,7 +192,7 @@ router.get("/partyMemberCount/:partyID", async function (req, res) {
   });
 });
 
-router.get("/fetchPoliticalParties/:country?/:mode?/:page?/:query?", async function (req, res, next) {
+router.get("/fetchPoliticalParties/:country?/:mode?/:page?/:query?", cache(10), async function (req, res, next) {
   var { country, mode, page, query } = req.params;
   query == undefined || query == null ? (query = `% %`) : (query = `%${query}%`);
   mode == undefined && (mode = "active");
@@ -259,7 +260,7 @@ router.get("/fetchPoliticalParties/:country?/:mode?/:page?/:query?", async funct
   res.send(newParties);
 });
 
-router.get("/getFundingRequests/:partyId/:lowerLimit?/:upperLimit?", async (req, res) => {
+router.get("/getFundingRequests/:partyId/:lowerLimit?/:upperLimit?", cache(10), async (req, res) => {
   var { lowerLimit, upperLimit, partyId } = req.params;
   partyId = parseInt(partyId);
   var lowerLimit = lowerLimit == undefined ? 10 : Math.abs(lowerLimit);
@@ -288,7 +289,7 @@ router.get("/getFundingRequests/:partyId/:lowerLimit?/:upperLimit?", async (req,
   }
 });
 
-router.post("/searchUsersInParty", async function (req, res) {
+router.post("/searchUsersInParty", cache(10), async function (req, res) {
   var { hasRole, searchQuery, party, active, selectSearch } = req.body;
   hasRole = boolean(hasRole);
   selectSearch = boolean(selectSearch);

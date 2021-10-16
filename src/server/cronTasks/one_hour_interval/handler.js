@@ -1,9 +1,16 @@
-const cron = require("node-cron");
+var CronJob = require("cron").CronJob;
 
 // At minute 0 of every hour
-cron.schedule("0 * * * *", async () => {
-  // Party Position Drift
-  require("./partyPositionDrift");
-  // Party Power Increase
-  require("./partyPower");
-});
+var job = new CronJob(
+  "* * * * *",
+  async () => {
+    // Party Position Drift
+    require("./partyPositionDrift");
+    // Party Power Increase
+    require("./partyPower");
+  },
+  null,
+  true,
+  "America/New_York"
+);
+job.start();

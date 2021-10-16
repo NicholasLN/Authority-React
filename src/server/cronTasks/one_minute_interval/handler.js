@@ -1,10 +1,17 @@
-const cron = require("node-cron");
-
+var CronJob = require("cron").CronJob;
 // At every minute
-cron.schedule("* * * * *", async () => {
-  // Party vote check
-  require("./partyVoteCheck.js");
+var job = new CronJob(
+  "* * * * *",
+  async () => {
+    // Party vote check
+    require("./partyVoteCheck.js");
 
-  // Legislature vote check.
-  require("./legislatureVoteCheck");
-});
+    // Legislature vote check.
+    require("./legislatureVoteCheck");
+  },
+  null,
+  true,
+  "America/New_York"
+);
+
+job.start();

@@ -2,6 +2,7 @@ var express = require("express");
 const is_number = require("is-number");
 const LegislatureVote = require("../../classes/Legislatures/LegislatureVote/LegislatureVote");
 var router = express.Router();
+var cache = require("../../cache");
 
 const getLegislaturePositions = (country, legislature) => {
   var db = require("../../db");
@@ -67,7 +68,7 @@ const verifyCountry = (country) => {
   });
 };
 
-router.get("/fetchLegislatures/:country", async function (req, res) {
+router.get("/fetchLegislatures/:country", cache(10), async function (req, res) {
   var db = require("../../db");
   var countryId = await verifyCountry(req.params.country);
   if (countryId) {
@@ -99,7 +100,7 @@ router.get("/fetchLegislatures/:country", async function (req, res) {
   }
 });
 
-router.get("/fetchVote/:voteId", async (req, res) => {
+router.get("/fetchVote/:voteId", cache(10), async (req, res) => {
   if (is_number(req.params.voteId)) {
     var db = require("../../db");
     var fetchVote = await new Promise((resolve, reject) => {
@@ -122,7 +123,7 @@ router.get("/fetchVote/:voteId", async (req, res) => {
   }
 });
 
-router.get("/fetchLegislatureVotes/:legislatureId/:limit?/:offset?", async function (req, res) {
+router.get("/fetchLegislatureVotes/:legislatureId/:limit?/:offset?", cache(10), async function (req, res) {
   if (is_number(req.params.legislatureId)) {
     var votes = await getLegislatureVotes(req.params.legislatureId, req.params.limit, req.params.offset);
     await Promise.all(
