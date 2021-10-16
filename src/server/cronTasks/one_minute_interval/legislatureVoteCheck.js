@@ -20,9 +20,13 @@ async function handlePassingVotes() {
   forEach(votes, async (voteEntry, idx) => {
     var lv = new LegislatureVote(voteEntry.id);
     await lv.updateVoteInformation();
-
-    if (Date.now() > lv.voteInfo.expiresAt) {
-      await lv.handleSuccess();
+    if (lv.isPassing()) {
+      if (Date.now() > lv.voteInfo.expiresAt) {
+        await lv.handleSuccess();
+      }
+    } else {
+      await lv.updateLegislatureVoteVariable("status", 0);
+      await lv.updateLegislatureVoteVariable("passed", 0);
     }
   });
 }
