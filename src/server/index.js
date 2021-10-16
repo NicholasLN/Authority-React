@@ -10,7 +10,6 @@ const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
   max: 200, // limit each IP to 100 requests per windowMs
 });
-
 const multer = require("multer");
 const multerMid = multer({
   storage: multer.memoryStorage(),
@@ -18,7 +17,6 @@ const multerMid = multer({
     fileSize: 5 * 1024 * 1024 * 1024,
   },
 });
-
 const app = express();
 
 app.use(multerMid.single("file"));
@@ -40,6 +38,9 @@ try {
   logger.color("red").bold().log("[session] Error initializing session. Read previous exception for more details. Shutting down server.");
   return;
 }
+
+// Cron
+require("./cron");
 
 const logOut = function (req) {
   req.session.playerData.loggedIn = false;
@@ -111,5 +112,4 @@ if (process.env.ENVIRONMENT == "PRODUCTION") {
 
 app.listen(process.env.PORT || 8080, () => {
   console.log(`Listening on port ${process.env.PORT || 8080}!`);
-  require("./cronTasks/cron");
 });

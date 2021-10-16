@@ -1,12 +1,13 @@
 const { forEach } = require("async-foreach");
 const LegislatureVote = require("../../classes/Legislatures/LegislatureVote/LegislatureVote");
 
+console.log("Legislature Vote Check.....");
+
 async function fetchVotes() {
   var db = require("../../db");
-  var date = Date.now();
   var sql = `SELECT * FROM legislatureVotes WHERE passed = -1`;
   return new Promise((res, rej) => {
-    db.query(sql, [date], (error, results) => {
+    db.query(sql, (error, results) => {
       if (error) {
         res([]);
       } else {
@@ -23,10 +24,8 @@ async function handlePassingVotes() {
     if (Date.now() > lv.voteInfo.expiresAt) {
       console.log("Bill is passed it's expiration date.");
       if (lv.isPassing()) {
-        console.log("Bill is passing");
         await lv.handleSuccess();
       } else {
-        console.log("Bill is failing");
         await lv.updateLegislatureVoteVariable("status", 0);
         await lv.updateLegislatureVoteVariable("passed", 0);
       }
