@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import PoliticianSearch from "../../../Misc/PoliticianSearch";
+import { UserContext } from "./../../../../context/UserContext";
 
-export default function BillSetForm({ billSetInformation, formData, setFormData }) {
+export default function BillSetForm({ billSetInformation, legislatureInfo, formData, setFormData }) {
+  const { playerData } = useContext(UserContext);
+
   const addInputFormData = (inputName, inputValue) => {
     setFormData({ type: billSetInformation.type, action: billSetInformation.action, newValue: { inputName, inputValue }, constitutional: billSetInformation.constitutional });
   };
@@ -9,10 +13,14 @@ export default function BillSetForm({ billSetInformation, formData, setFormData 
     setFormData({ type: billSetInformation.type, action: billSetInformation.action, option: inputValue, constitutional: billSetInformation.constitutional });
   };
 
+  const appointChangeSelect = (e) => {
+    var newFormData = formData;
+    newFormData.appointee = e;
+    setFormData(newFormData);
+  };
+
   useEffect(() => {
-    console.log("rerender", billSetInformation.action);
     setFormData({ type: billSetInformation.type, action: billSetInformation.action, constitutional: billSetInformation.constitutional });
-    console.log(billSetInformation);
   }, [billSetInformation.action]);
 
   if (billSetInformation.hasOwnProperty("type")) {
@@ -56,6 +64,24 @@ export default function BillSetForm({ billSetInformation, formData, setFormData 
                 />
               );
             })}
+          </>
+        );
+      case "appointPosition":
+        return (
+          <>
+            <select className="form-control" onChange={(e) => setFormData({ type: "appointPosition", action: "appointPosition", office: e.target.value, appointee: null })}>
+              <option value=""></option>
+              {legislatureInfo.appoints.map((appoint, index) => {
+                if (appoint.members < appoint.numElected) {
+                  return (
+                    <option key={index} value={appoint.id}>
+                      {appoint.officeName}
+                    </option>
+                  );
+                }
+              })}
+            </select>
+            <PoliticianSearch onChange={appointChangeSelect} country={playerData.nation} active={true} />
           </>
         );
       default:

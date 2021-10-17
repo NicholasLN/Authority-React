@@ -1,8 +1,6 @@
 const { forEach } = require("async-foreach");
 const LegislatureVote = require("../../classes/Legislatures/LegislatureVote/LegislatureVote");
 
-console.log("Legislature Vote Check.....");
-
 async function fetchVotes() {
   var db = require("../../db");
   var sql = `SELECT * FROM legislatureVotes WHERE passed = -1`;

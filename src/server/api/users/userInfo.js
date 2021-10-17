@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var isnumber = require("is-number");
 var { boolean } = require("boolean");
+var cache = require("../../cache");
 
 const Party = require("../../classes/Party/Party");
 const User = require("../../classes/User");
@@ -98,6 +99,46 @@ router.get("/getPatrons", async function (req, res) {
       res.send(results);
     }
   });
+});
+
+router.get("/politicianSearch/:query/:country?/:active?", cache(10), async function (req, res) {
+  var country = "all";
+  var sql = "SELECT * FROM users";
+  var params = [];
+  if (req.params.sameCountry && req.params.sameCountry != "all") {
+    sql += " WHERE nation = ? ";
+    params.push(country);
+  }
+  if (req.params.active) {
+    if (params.length == 0) {
+      sql += " WHERE lastOnline > ?";
+    } else {
+      sql += " AND lastOnline > ?";
+    }
+    params.push(Date.now() - process.env.ACTIVITY_THRESHOLD);
+  }
+  if (params.length > 0) {
+    sql += " AND";
+  } else {
+    sql += " WHERE";
+  }
+  sql += " politicianName LIKE ? LIMIT 30";
+  params.push(`%${req.params.query}%`);
+  var db = require("../../db");
+  var results = await new Promise(function (resolve, reject) {
+    db.query(sql, params, (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+  var formatted = [];
+  results.map((user) => {
+    formatted.push({ value: user.id, label: user.politicianName });
+  });
+  res.send(formatted);
 });
 
 module.exports.router = router;

@@ -4,14 +4,49 @@ const LegislatureVote = require("../../classes/Legislatures/LegislatureVote/Legi
 var router = express.Router();
 var cache = require("../../cache");
 
-const getLegislaturePositions = (country, legislature) => {
+const officeHolders = (officeId) => {
   var db = require("../../db");
   return new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM legislaturePositions WHERE countryId = ? AND legislatureId = ?`, [country, legislature], (err, result) => {
+    db.query("SELECT * FROM users WHERE office = ?", [officeId], (err, results) => {
       if (err) {
         reject(err);
       } else {
-        resolve(result);
+        resolve(results.length);
+      }
+    });
+  });
+};
+
+const getLegislaturePositions = (country, legislature) => {
+  var db = require("../../db");
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM legislaturePositions WHERE countryId = ? AND legislatureId = ?`, [country, legislature], async (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        await Promise.all(
+          results.map(async (result) => {
+            result.members = await officeHolders(result.id);
+          })
+        );
+        resolve(results);
+      }
+    });
+  });
+};
+const getLegislatureAppoints = (country, legislature) => {
+  var db = require("../../db");
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM legislaturePositions WHERE countryId = ? AND isElected = 0 AND appointedBy = ?`, [country, legislature], async (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        await Promise.all(
+          results.map(async (result) => {
+            result.members = await officeHolders(result.id);
+          })
+        );
+        resolve(results);
       }
     });
   });
@@ -88,6 +123,7 @@ router.get("/fetchLegislatures/:country", cache(10), async function (req, res) {
         var legislature = legislatures[idx];
         legislature.positions = await getLegislaturePositions(countryId.id, legislature.id);
         legislature.rules = JSON.parse(legislature.rules);
+        legislature.appoints = await getLegislatureAppoints(countryId.id, legislature.id);
         newLegislatures.push(legislature);
       })
     );

@@ -14,7 +14,11 @@ function ProposeVote({ history, legislatureInfo }) {
   const changeBillType = (e) => {
     var newBillType = e.target.value;
     var billTypeInformation = billSet[newBillType];
-    setSelectedBillType(billTypeInformation);
+    if (billTypeInformation) {
+      setSelectedBillType(billTypeInformation);
+    } else {
+      setSelectedBillType({ type: newBillType });
+    }
   };
 
   const uploadVote = async () => {
@@ -30,6 +34,10 @@ function ProposeVote({ history, legislatureInfo }) {
       setAlert(resp.error);
     }
   };
+
+  useEffect(() => {
+    console.log(legislatureInfo);
+  });
 
   return (
     <>
@@ -57,11 +65,12 @@ function ProposeVote({ history, legislatureInfo }) {
             <td>
               <select className="form-control" onChange={changeBillType}>
                 <option value=""></option>
+                {legislatureInfo.appoints.length != 0 && <option value="appointPosition">Appoint Position</option>}
                 {Object.keys(billSet).map((k, v) => {
                   return <option key={v}>{k}</option>;
                 })}
               </select>
-              {selectedBillType != null && <BillSetForm billSetInformation={selectedBillType} formData={formData} setFormData={setFormData} />}
+              {selectedBillType != null && <BillSetForm billSetInformation={selectedBillType} formData={formData} setFormData={setFormData} legislatureInfo={legislatureInfo} />}
             </td>
           </tr>
           <tr>

@@ -102,6 +102,14 @@ function generateAction(billData) {
         newValue: billData.newValue.inputValue,
       };
       break;
+    case "appointPosition":
+      action = {
+        action: "appointPosition",
+        billType: billData.action,
+        office: billData.office,
+        appointee: billData.appointee,
+      };
+      break;
   }
   return action;
 }
@@ -122,6 +130,7 @@ router.post("/postVote", async (req, res) => {
                 var billName = req.body.formData.voteName;
                 var billData = req.body.formData.billData;
                 var ok = true;
+                var status = -1;
                 switch (billData.type) {
                   case "optionSelect":
                     if (!billData.hasOwnProperty("option")) {
@@ -135,6 +144,13 @@ router.post("/postVote", async (req, res) => {
                       res.send({ error: "No input (try to retype the value...my bad)." });
                     }
                     break;
+                  case "appointPosition":
+                    status = 3;
+                    if (!billData.hasOwnProperty("office") || !billData.hasOwnProperty("appointee")) {
+                      ok = false;
+                      res.send({ error: "Error." });
+                    }
+                    break;
                 }
                 if (ok) {
                   const getRandomPin = (chars, len) => [...Array(len)].map((i) => chars[Math.floor(Math.random() * chars.length)]).join("");
@@ -143,8 +159,8 @@ router.post("/postVote", async (req, res) => {
                   var actions = JSON.stringify(generateAction(billData));
                   var newBillId = await new Promise((resolve, reject) => {
                     db.query(
-                      "INSERT INTO legislatureVotes (author, legislature, name, actions, expiresAt, constitutional) VALUES (?, ?, ?, ?, ?, ?)",
-                      [author, legislature.legislatureId, billName, actions, Date.now() + 24 * 60 * 60 * 1000, billData.constitutional],
+                      "INSERT INTO legislatureVotes (author, legislature, name, actions, expiresAt, status, constitutional) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                      [author, legislature.legislatureId, billName, actions, Date.now() + 24 * 60 * 60 * 1000, status, billData.constitutional],
                       (err, result) => {
                         if (err) {
                           reject(err);

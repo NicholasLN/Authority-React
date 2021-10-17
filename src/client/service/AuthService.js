@@ -76,6 +76,9 @@ class AuthService {
   changePositions(body) {
     return this.auth.post("useractions/changeUserPositions", body).then((response) => response.data);
   }
+  userSearch(query, country = "all", active = "true") {
+    return this.auth.get(`userinfo/politicianSearch/${query}/${country}/${active}`).then((response) => response.data);
+  }
 }
 
 const AuthorizationService = new AuthService();
