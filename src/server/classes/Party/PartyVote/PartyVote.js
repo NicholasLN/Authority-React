@@ -36,6 +36,7 @@ class PartyVote {
     } else {
       voteInfo = this.voteInfo;
     }
+    console.log(voteInfo);
     await Promise.all(
       voteInfo.actions.map(async (action, idx) => {
         switch (action.action) {
