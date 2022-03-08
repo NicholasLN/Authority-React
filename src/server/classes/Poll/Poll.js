@@ -4,7 +4,7 @@ const { demoSetPopulation } = require("../Demographics/Methods");
 const DemographicSupport = require("../DemographicSupport/DemographicSupport");
 var user = require("../User");
 
-const randomInt = () => {
+const randomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
