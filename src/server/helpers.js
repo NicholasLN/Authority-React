@@ -24,7 +24,7 @@ const uploadImage = (file, directory) =>
       });
       blobStream
         .on("finish", () => {
-          const publicUrl = `https://storage.googleapis.com/${bucket.name}/${directory}?ignoreCache=${randomInt(0, 1000000000)}`;
+          const publicUrl = `https://storage.googleapis.com/${bucket.name}/${directory}?ignoreCache=${Math.random() * 10000000000}`;
           resolve(publicUrl);
         })
         .on("error", (err) => {
