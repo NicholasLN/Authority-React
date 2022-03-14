@@ -183,14 +183,16 @@ function Party(props) {
             >
               Party Committee
             </button>
-            <button
-              className={"btn btn-primary partyButton" + (partyMode == "treasury" ? " active" : "")}
-              onClick={() => {
-                setPartyMode("treasury");
-              }}
-            >
-              Party Treasury
-            </button>
+            {sessionData.loggedIn && playerData.party == partyInfo.id && (
+              <button
+                className={"btn btn-primary partyButton" + (partyMode == "treasury" ? " active" : "")}
+                onClick={() => {
+                  setPartyMode("treasury");
+                }}
+              >
+                Party Treasury
+              </button>
+            )}
             {userHasPerm(playerData.id, partyInfo, "leader") && (
               <button
                 className={"btn btn-primary partyButton" + (partyMode == "management" ? " active" : "")}

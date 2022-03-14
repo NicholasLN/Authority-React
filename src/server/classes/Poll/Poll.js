@@ -1,9 +1,13 @@
 const { forEach } = require("async-foreach");
-const { randomInt } = require("crypto");
 const Demographic = require("../Demographics/Demographic");
 const { demoSetPopulation } = require("../Demographics/Methods");
 const DemographicSupport = require("../DemographicSupport/DemographicSupport");
 var user = require("../User");
+
+const randomInt = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 class Poll {
   constructor(demoArray, confidenceLevel, sampleSize, loggedInUser) {
     this.demoArray = demoArray;
