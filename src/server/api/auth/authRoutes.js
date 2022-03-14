@@ -42,7 +42,6 @@ router.post("/login", function (req, res) {
         } else {
           // If the username they've provided exists and if the password matches.
           if (result) {
-            console.log(result.length);
             if (result.length > 0) {
               var passwordMatches = bcrypt.compareSync(password, result[0].password);
               if (passwordMatches) {

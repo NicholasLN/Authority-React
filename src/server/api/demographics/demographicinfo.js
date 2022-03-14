@@ -11,7 +11,6 @@ var fetchDemographics = (sql, prepared) => {
     db.query(sql, prepared, (err, results) => {
       if (err) {
         reject(err);
-        console.log(err);
       } else {
         resolve(results);
       }

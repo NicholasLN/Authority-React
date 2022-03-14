@@ -20,7 +20,6 @@ async function handlePassingVotes() {
     var lv = new LegislatureVote(voteEntry.id);
     await lv.updateVoteInformation();
     if (Date.now() > lv.voteInfo.expiresAt) {
-      console.log("Bill is passed it's expiration date.");
       if (lv.isPassing()) {
         await lv.handleSuccess();
       } else {

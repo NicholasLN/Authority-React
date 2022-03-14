@@ -35,10 +35,6 @@ function ProposeVote({ history, legislatureInfo }) {
     }
   };
 
-  useEffect(() => {
-    console.log(legislatureInfo);
-  });
-
   return (
     <>
       <hr />

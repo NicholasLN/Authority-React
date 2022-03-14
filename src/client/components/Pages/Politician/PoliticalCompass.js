@@ -16,7 +16,6 @@ function PoliticalCompass({ ecoPos, socPos }) {
         width *= 0.7;
         break;
     }
-    console.log("width: " + width);
     height *= 0.45;
 
     return { height, width };
@@ -41,7 +40,6 @@ function PoliticalCompass({ ecoPos, socPos }) {
 
   useEffect(() => {
     window.addEventListener("resize", updateDims);
-    console.log("rerender");
     drawChart();
     return () => {
       window.removeEventListener("resize", updateDims);

@@ -7,7 +7,6 @@ export default function Credits() {
 
   async function fetchPatrons() {
     var resp = await PatronService.getPatrons();
-    console.log(resp);
     if (!resp.hasOwnProperty("error")) {
       setPatrons(resp);
     }

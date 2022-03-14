@@ -2,20 +2,23 @@ import React, { useState, useEffect, useContext } from "react";
 import { useForm, Controller, get } from "react-hook-form";
 import PartyMemberSearch from "../../Misc/PartyMemberSearch";
 import RolePermissionRadio from "../../Misc/RolePermissionRadio";
-import { getLeaderInfo } from "../../../../server/classes/Party/Methods";
+import { getLeaderInfo, userHasPerm } from "../../../../server/classes/Party/Methods";
 import PartyInfoService from "../../../service/PartyService";
 import { withRouter } from "react-router";
 import { AlertContext } from "../../../context/AlertContext";
+import { UserContext } from "../../../context/UserContext";
 
 function ProposeVote(props) {
   var [voteType, setVoteType] = useState("newChair");
   var { setAlert, setAlertType } = useContext(AlertContext);
+  var { sessionData, playerData } = useContext(UserContext);
 
   const { control, reset, getValues, setValue, register, handleSubmit } = useForm();
 
   async function onSubmit(data) {
     data.partyId = props.partyInfo.id;
     var resp = await PartyInfoService.createPartyVote(data);
+    //var resp = await PartyInfoService.createPartyVote(data);
     if (resp.hasOwnProperty("success")) {
       props.history.push(`/partyVote/${resp.success}`);
       setAlert("Vote successfully created!");
@@ -62,6 +65,10 @@ function ProposeVote(props) {
                 <option value="changeFees">Change Party Fees</option>
                 <option value="renameParty">Rename Party</option>
                 <option value="changeVotes">Change # of Party Votes</option>
+                {sessionData.loggedIn && userHasPerm(playerData.id, props.partyInfo, "purgeMembers") && (
+                <option value="purgeMembers">Purge Member (costs 10% party influence)</option>
+                )}
+              
               </select>
               {voteType == "newChair" && (
                 <>
@@ -95,7 +102,6 @@ function ProposeVote(props) {
                           } else {
                             setValue(`perms.${e.target.value}`, true);
                           }
-                          console.log(getValues("perms"));
                         }}
                       />
                     )}
@@ -144,7 +150,7 @@ function ProposeVote(props) {
                     name="changeOccupantId"
                     control={control}
                     defaultValue=""
-                    render={({ field }) => <PartyMemberSearch {...field} partyInfo={props.partyInfo} />}
+                    render={({ field }) => <PartyMemberSearch {...field} partyInfo={props.partyInfo}/>}
                   />
                 </>
               )}
@@ -162,6 +168,11 @@ function ProposeVote(props) {
                 <>
                   <input className="form-control" type="number" {...register("changeVotesTo")} placeholder={props.partyInfo.votes} />
                 </>
+              )}
+              {voteType == "purgeMembers" && (
+               <>
+                  <Controller rules={{ required: true }} name="purgeMembers" control={control} defaultValue="" render={({ field }) => <PartyMemberSearch {...field} partyInfo={props.partyInfo} />} />
+               </> 
               )}
             </td>
           </tr>

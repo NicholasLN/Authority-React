@@ -76,7 +76,6 @@ function PartyVotes(props) {
   const fetchData = async () => {
     var tableDataAPI = await PartyInfoService.fetchPartyVotes(props.partyInfo.id, limits.lowerLimit, limits.upperLimit);
     setTableData(tableDataAPI);
-    console.log(tableDataAPI);
     setLoading(false);
   };
 

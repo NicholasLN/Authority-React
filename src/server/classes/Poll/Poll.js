@@ -201,7 +201,6 @@ class Poll {
     });
     Object.keys(questionArray).map((value, i) => {
       var respondents = questionArray[value];
-      console.log(respondents);
       questionArrayMOE[value] = this.calcMOE(respondents / this.sampleSize);
     });
     return { questionArray: questionArray, questionArrayMOE: questionArrayMOE };
