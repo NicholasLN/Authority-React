@@ -56,7 +56,6 @@ function DemographicOverview(props) {
   }, []);
 
   function changeState(e) {
-    console.log(e);
     const terms = queryTerms;
     terms.state = e.value;
     setQueryTerms(terms);

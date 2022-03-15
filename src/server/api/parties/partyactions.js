@@ -21,8 +21,6 @@ async function getClientInformation(userId, partyId) {
   var party = new Party(partyId);
   await party.updatePartyInfo();
 
-  console.log(party.partyInfo);
-
   var sendData = { partyInfo: party.partyInfo, userInfo: user.userInfo };
   return sendData;
 }
@@ -88,16 +86,23 @@ router.get("/leaveParty", async function (req, res) {
  * @param {number} partyID
  */
 router.get("/joinParty/:partyId", async function (req, res) {
+  var db = require("../../db");
   let partyToJoin = req.params.partyId;
   if (req.session.playerData.loggedIn) {
     let userData = req.session.playerData.loggedInInfo;
+    // Check partyPurges in the database to see if the user has been purged
+    var result = await db.query(`SELECT * FROM partyPurges WHERE partyid = ? AND userid = ?`, [partyToJoin, userData.id]);
+    if (result.length > 0) {
+      res.send({ error: "You have been purged from this party. Wait a few days before joining again." });
+      return;
+    }
+    // Check if they are already in a party
     if (userData.party != 0) {
       var currentUserParty = new Party(userData.party);
       await currentUserParty.updatePartyInfo();
       await currentUserParty.memberLeave(userData.id);
     }
     var party = new Party(partyToJoin);
-
     var joinStatus = await party.memberJoin(userData.id);
     if (joinStatus == 200) {
       res.send(await getClientInformation(userData.id, partyToJoin));

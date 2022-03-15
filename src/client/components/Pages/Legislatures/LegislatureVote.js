@@ -21,7 +21,6 @@ function LegislatureVote(props) {
       var resp = await LegislatureService.fetchVote(voteId);
       if (!resp.hasOwnProperty("error")) {
         setVoteInfo(resp);
-        console.log(resp);
         setLoading(false);
       } else {
         setAlert("Vote not found.");

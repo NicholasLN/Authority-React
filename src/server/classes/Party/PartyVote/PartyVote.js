@@ -36,7 +36,6 @@ class PartyVote {
     } else {
       voteInfo = this.voteInfo;
     }
-    console.log(voteInfo);
     await Promise.all(
       voteInfo.actions.map(async (action, idx) => {
         switch (action.action) {
@@ -113,6 +112,17 @@ class PartyVote {
           case "renameParty":
             if (action.oldName != null && action.proposedName != null) {
               tostr += `<span class='redFont'>Change Party Name</span> <b>from</b> <u>${action.oldName}</u> <b>to</b> <u>${action.proposedName}</u>`;
+              if (len > 0) {
+                tostr += "<br/>";
+              }
+              len += 1;
+            }
+            break;
+          case "purgeMembers":
+            var purgedUser = new User(action.purgeMembers);
+            await purgedUser.updateUserInfo();
+            if(purgedUser.userInfo) {
+              tostr += `<span class='redFont'>Purge</span> <u>${purgedUser.userInfo.politicianName}</u>`;
               if (len > 0) {
                 tostr += "<br/>";
               }
@@ -201,6 +211,18 @@ class PartyVote {
           break;
         case "deleteRole":
           await party.deleteRole(vote.uniqueId);
+          break;
+        case "purgeMembers":
+          console.log("purge members vote passed")
+          // Purge the member from the party (kick them out)
+          // Now create a DB connection
+          var db = require('../../../db');
+          await party.memberLeave(vote.purgeMembers);
+          // Add purge to DB to prevent them from rejoining
+          await db.query(
+            `INSERT INTO partyPurges (partyid, politicianid, timestamp) VALUES (?, ?, ?)`,
+            [party.partyInfo.id, vote.purgeMembers, Date.now()]
+          );
           break;
         case "changeOccupant":
           await party.changeOccupant(getUserRole(party.partyInfo, vote.newOccupant, "uniqueID"), 0);
@@ -309,7 +331,6 @@ class PartyVote {
     if (currentPartyVoteInfo.hasOwnProperty(variable)) {
       var error;
       await this.updatePartyVoteVariable(variable, updateTo).catch((err) => {
-        console.log(err);
         error = { error: "Update failed. Check variable type." };
       });
       if (!error) {

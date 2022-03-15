@@ -1,5 +1,3 @@
-const { randomInt } = require("crypto");
-const util = require("util");
 const gc = require("./config/gc");
 const bucket = gc.bucket(`${process.env.STORAGE_BUCKET_NAME}`); // should be your bucket name
 
@@ -28,7 +26,6 @@ const uploadImage = (file, directory) =>
           resolve(publicUrl);
         })
         .on("error", (err) => {
-          console.log(err);
           reject(`Unable to upload image, something went wrong`);
         })
         .end(buffer);

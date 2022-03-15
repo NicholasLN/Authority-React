@@ -94,7 +94,6 @@ function Poll(props) {
                     </thead>
                     <tbody>
                       {Object.keys(pollData.questionArray).map((value, idx) => {
-                        console.log(pollData.questionArrayMOE);
                         return (
                           <tr key={idx}>
                             <td>{value}</td>

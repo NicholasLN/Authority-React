@@ -34,7 +34,6 @@ function Party(props) {
     } else {
       setPartyID(requestedPartyId);
       var info = await PartyInfoService.fetchPartyById(requestedPartyId);
-      console.log(info);
       // Fetching party returns error
       if (info.hasOwnProperty("error")) {
         setAlert("Party not found.");

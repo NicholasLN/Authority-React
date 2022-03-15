@@ -125,7 +125,6 @@ router.post("/postVote", async (req, res) => {
           await legislature.updateLegislatureInformation();
           if (await legislature.userCanProposeVote(office)) {
             var activeVotes = await User.getActiveLegislatureVotes(author);
-            console.log(activeVotes);
             if (activeVotes == 0) {
               if (req.body.formData.billData) {
                 var billName = req.body.formData.voteName;

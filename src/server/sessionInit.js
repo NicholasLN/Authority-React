@@ -10,7 +10,6 @@ if (process.env.SESSION_SECURE == "false") {
 }
 
 try {
-  console.log(process.env.ENVIRONMENT.toLowerCase());
   if (process.env.ENVIRONMENT.toLowerCase() != "development") {
     var configDetails = {
       name: `${randomString(12)}`,

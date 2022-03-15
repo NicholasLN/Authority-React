@@ -94,7 +94,6 @@ router.get("/getPatrons", async function (req, res) {
   var db = require("../../db");
   db.query("SELECT * FROM patrons", function (err, results) {
     if (err) {
-      console.log(err);
     } else {
       res.send(results);
     }

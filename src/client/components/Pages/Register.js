@@ -58,7 +58,6 @@ function Register(props) {
         ecoPos: selectedEcoPosition,
         socPos: selectedSocPosition,
       };
-      console.log(body);
       var sessionData = await AuthorizationService.register(body);
       if (!sessionData.hasOwnProperty("error")) {
         setSessionData(sessionData);

@@ -49,7 +49,6 @@ export default function ContextProvider(props) {
           }
         }
       } catch (error) {
-        console.log(error);
       }
     };
     // Fetch data first

@@ -42,7 +42,6 @@ router.get("/partyRoleList/:partyId", cache(10), async function (req, res) {
       return result[0];
     })
     .catch((error) => {
-      console.log(error);
       return undefined;
     });
 

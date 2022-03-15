@@ -24,7 +24,6 @@ async function handlePassingVotes() {
     if (Date.now() > pv.voteInfo.expiresAt) {
       var billPassed = pv.voteInfo.regularPassPercentage >= 51;
       if (billPassed) {
-        console.log("OK!!!");
         await pv.handleBillSuccess();
       } else {
         await pv.updatePartyVote("passed", 0);
@@ -32,7 +31,6 @@ async function handlePassingVotes() {
     } else {
       // auto pass
       if (pv.voteInfo.autoPassPercentage >= 60) {
-        console.log("Autopass, ", pv.voteInfo.name);
         await pv.handleBillSuccess();
       }
     }

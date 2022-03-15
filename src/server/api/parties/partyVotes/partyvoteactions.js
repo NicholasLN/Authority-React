@@ -142,6 +142,22 @@ async function changeVotesAction(req) {
   }
 }
 
+async function purgeMemberAction(req){
+  var { purgeMembers, partyId } = req.body;
+  if(purgeMembers && partyId){
+    // Check if user can purge members
+    var party = new Party(partyId);
+    await party.updatePartyInfo();
+    if(userHasPerm(req.session.playerData.loggedInId, party.partyInfo, "purgeMembers")){
+      var action = {
+        action: "purgeMembers",
+        purgeMembers: purgeMembers,
+      };
+      return action;
+    }
+  }
+}
+
 router.post("/createPartyVote", async (req, res) => {
   var { voteType } = req.body;
   var action = [];
@@ -172,6 +188,9 @@ router.post("/createPartyVote", async (req, res) => {
         case "changeVotes":
           action.push(await changeVotesAction(req));
           break;
+        case "purgeMembers":
+          action.push(await purgeMemberAction(req));
+          break;
       }
       if (action.length > 0) {
         var sql = `INSERT INTO partyVotes (author, party, name, actions, expiresAt) VALUES (?,?,?,?,?)`;
@@ -185,7 +204,6 @@ router.post("/createPartyVote", async (req, res) => {
           }
         });
       } else {
-        console.log(action);
         res.send({ error: "Something went wrong with your vote bro." });
       }
     } else {

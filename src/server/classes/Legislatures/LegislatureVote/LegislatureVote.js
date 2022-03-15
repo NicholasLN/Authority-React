@@ -256,7 +256,6 @@ class LegislatureVote {
         var positionQuery = new Promise((resolve, reject) => {
           db.query("SELECT * FROM legislaturePositions WHERE id=?", [office], (err, result) => {
             if (err) {
-              console.log(err);
             } else {
               resolve(result[0]);
             }
@@ -369,7 +368,6 @@ class LegislatureVote {
                   ],
                   function (err, results) {
                     if (err) {
-                      console.log(err);
                     }
                   }
                 );
@@ -380,7 +378,6 @@ class LegislatureVote {
       }
       // If the vote is from another legislature.
       else {
-        console.log(this.voteInfo.id);
         var voteId = this.voteInfo.fromVote;
         var votes = await new Promise(function (resolve, reject) {
           db.query("SELECT * FROM legislatureVotes WHERE id = ? OR fromVote =?", [voteId, voteId], function (err, results) {
@@ -480,7 +477,6 @@ class LegislatureVote {
     if (currentLegislatureVoteInfo.hasOwnProperty(variable)) {
       var error;
       await this.updateLegislatureVoteVariable(variable, updateTo).catch((err) => {
-        console.log(err);
         error = { error: "Update failed. Check variable type." };
       });
       if (!error) {

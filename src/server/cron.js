@@ -20,6 +20,8 @@ cron.schedule("0 * * * *", async () => {
   requireUncached("./cronTasks/one_hour_interval/partyPositionDrift");
   // Party Power Increase
   requireUncached("./cronTasks/one_hour_interval/partyPower");
+  // Party Purge Deletions
+  requireUncached("./cronTasks/one_hour_interval/purgeCheck");
 });
 ////////////////////////////////////////////////////////////////
 ////////////////////////END CRON ///////////////////////////////

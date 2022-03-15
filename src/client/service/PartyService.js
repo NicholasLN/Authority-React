@@ -12,7 +12,7 @@ class PartyService {
     return this.auth
       .get(`/partyinfo/fetchPartyById/${partyID}`)
       .then((response) => response.data)
-      .catch((err) => console.log(err));
+      .catch((err) => "error");
   }
   fetchRoleList(partyID) {
     let url = `/partyinfo/partyRoleList/${partyID}`;
@@ -106,7 +106,6 @@ class PartyService {
       .catch((err) => "error");
   }
   createPartyRole(body) {
-    console.log(body);
     let url = `/partyactions/createPartyRole`;
     return this.auth
       .post(url, body)

@@ -17,7 +17,6 @@ function PartyOverview({ partyInfo }) {
     async function fetchData() {
       // Roles //
       var reqPartyRoles = await PartyInfoService.fetchRoleList(partyInfo.id);
-      console.log(reqPartyRoles);
       setPartyRoles(reqPartyRoles);
       setLoading(false);
     }
