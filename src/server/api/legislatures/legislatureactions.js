@@ -149,6 +149,7 @@ router.post("/postVote", async (req, res) => {
                     status = 3;
                     if (!billData.hasOwnProperty("office") || !billData.hasOwnProperty("appointee")) {
                       ok = false;
+                      billData.constitutional = 0;
                       res.send({ error: "Error." });
                     }
                     break;

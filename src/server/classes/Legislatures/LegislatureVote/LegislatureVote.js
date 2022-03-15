@@ -59,11 +59,18 @@ class LegislatureVote {
     }
   }
   async passPercentage() {
+    var pctg;
     if (this.voteInfo.constitutional == 1) {
-      return ((this.voteInfo.sumAyes / (await this.getTotalPossibleVotes())) * 100).toFixed(2);
+      pctg = ((this.voteInfo.sumAyes / (await this.getTotalPossibleVotes())) * 100).toFixed(2);
     } else {
-      return ((this.voteInfo.sumAyes / (this.voteInfo.sumAyes + this.voteInfo.sumNays)) * 100).toFixed(2);
+      var totalVotes = this.voteInfo.sumAyes + this.voteInfo.sumNays;
+      if (totalVotes == 0) {
+        pctg = 0;
+      } else {
+        pctg = ((this.voteInfo.sumAyes / (this.voteInfo.sumAyes + this.voteInfo.sumNays)) * 100).toFixed(2);
+      }
     }
+    return pctg;
   }
 
   /**
@@ -279,6 +286,9 @@ class LegislatureVote {
         break;
       case 3:
         rtn = "Ongoing";
+        break;
+      default:
+        rtn = "IDK.";
         break;
     }
     return rtn;
