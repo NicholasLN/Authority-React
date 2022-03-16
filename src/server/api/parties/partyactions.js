@@ -72,6 +72,7 @@ router.get("/leaveParty", async function (req, res) {
     if (req.session.playerData.loggedInInfo.party != 0) {
       var userParty = new Party(userData.party);
       await userParty.updatePartyInfo();
+      console.log(userParty.partyInfo);
       var leaveStatus = await userParty.memberLeave(userData.id);
       if (leaveStatus == 200) {
         res.send(await getClientInformation(userData.id, userData.party));
@@ -79,6 +80,24 @@ router.get("/leaveParty", async function (req, res) {
     }
   }
 });
+
+const purgeCheck = (partyId, userId) => {
+  return new Promise((resolve, reject) => {
+    var db = require("../../db");
+    const sql = `SELECT * FROM partyPurges WHERE partyid = ? AND politicianid = ?`;
+    db.query(sql, [partyId, userId], function (err, results) {
+      if (err) {
+        throw err;
+      } else {
+        if (results.length > 0) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      }
+    });
+  });
+};
 
 /**
  * Route that handles joining a party
@@ -90,24 +109,25 @@ router.get("/joinParty/:partyId", async function (req, res) {
   let partyToJoin = req.params.partyId;
   if (req.session.playerData.loggedIn) {
     let userData = req.session.playerData.loggedInInfo;
-    // Check partyPurges in the database to see if the user has been purged
-    var result = await db.query(`SELECT * FROM partyPurges WHERE partyid = ? AND userid = ?`, [partyToJoin, userData.id]);
-    if (result.length > 0) {
-      res.send({ error: "You have been purged from this party. Wait a few days before joining again." });
-      return;
-    }
-    // Check if they are already in a party
-    if (userData.party != 0) {
-      var currentUserParty = new Party(userData.party);
-      await currentUserParty.updatePartyInfo();
-      await currentUserParty.memberLeave(userData.id);
-    }
-    var party = new Party(partyToJoin);
-    var joinStatus = await party.memberJoin(userData.id);
-    if (joinStatus == 200) {
-      res.send(await getClientInformation(userData.id, partyToJoin));
+
+    var isPurged = await purgeCheck(partyToJoin, userData.id);
+    if (isPurged) {
+      res.send({ error: "You have been purged from this party. Wait a while." });
     } else {
-      res.send({ error: "Error joining party." });
+      // Check partyPurges in the database to see if the user has been purged
+      // Check if they are already in a party
+      if (userData.party != 0) {
+        var currentUserParty = new Party(userData.party);
+        await currentUserParty.updatePartyInfo();
+        await currentUserParty.memberLeave(userData.id);
+      }
+      var party = new Party(partyToJoin);
+      var joinStatus = await party.memberJoin(userData.id);
+      if (joinStatus == 200) {
+        res.send(await getClientInformation(userData.id, partyToJoin));
+      } else {
+        res.send({ error: "Error joining party." });
+      }
     }
   } else {
     res.send({ error: "Not logged in." });

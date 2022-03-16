@@ -58,23 +58,34 @@ function Party(props) {
   }, [requestedPartyId, mode, setPartyInfo]);
 
   const leaveParty = async () => {
+    var leaderCosmetics = partyInfo.leaderCosmetics;
     if (sessionData.loggedIn) {
       if (playerData.party == partyInfo.id) {
         var data = await PartyInfoService.leaveParty();
-        const { userInfo, partyInfo } = data;
-        setPlayerData(userInfo);
-        setPartyInfo(partyInfo);
+        if (data.hasOwnProperty("error")) {
+          setAlert(data.error);
+        } else {
+          const { userInfo, partyInfo } = data;
+          setPlayerData(userInfo);
+          setPartyInfo({ ...partyInfo, leaderCosmetics });
+          setRefresh(!refresh);
+        }
       }
     }
   };
   const joinParty = async () => {
+    var leaderCosmetics = partyInfo.leaderCosmetics;
     var id = partyInfo.id;
     if (sessionData.loggedIn) {
       var data = await PartyInfoService.joinParty(id);
-      const { userInfo, partyInfo } = data;
-      setPlayerData(userInfo);
-      setPartyInfo(partyInfo);
-      setRefresh(refresh + 1);
+      if (data.hasOwnProperty("error")) {
+        setAlert(data.error);
+      } else {
+        const { userInfo, partyInfo } = data;
+        setPlayerData(userInfo);
+        setPartyInfo({ ...partyInfo, leaderCosmetics });
+        setRefresh(!refresh);
+      }
     }
   };
   const claimLeadership = async () => {
@@ -83,7 +94,7 @@ function Party(props) {
       const { userInfo, partyInfo } = data;
       setPlayerData(userInfo);
       setPartyInfo(partyInfo);
-      setRefresh(refresh + 1);
+      setRefresh(!refresh);
     }
   };
   const resignLeadership = async () => {
