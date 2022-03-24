@@ -3,7 +3,7 @@ var dotenv = require("dotenv");
 var express = require("express");
 var router = express.Router();
 
-if (process.env.ENVIRONMENT == "DEVELOPMENT") {
+if (process.env.ENVIRONMENT.toLowerCase() == "development") {
   router.get("/loginAsUser/:userId", function (req, res) {
     var userID = req.params.userId;
 
