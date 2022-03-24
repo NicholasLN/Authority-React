@@ -29,6 +29,7 @@ class LegislatureVote {
       await legislature.updateLegislatureInformation();
 
       this.legislatureInfo = legislature.legislatureInfo;
+      this.voteInfo.country = this.legislatureInfo.countryId;
       this.voteInfo.ayes = eval(voteInformation.ayes);
       this.voteInfo.nays = eval(voteInformation.nays);
       this.voteInfo.authorId = this.voteInfo.author;
